@@ -1,5 +1,7 @@
-import { Routes ,Route } from "react-router-dom";
+import { NavLink,Routes ,Route } from "react-router-dom";
 import { Link } from "react-router-dom";
+
+
 
 
 function Header() {
@@ -19,58 +21,29 @@ function Header() {
             <i className="bi bi-x-lg" />
           </div>
         </div>
+      
         <ul className="menu-list">
-          <li className="menu-item-has-children active">
-            <a href="#" className="drop-down">Home</a><i className="bi bi-plus dropdown-icon" />
-            <ul className="sub-menu">
-              <li><a href="index.html">Home One</a></li>
-              <li><a className="active" href="index2.html">Home Two</a></li>
-              <li><a href="index3.html">Home Three</a></li>
-            </ul>
+          <li class="active" >
+
+            <NavLink to="/home" className="drop-down " >Home</NavLink>
           </li>
-          <li><a href="about.html">About</a></li>
-          <li className="menu-item-has-children">
-            <a href="#">Services</a><i className="bi bi-plus dropdown-icon" />
-            <ul className="sub-menu">
-              <li><a href="service-details.html">Daycare </a></li>
-              <li><a href="service-details.html">Grooming</a></li>
-              <li><a href="service-details.html">Boarding</a></li>
-              <li><a href="service-details.html">Veterinary  </a></li>
-            </ul>
+          <li><NavLink to='/About'>About</NavLink></li>
+          <li>
+            <a href="#">Services</a>
+           
           </li>
-          <li className="menu-item-has-children">
-            <a href="#" className="drop-down">Pages</a><i className="bi bi-plus dropdown-icon" />
-            <ul className="sub-menu">
-              <li><a href="pricing-plan.html">Pricing Plan</a></li>
-              <li><a href="team.html">Our Team</a></li>
-              <li><a href="3col-gallery.html">Gallery</a></li>
-              <li><a href="faq.html">Faq</a></li>
-              <li><a href="error.html">Error</a></li>
-              <li><a href="login.html">Login</a></li>
-              <li><a href="sign-up.html">Sign Up</a></li>
-            </ul>
+          
+          <li >
+            <NavLink to="/shop">Shop</NavLink>
           </li>
-          <li className="menu-item-has-children">
-            <a href="#">Shop</a><i className="bi bi-plus dropdown-icon" />
-            <ul className="sub-menu">
-              <li><a href="shop.html">Shop</a></li>
-              <li><a href="shop-details.html">Shop Details</a></li>
-              <li><a href="cart.html">Cart</a></li>
-              <li><a href="check-out.html">Check Out</a></li>
-            </ul>
-          </li>
-          <li className="menu-item-has-children">
-            <a href="#">Blog</a><i className="bi bi-plus dropdown-icon" />
-            <ul className="sub-menu">
-              <li><a href="blog-grid.html">Blog Grid</a></li>
-              <li><a href="blog-grid-sidebar.html">Blog Grid Sidebar</a></li>
-              <li><a href="blog-standard.html">Blog Standard</a></li>
-              <li><a href="blog-details.html">Blog Details</a></li>
-            </ul>
+          <li >
+            <a href="#">Blog</a>
+           
           </li>
           <li><a href="contact.html">Contact</a></li> 
           {/* <Link to="About">Contact</Link> */}
         </ul>
+       
         <div className="for-mobile-menu d-lg-none d-block">
           <div className="hotline mb-5">
             <div className="hotline-info">

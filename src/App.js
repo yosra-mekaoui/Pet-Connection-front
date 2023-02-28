@@ -1,15 +1,28 @@
 import logo from './logo.svg';
-import Home from './Components/Pages/Home.js';
-import Header from './Components/Pages/Header';
-import Footer from './Components/Pages/Footer';
-
+import React from "react";
+import { Suspense } from 'react';
+import { NavLink, Route, Routes } from 'react-router-dom';
+const Home = React.lazy(() => import('./Components/Pages/Home.js'))
+const Header = React.lazy(() => import('./Components/Pages/Header'))
+const Footer = React.lazy(() => import('./Components/Pages/Footer'))
+const Market = React.lazy(()=> import ('./Components/Pages/Market'))
+const About = React.lazy(()=> import ('./Components/Pages/About'))
 function App() {
   return (
     <div className="App">
       
+     
+     
+      <Suspense fallback={<div>Loading...</div>}>
       <Header/>
-      <Home/>
-      <Footer/>
+     
+                <Routes>
+                <Route path='/home' element={<Home/>}></Route>
+                <Route path='/shop' element={<Market/>}></Route>
+                <Route path='/About' element={<About/>}></Route>
+                </Routes>
+<Footer/>
+            </Suspense>
     </div>
   );
 }
