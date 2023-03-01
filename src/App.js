@@ -2,6 +2,7 @@ import logo from './logo.svg';
 import React from "react";
 import { Suspense } from 'react';
 import { NavLink, Route, Routes } from 'react-router-dom';
+import NotFound from './Components/Pages/NotFound';
 const Home = React.lazy(() => import('./Components/Pages/Home.js'))
 const Header = React.lazy(() => import('./Components/Pages/Header'))
 const Footer = React.lazy(() => import('./Components/Pages/Footer'))
@@ -17,7 +18,7 @@ function App() {
       <Header/>
      
                 <Routes>
-                <Route path='/home' element={<Home/>}></Route>
+                <Route path='*' element={<Home/>}></Route>
                 <Route path='/shop' element={<Market/>}></Route>
                 <Route path='/About' element={<About/>}></Route>
                 </Routes>
