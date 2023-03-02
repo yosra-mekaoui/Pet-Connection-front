@@ -1,5 +1,5 @@
 import logo from './logo.svg';
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { Suspense } from 'react';
 import { NavLink, Route, Routes } from 'react-router-dom';
 import NotFound from './Components/Pages/NotFound';
@@ -34,7 +34,18 @@ useScript("./assets/js/SmoothScroll.js");
 useScript("./assets/js/jquery.nice-number.min.js");
 useScript("./assets/js/jquery.magnific-popup.min.js");
 useScript("./assets/js/masonry.pkgd.min.js");
-useScript("./assets/js/main.js");
+  useScript("./assets/js/main.js");
+  
+
+  const [user, setUser] = useState(null)
+  useEffect(() => {
+    if (localStorage.getItem("user") != null)
+      setUser(localStorage.getItem("user"));
+    
+    console.log(user)
+  },[])
+
+
   return (
     <div className="App">
       
@@ -46,8 +57,14 @@ useScript("./assets/js/main.js");
           <Route path='*' element={<Home/>}></Route>
           <Route path='/shop' element={<Market/>}></Route>
           <Route path='/About' element={<About />}></Route>
-          <Route path='/Login' element={<Login />}></Route>
-          <Route path='/Register' element={<Register />}></Route>
+          {user == null &&
+             
+            <Route path='/Login' element={<Login />}></Route>}
+          {user ==null &&
+            <Route path='/Register' element={<Register />}></Route>
+               
+           
+          }
         </Routes>
       
         

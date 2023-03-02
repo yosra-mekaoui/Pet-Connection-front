@@ -5,11 +5,13 @@ import { useNavigate } from "react-router-dom";
 import { NavLink, Routes, Route } from "react-router-dom";
 
 function Login() {
+    
     const [username, setUsername] = useState(''); 
     const [password, setPassword] = useState(''); 
     const [user, setUser] = useState(''); 
 
     const navigate = useNavigate(); 
+ 
 
     const handleSubmit = (event) => {
         event.preventDefault(); 
@@ -103,8 +105,8 @@ function Login() {
                       </div>
                       <button class="account-btn">
                         {" "}
-                            <i class="fa fa-paw" aria-hidden="true"></i>
-                            &nbsp;Log in
+                        <i class="fa fa-paw" aria-hidden="true"></i>
+                        &nbsp;Log in
                       </button>
                     </form>
                     <div class="alternate-signup-box">
@@ -115,13 +117,21 @@ function Login() {
                           class="eg-btn google-btn d-flex align-items-center"
                         >
                           <i class="bx bxl-google"></i>
-                          <span>signup whit google</span>
+                          <span>signup with google</span>
                         </a>
                         <a
                           href="#"
                           class="eg-btn facebook-btn d-flex align-items-center"
                         >
-                          <i class="bx bxl-facebook"></i>signup whit facebook
+                          <i class="bx bxl-facebook"></i>signup with facebook
+                        </a>
+
+                        <a
+                          href="#"
+                          class="eg-btn facebook-btn d-flex align-items-center"
+                          style={{'backgroundColor' : 'green'}}
+                        >
+                          <i class="bx bxl-facebook"></i>signup with linkedin
                         </a>
                       </div>
                     </div>
@@ -138,8 +148,6 @@ function Login() {
               </div>
             </div>
           </div>
-
-           
         </center>
       </>
     );

@@ -28,8 +28,8 @@ function Register() {
             };
             
             register(user).then(data => {
-                window.location.reload()
-                navigate("/home")
+                //window.location.reload()
+                navigate("/login")
                 console.log(data["data"])
             })
         }
@@ -67,13 +67,25 @@ function Register() {
                     data-wow-delay=".2s"
                   >
                     <div class="form-title">
-                      <h3>Log In</h3>
+                      <h3>Sign Up</h3>
                       <p>
-                        Already a Member? <NavLink to="/Register"> Sign Up</NavLink>
+                        Already a Member? <NavLink to="/Login"> Log In</NavLink>
                       </p>
                     </div>
                     <form class="w-100" onSubmit={handleSubmit}>
                       <div class="row">
+                        <div class="col-12">
+                          <div class="form-inner">
+                            <label style={{ float: "left" }}>Full Name </label>
+                            <input
+                              type="text"
+                              placeholder="Enter Your Name..."
+                              value={name}
+                              onChange={(e) => setName(e.target.value)}
+                            />
+                          </div>
+                        </div>
+
                         <div class="col-12">
                           <div class="form-inner">
                             <label style={{ float: "left" }}>Username </label>
@@ -85,6 +97,19 @@ function Register() {
                             />
                           </div>
                         </div>
+
+                        <div class="col-12">
+                          <div class="form-inner">
+                            <label style={{ float: "left" }}>Email </label>
+                            <input
+                              type="email"
+                              placeholder="Enter Your Email..."
+                              value={email}
+                              onChange={(e) => setEmail(e.target.value)}
+                            />
+                          </div>
+                        </div>
+
                         <div class="col-12">
                           <div class="form-inner">
                             <label style={{ float: "left" }}>Password </label>
@@ -99,6 +124,24 @@ function Register() {
                             <i class="bi bi-eye-slash" id="togglePassword"></i>
                           </div>
                         </div>
+
+                        <div class="col-12">
+                          <div class="form-inner">
+                            <label style={{ float: "left" }}>
+                              Confirm Password{" "}
+                            </label>
+                            <input
+                              type="password"
+                              name="repass"
+                              id="repass"
+                              placeholder="Retype Password..."
+                              value={repass}
+                              onChange={(e) => setRepass(e.target.value)}
+                            />
+                            <i class="bi bi-eye-slash" id="togglePassword"></i>
+                          </div>
+                        </div>
+
                         <div class="col-12">
                           <div class="form-agreement form-inner d-flex justify-content-between flex-wrap">
                             <div class="form-group">
@@ -116,7 +159,7 @@ function Register() {
                       <button class="account-btn">
                         {" "}
                         <i class="fa fa-paw" aria-hidden="true"></i>
-                        &nbsp;Log in
+                        &nbsp;Register
                       </button>
                     </form>
                     <div class="alternate-signup-box">
@@ -127,13 +170,22 @@ function Register() {
                           class="eg-btn google-btn d-flex align-items-center"
                         >
                           <i class="bx bxl-google"></i>
-                          <span>signup whit google</span>
+                          <span>signup with google</span>
                         </a>
                         <a
                           href="#"
                           class="eg-btn facebook-btn d-flex align-items-center"
                         >
-                          <i class="bx bxl-facebook"></i>signup whit facebook
+                          <i class="bx bxl-facebook"></i>signup with facebook
+                        </a>
+
+                        <a
+                          href="#"
+                          class="eg-btn linkedin-btn d-flex align-items-center"
+                          style={{'backgroundColor' :'green'}}
+                        >
+                          <i class="bx bxl-google"></i>
+                          <span>signup with linkedin</span>
                         </a>
                       </div>
                     </div>
@@ -148,80 +200,6 @@ function Register() {
                   </div>
                 </div>
               </div>
-            </div>
-          </div>
-
-          <div style={back}>
-            <h2 style={{ "margin-bottom": "30px", color: "black" }}>
-              Register
-            </h2>
-            <div style={{ width: "60%", "margin-bottom": "200px" }}>
-              <Form onSubmit={handleSubmit}>
-                <Form.Group>
-                  <Form.Label style={{ float: "left", color: "black" }}>
-                    Username
-                  </Form.Label>
-                  <Form.Control
-                    type="text"
-                    value={username}
-                    onChange={(e) => setUsername(e.target.value)}
-                  />
-                </Form.Group>
-                <Form.Group>
-                  <Form.Label style={{ float: "left", color: "black" }}>
-                    Full Name
-                  </Form.Label>
-                  <Form.Control
-                    type="text"
-                    value={name}
-                    onChange={(e) => setName(e.target.value)}
-                  />
-                </Form.Group>
-                <Form.Group>
-                  <Form.Label style={{ float: "left", color: "black" }}>
-                    Email
-                  </Form.Label>
-                  <Form.Control
-                    type="text"
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
-                  />
-                </Form.Group>
-                <Form.Group>
-                  <Form.Label style={{ float: "left", color: "black" }}>
-                    Password
-                  </Form.Label>
-                  <Form.Control
-                    type="password"
-                    value={password}
-                    onChange={(e) => setPassword(e.target.value)}
-                  />
-                </Form.Group>
-                <Form.Group>
-                  <Form.Label style={{ float: "left", color: "black" }}>
-                    Retype Password
-                  </Form.Label>
-                  <Form.Control
-                    type="password"
-                    value={repass}
-                    onChange={(e) => setRepass(e.target.value)}
-                  />
-                </Form.Group>
-
-                <br></br>
-                <p>
-                  You have an account already?
-                  <NavLink to="/Login">Login</NavLink>
-                </p>
-                <Button
-                  variant="primary"
-                  type="submit"
-                  style={{ marginBottom: "60px" }}
-                >
-                  <i class="fa fa-paw" aria-hidden="true"></i>
-                  &nbsp; Register
-                </Button>
-              </Form>
             </div>
           </div>
         </center>
