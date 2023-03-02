@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Form, Button } from 'react-bootstrap';
 import { login, register } from "./api";
 import { useNavigate } from "react-router-dom";
@@ -11,6 +11,8 @@ function Register() {
     const [email, setEmail] = useState(''); 
     const [password, setPassword] = useState('');
     const [repass, setRepass] = useState('');   
+    const [user, setUser] = useState('');   
+
     
     const navigate = useNavigate(); 
 
@@ -35,6 +37,13 @@ function Register() {
 
     }
 
+     useEffect(() => { 
+        const test = JSON.parse(localStorage.getItem('user'))["username"] ;  
+        if (test != null) { 
+            navigate("/home")
+        }
+     }, [])
+    
     return (<>
         <center>
             <h2 style={{ 'width': '30%' , 'margin-top' : '100px', 'margin-bottom' : '30px', 'color' : 'black'}}>Register</h2>

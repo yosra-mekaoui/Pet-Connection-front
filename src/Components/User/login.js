@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Form, Button } from 'react-bootstrap';
 import { login } from "./api";
 import { useNavigate } from "react-router-dom";
@@ -7,6 +7,8 @@ import { NavLink, Routes, Route } from "react-router-dom";
 function Login() {
     const [username, setUsername] = useState(''); 
     const [password, setPassword] = useState(''); 
+    const [user, setUser] = useState(''); 
+
     const navigate = useNavigate(); 
 
     const handleSubmit = (event) => {
@@ -18,11 +20,18 @@ function Login() {
         }; 
 
         login(user).then(data => {
-            navigate("/home")
+            navigate("/home") 
             console.log(data["data"])
         })
 
     }
+
+    useEffect(() => { 
+        const test = JSON.parse(localStorage.getItem('user'))["username"] ;  
+        if (test != null) { 
+            navigate("/home")
+        }
+    },[])
 
     return (<> 
         <center>
@@ -35,7 +44,7 @@ function Login() {
                 </Form.Group>
                 <Form.Group>
                     <Form.Label style={{'float' : 'left'}}>Password</Form.Label>
-                    <Form.Control type="text" value={password} onChange={(e)=>setPassword(e.target.value)} />
+                    <Form.Control type="password" value={password} onChange={(e)=>setPassword(e.target.value)} />
                 </Form.Group>
                     <br></br>
                     <p>
