@@ -1,10 +1,16 @@
 import { NavLink,Routes ,Route } from "react-router-dom";
 import { Link } from "react-router-dom";
-
-
-
-
+import React, { useState, useEffect } from "react";
+ 
 function Header() {
+    const [user, setUser] = useState(localStorage.getItem('user'));   
+  useEffect(() => {
+    setUser(localStorage.getItem('user')) 
+  },[user])
+    const logout = () => {
+      localStorage.removeItem("user")
+      window.location.reload()
+    }
     return ( <div>  
     
       <header className="header-area style-2">
@@ -114,6 +120,10 @@ function Header() {
                     </g>
                   </svg>
                 </NavLink>
+              </li>
+              <li> 
+                {user &&
+                  <button onClick={logout}>Logout</button>}
               </li>
         </ul>
         <div className="hotline-info">

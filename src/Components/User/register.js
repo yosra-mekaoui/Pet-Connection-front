@@ -28,6 +28,7 @@ function Register() {
             };
             
             register(user).then(data => {
+                window.location.reload()
                 navigate("/home")
                 console.log(data["data"])
             })
@@ -38,35 +39,45 @@ function Register() {
     }
 
      useEffect(() => { 
-        const test = JSON.parse(localStorage.getItem('user'))["username"] ;  
-        if (test != null) { 
+        if (localStorage.getItem('user') != null) { 
             navigate("/home")
         }
      }, [])
     
+    const back = {
+        backgroundColor: '#F6DDDD',
+        margin: '70px',
+        paddingTop: '50px',
+        width: '40%',
+        boxShadow: 'rgba(0, 0, 0, 0.35) 0px 5px 15px',
+        borderRadius : '10px'
+        
+    }
+
     return (<>
         <center>
-            <h2 style={{ 'width': '30%' , 'margin-top' : '100px', 'margin-bottom' : '30px', 'color' : 'black'}}>Register</h2>
-            <div style={{ 'width': '30%' , 'margin-bottom' : '200px'}}>
+            <div style={back}>
+            <h2 style={{  'margin-bottom' : '30px', 'color' : 'black'}}>Register</h2>
+            <div style={{ 'width': '60%' , 'margin-bottom' : '200px'}}>
             <Form onSubmit={handleSubmit} >
                 <Form.Group>
-                    <Form.Label style={{'float' : 'left'}}>Username</Form.Label>
+                    <Form.Label style={{'float' : 'left' , 'color' : 'black'}}>Username</Form.Label>
                     <Form.Control type="text" value={username} onChange={(e) => setUsername(e.target.value)} />
                 </Form.Group>
                 <Form.Group>
-                    <Form.Label style={{'float' : 'left'}}>Full Name</Form.Label>
+                    <Form.Label style={{'float' : 'left', 'color' : 'black'}}>Full Name</Form.Label>
                     <Form.Control type="text" value={name} onChange={(e) => setName(e.target.value)} />
                 </Form.Group>
                 <Form.Group>
-                    <Form.Label style={{'float' : 'left'}}>Email</Form.Label>
+                    <Form.Label style={{'float' : 'left', 'color' : 'black'}}>Email</Form.Label>
                     <Form.Control type="text" value={email} onChange={(e) => setEmail(e.target.value)} />
                 </Form.Group>    
                 <Form.Group>
-                    <Form.Label style={{'float' : 'left'}}>Password</Form.Label>
+                    <Form.Label style={{'float' : 'left', 'color' : 'black'}}>Password</Form.Label>
                     <Form.Control type="password" value={password} onChange={(e)=>setPassword(e.target.value)} />
                 </Form.Group>
                 <Form.Group>
-                    <Form.Label style={{'float' : 'left'}}>Retype Password</Form.Label>
+                    <Form.Label style={{'float' : 'left', 'color' : 'black'}}>Retype Password</Form.Label>
                     <Form.Control type="password" value={repass} onChange={(e) => setRepass(e.target.value)} />
                 </Form.Group>    
                 
@@ -76,11 +87,13 @@ function Register() {
                         You have an account already? 
                         <NavLink to="/Login" >Login</NavLink>
                     </p>
-                <Button variant="primary" type="submit">
-                    Register
+                <Button variant="primary" type="submit" style={{'marginBottom' : '60px'}}>
+                    <i class="fa fa-paw" aria-hidden="true"></i>
+                    &nbsp; Register
                 </Button>
 
             </Form>
+            </div>
             </div>
         </center>      
     
