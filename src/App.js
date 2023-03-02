@@ -3,12 +3,34 @@ import React from "react";
 import { Suspense } from 'react';
 import { NavLink, Route, Routes } from 'react-router-dom';
 import NotFound from './Components/Pages/NotFound';
+
+import { useScript } from 'usehooks-ts'
 const Home = React.lazy(() => import('./Components/Pages/Home.js'))
 const Header = React.lazy(() => import('./Components/Pages/Header'))
 const Footer = React.lazy(() => import('./Components/Pages/Footer'))
 const Market = React.lazy(()=> import ('./Components/Pages/Market'))
 const About = React.lazy(()=> import ('./Components/Pages/About'))
 function App() {
+useScript("./assets/js/email-decode.min.js");
+
+useScript("./assets/js/jquery-3.6.0.min.js"); 
+
+useScript("./assets/js/jquery-ui.js");
+useScript("./assets/js/jquery.timepicker.min.js");
+useScript("./assets/js/bootstrap.bundle.min.js");
+useScript("./assets/js/swiper-bundle.min.js");
+useScript("./assets/js/jquery.nice-select.js");
+useScript("./assets/js/jquery.fancybox.min.js");
+useScript("./assets/js/morphext.min.js");
+useScript("./assets/js/odometer.min.js")
+useScript("./assets/js/jquery.marquee.min.js");
+useScript("./assets/js/viewport.jquery.js");
+useScript("./assets/js/isotope.pkgd.min.js");
+useScript("./assets/js/SmoothScroll.js");
+useScript("./assets/js/jquery.nice-number.min.js");
+useScript("./assets/js/jquery.magnific-popup.min.js");
+useScript("./assets/js/masonry.pkgd.min.js");
+useScript("./assets/js/main.js");
   return (
     <div className="App">
       

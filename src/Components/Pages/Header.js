@@ -23,7 +23,7 @@ function Header() {
         </div>
       
         <ul className="menu-list">
-          <li class="active" >
+          <li className="active" >
 
             <NavLink to="/home" className="drop-down " >Home</NavLink>
           </li>
