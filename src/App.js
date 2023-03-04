@@ -3,15 +3,15 @@ import React from "react";
 import { Suspense } from 'react';
 import { NavLink, Route, Routes } from 'react-router-dom';
 import NotFound from './Components/Pages/NotFound';
-import login from './Components/Pages/Login';
+
 import { useScript } from 'usehooks-ts'
 const Home = React.lazy(() => import('./Components/Pages/Home.js'))
 const Header = React.lazy(() => import('./Components/Pages/Header'))
 const Footer = React.lazy(() => import('./Components/Pages/Footer'))
 const Market = React.lazy(()=> import ('./Components/Pages/Market'))
 const About = React.lazy(()=> import ('./Components/Pages/About'))
-const Login =React.lazy(()=>import('./Components/Pages/Login'))
- const Register =React.lazy(()=>import('./Components/Pages/Register'))
+const Login =React.lazy(()=>import('./Components/User/Login'))
+ const Register =React.lazy(()=>import('./Components/User/Register'))
 function App() {
 useScript("./assets/js/email-decode.min.js");
 
