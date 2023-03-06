@@ -62,8 +62,6 @@ useScript("./assets/js/masonry.pkgd.min.js");
             <Route path='/Login' element={<Login />}></Route>}
           {user ==null &&
             <Route path='/Register' element={<Register />}></Route>
-               
-           
           }
         </Routes>
       
