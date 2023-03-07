@@ -56,6 +56,57 @@ function Register() {
 
     return (
       <>
+        <div className="inner-page-banner">
+          <div className="breadcrumb-vec-btm">
+            <img
+              className="img-fluid"
+              src="assets/images/bg/inner-banner-btm-vec.png"
+              alt=""
+            />
+          </div>
+          <div className="container">
+            <div className="row justify-content-center align-items-center text-center">
+              <div className="col-lg-6 align-items-center">
+                <div className="banner-content">
+                  <h1>Register</h1>
+                  <nav aria-label="breadcrumb">
+                    <ol className="breadcrumb">
+                      <li className="breadcrumb-item">
+                        <a href="/">Home</a>
+                      </li>
+                      <li
+                        className="breadcrumb-item active"
+                        aria-current="page"
+                      >
+                        Login
+                      </li>
+                    </ol>
+                  </nav>
+                </div>
+              </div>
+              <div className="col-lg-6">
+                <div className="banner-img d-lg-block d-none">
+                  <div className="banner-img-bg">
+                    <img
+                      className="img-fluid"
+                      src="assets/images/bg/inner-banner-vec.png"
+                      alt=""
+                    />
+                  </div>
+                  <img
+                    className="img-fluid"
+                    src="assets/images/bg/inner-banner-img.png"
+                    alt=""
+                  />
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+
+
+
         <center>
           <div class="login-section pt-120 pb-120">
             <div class="container">
@@ -182,7 +233,7 @@ function Register() {
                         <a
                           href="#"
                           class="eg-btn linkedin-btn d-flex align-items-center"
-                          style={{'backgroundColor' :'green'}}
+                          style={{ backgroundColor: "green" }}
                         >
                           <i class="bx bxl-google"></i>
                           <span>signup with linkedin</span>
