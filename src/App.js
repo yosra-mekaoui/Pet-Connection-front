@@ -48,26 +48,21 @@ useScript("./assets/js/masonry.pkgd.min.js");
 
   return (
     <div className="App">
-      
-     
-     
       <Suspense fallback={<div>Loading...</div>}>
-      <Header/>
+        <Header />
         <Routes>
-          <Route path='*' element={<Home/>}></Route>
-          <Route path='/shop' element={<Market/>}></Route>
-          <Route path='/About' element={<About />}></Route>
-          {user == null &&
-             
-            <Route path='/Login' element={<Login />}></Route>}
-          {user ==null &&
-            <Route path='/Register' element={<Register />}></Route>
-          }
+          <Route path="*" element={<Home />}></Route>
+          <Route path="/shop" element={<Market />}></Route>
+          <Route path="/About" element={<About />}></Route>
+          {user == null && <Route path="/Login" element={<Login />}></Route>}
+          {user == null && (
+            <Route path="/Register" element={<Register />}></Route>
+          )}
         </Routes>
-      
-        
-      <Footer />
+
+        <Footer />
       </Suspense>
+      
     </div>
   );
 }

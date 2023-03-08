@@ -23,8 +23,9 @@ function Login() {
         }; 
 
         login(user).then(data => {
-            //window.location.reload()
-            navigate("/home") 
+            window.location.reload("/home")
+            //navigate("/home") 
+        window.location.reload();
             console.log(data["data"])
         })
 
