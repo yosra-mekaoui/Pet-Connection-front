@@ -10,13 +10,27 @@ function Login() {
     const [username, setUsername] = useState(''); 
     const [password, setPassword] = useState(''); 
     const [user, setUser] = useState(''); 
-
+    const [errors, setErrors] = useState({});
     const navigate = useNavigate(); 
  
 
     const handleSubmit = (event) => {
+
+      // form validation 
+
+
+      const errors = {};
+      if (username.trim() === "") {
+        errors.username = "Username is required";
+      }
+      if (password.trim() === "") {
+        errors.password = "Password is required";
+      } else if (password.trim().length < 6) {
+        errors.password = "Password must be at least 6 characters";
+      }
+      setErrors(errors);
         event.preventDefault(); 
-        
+        if (Object.keys(errors).length === 0){
         const user = {
             'username': username,
             'password': password
@@ -26,8 +40,8 @@ function Login() {
             //window.location.reload()
             navigate("/home") 
             console.log(data["data"])
-        })
-
+        });
+      }
     }
 
     useEffect(() => {   
@@ -172,6 +186,8 @@ function Login() {
                               onChange={(e) => setUsername(e.target.value)}
                             />
                           </div>
+                          {errors.username && <p  style={{ fontSize: 12, color: "red" }}>{errors.username}</p>}
+
                         </div>
                         <div className="col-12">
                           <div className="form-inner">
@@ -189,6 +205,8 @@ function Login() {
                               id="togglePassword"
                             ></i>
                           </div>
+                          {errors.password && <p  style={{ fontSize: 12, color: "red" }}>{errors.password}</p>}
+
                         </div>
                         <div className="col-12">
                           <div className="form-agreement form-inner d-flex justify-content-between flex-wrap">

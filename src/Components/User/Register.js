@@ -19,7 +19,7 @@ function Register() {
 
     const handleSubmit = (event) => {
 // Form validation ================================
-
+ 
 const errors = {};
 
 if (username.trim() === "") {
@@ -49,23 +49,25 @@ if (repass.trim() === "") {
 }
 
 setErrors(errors);
-
+event.preventDefault(); 
+//Object.keys(errors).length === 0
 if (Object.keys(errors).length === 0) {
   const user = {
-    username: username,
-    password: password,
-    name: name,
-    email: email,
+    "username": username,
+    "password": password,
+    "name": name,
+    "email": email,
   };
 
-  register(user).then((data) => {
-    navigate("/login");
-    console.log(data["data"]);
-  });
+  register(user).then(data => {
+    //window.location.reload()
+    navigate("/login")
+    console.log(data["data"])
+})
 }
 
 
-        event.preventDefault(); 
+      /*  event.preventDefault(); 
         
         if (password == repass) {
             const user = {
@@ -80,7 +82,7 @@ if (Object.keys(errors).length === 0) {
                 navigate("/login")
                 console.log(data["data"])
             })
-        }
+        }*/
 
         
 
