@@ -1,5 +1,5 @@
 import logo from './logo.svg';
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { Suspense } from 'react';
 import { NavLink, Route, Routes } from 'react-router-dom';
 import NotFound from './Components/Pages/NotFound';
@@ -9,9 +9,11 @@ const Home = React.lazy(() => import('./Components/Pages/Home.js'))
 const Header = React.lazy(() => import('./Components/Pages/Header'))
 const Footer = React.lazy(() => import('./Components/Pages/Footer'))
 const Market = React.lazy(()=> import ('./Components/Pages/Market'))
-const About = React.lazy(()=> import ('./Components/Pages/About'))
-const Login =React.lazy(()=>import('./Components/User/Login'))
- const Register =React.lazy(()=>import('./Components/User/Register'))
+const About = React.lazy(() => import('./Components/Pages/About'))
+const Login = React.lazy(() => import('./Components/User/login'))
+const Register = React.lazy(()=> import ('./Components/User/register'))
+
+
 function App() {
 useScript("./assets/js/email-decode.min.js");
 
@@ -32,7 +34,18 @@ useScript("./assets/js/SmoothScroll.js");
 useScript("./assets/js/jquery.nice-number.min.js");
 useScript("./assets/js/jquery.magnific-popup.min.js");
 useScript("./assets/js/masonry.pkgd.min.js");
-useScript("./assets/js/main.js");
+  useScript("./assets/js/main.js");
+  
+
+  const [user, setUser] = useState(null)
+  useEffect(() => {
+    if (localStorage.getItem("user") != null)
+      setUser(localStorage.getItem("user"));
+    
+    console.log(user)
+  },[])
+
+
   return (
     <div className="App">
       
@@ -40,16 +53,21 @@ useScript("./assets/js/main.js");
      
       <Suspense fallback={<div>Loading...</div>}>
       <Header/>
-     
-                <Routes>
-                <Route path='*' element={<Home/>}></Route>
-                <Route path='/shop' element={<Market/>}></Route>
-                <Route path='/About' element={<About/>}></Route>
-                <Route path='/login' element={<Login/>}></Route>
-                <Route path='/register' element={<Register/>}></Route>
-                </Routes>
-<Footer/>
-            </Suspense>
+        <Routes>
+          <Route path='*' element={<Home/>}></Route>
+          <Route path='/shop' element={<Market/>}></Route>
+          <Route path='/About' element={<About />}></Route>
+          {user == null &&
+             
+            <Route path='/Login' element={<Login />}></Route>}
+          {user ==null &&
+            <Route path='/Register' element={<Register />}></Route>
+          }
+        </Routes>
+      
+        
+      <Footer />
+      </Suspense>
     </div>
   );
 }

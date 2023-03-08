@@ -1,156 +1,261 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
+import { Form, Button } from 'react-bootstrap';
+import { login } from "./api";
+import { useNavigate } from "react-router-dom";
+import { NavLink, Routes, Route } from "react-router-dom";
+import jwt_decode from "jwt-decode"; 
 
-const initialState = {
+function Login() {
+    
+    const [username, setUsername] = useState(''); 
+    const [password, setPassword] = useState(''); 
+    const [user, setUser] = useState(''); 
+
+    const navigate = useNavigate(); 
  
-  email: "",
-  password: "",
-  passError: "",
-  emailError: "",
-  passwordError: ""
-};
 
-export default class Login extends React.Component {
-  state = initialState;
+    const handleSubmit = (event) => {
+        event.preventDefault(); 
+        
+        const user = {
+            'username': username,
+            'password': password
+        }; 
 
-  handleChange = event => {
-    const isCheckbox = event.target.type === "checkbox";
-    this.setState({
-      [event.target.name]: isCheckbox
-        ? event.target.checked
-        : event.target.value
-    });
-  };
+        login(user).then(data => {
+            //window.location.reload()
+            navigate("/home") 
+            console.log(data["data"])
+        })
 
-  validate = () => {
-    let passError = "";
-    let emailError = "";
-    // let passwordError = "";
-
-    if (!this.state.password) {
-      passError = "password cannot be blank";
     }
 
-    if (!this.state.email.includes("@")) {
-      emailError = "invalid email";
-    }
+    useEffect(() => {   
+        if (localStorage.getItem('user') != null) { 
+            navigate("/home")
+        }
+    },[])
 
-    if (emailError || passError) {
-      this.setState({ emailError, passError });
-      return false;
-    }
+    const back = {
+        backgroundColor: '#F6DDDD',
+        margin: '70px',
+        paddingTop: '50px',
+        width: '40%',
+        boxShadow: 'rgba(0, 0, 0, 0.35) 0px 5px 15px',
+        borderRadius : '10px'
+        
+  }
+  
+ // ====== google =====
+  function handleCallbackResponse(response) {
+    console.log("Encoded JWT : " + response.credential); 
+    var userObject = jwt_decode(response.credential); 
+    console.log(userObject["family_name"]);
+    
+     
 
-    return true;
-  };
-
-  handleSubmit = event => {
-    event.preventDefault();
-    const isValid = this.validate();
-    if (isValid) {
-      console.log(this.state);
-      // clear form
-      this.setState(initialState);
-    }
-  };
-
-  render() {
-    return (
-        <div>
-            <div class="inner-page-banner">
-<div class="breadcrumb-vec-btm">
-<img class="img-fluid" src="assets/images/bg/inner-banner-btm-vec.png" alt="" />
-</div>
-<div class="container">
-<div class="row justify-content-center align-items-center text-center">
-<div class="col-lg-6 align-items-center">
-<div class="banner-content">
-<h1>Login</h1>
-<nav aria-label="breadcrumb">
-<ol class="breadcrumb">
-<li class="breadcrumb-item"><a href="index.html">Home</a></li>
-<li class="breadcrumb-item active" aria-current="page">Login</li>
-</ol>
-</nav>
-</div>
-</div>
-<div class="col-lg-6">
-<div class="banner-img d-lg-block d-none">
-<div class="banner-img-bg">
-<img class="img-fluid" src="assets/images/bg/inner-banner-vec.png" alt="" />
-</div>
-<img class="img-fluid" src="assets/images/bg/inner-banner-img.png" alt="" />
-</div>
-</div>
-</div>
-</div>
-</div>
-
-<div class="login-section pt-120 pb-120">
-<div class="container">
-<div class="row d-flex justify-content-center g-4">
-<div class="col-xl-6 col-lg-8 col-md-10">
-<div class="form-wrapper wow fadeInUp" data-wow-duration="1.5s" data-wow-delay=".2s">
-<div class="form-title">
-<h3>Log In</h3>
-<p>New Member? <a href="sign-up.html">signup here</a></p>
-</div>
-<form class="w-100" onSubmit={this.handleSubmit}>
-<div class="row">
- <div class="col-12">
-<div class="form-inner">
-<label>Enter Your Email *</label>
-<input type="text" placeholder="Enter Your Email" 
-
-name="email"
-value={this.state.email}
-onChange={this.handleChange}
-/>
-
-</div>
-<div style={{ fontSize: 12, color: "red" }}>
-            {this.state.emailError}
-          </div>
-</div>
-<div class="col-12">
-<div class="form-inner">
-<label>Password *</label>
-<input type="password" name="password" id="password" placeholder="Password" 
- 
-value={this.state.password}
-onChange={this.handleChange}/>
-<i class="bi bi-eye-slash" id="togglePassword"></i>
-</div>
-<div style={{ fontSize: 12, color: "red" }}>
-            {this.state.passError}
-          </div>
-</div>
-<div class="col-12">
-<div class="form-agreement form-inner d-flex justify-content-between flex-wrap">
-<div class="form-group">
-<input type="checkbox" id="html" />
-<label for="html">I agree to the <a href="#">Terms & Policy</a></label>
-</div>
-<a href="#" class="forgot-pass">Forgotten Password</a>
-</div>
-</div>
-</div>
-<button class="account-btn" type="submit">Log in</button>
-</form>
-<div class="alternate-signup-box">
-<h6>or signup WITH</h6>
-<div class="btn-group gap-4">
-<a href="#" class="eg-btn google-btn d-flex align-items-center"><i class='bx bxl-google'></i><span>signup whit google</span></a>
-<a href="#" class="eg-btn facebook-btn d-flex align-items-center"><i class='bx bxl-facebook'></i>signup whit facebook</a>
-</div>
-</div>
-<div class="form-poicy-area">
-<p>By clicking the "signup" button, you create a Cobiro account, and you agree to Cobiro's <a href="#">Terms & Conditions</a> & <a href="#">Privacy Policy.</a></p>
-</div>
-</div>
-</div>
-</div>
-</div>
-</div>
-
-        </div>
+    localStorage.setItem(
+      "user",
+      JSON.stringify({
+        username: userObject["family_name"],
+        email: userObject["email"],
+        name: userObject["name"],
+        image: userObject["picture"],
+      })
     );
-  }}
+      navigate("/home");  
+  }
+
+
+
+
+  
+  useEffect(() => {
+    const google = window.google;  
+    google.accounts.id.initialize({
+      client_id:
+        "607985557534-jakbgo8aau3rdivantjud5kji6o77560.apps.googleusercontent.com",
+      callback : handleCallbackResponse
+    });
+
+    google.accounts.id.renderButton (
+      document.getElementById("signInDiv"),
+        {theme : "outline" , size : "large"}
+    ); 
+
+    google.accounts.id.prompt()
+  }, [])
+
+
+
+
+    return (
+      <>
+        <script
+          src="https://accounts.google.com/gsi/client"
+          async
+          defer
+        ></script>
+
+        <div className="inner-page-banner">
+          <div className="breadcrumb-vec-btm">
+            <img
+              className="img-fluid"
+              src="assets/images/bg/inner-banner-btm-vec.png"
+              alt=""
+            />
+          </div>
+          <div className="container">
+            <div className="row justify-content-center align-items-center text-center">
+              <div className="col-lg-6 align-items-center">
+                <div className="banner-content">
+                  <h1>Login</h1>
+                  <nav aria-label="breadcrumb">
+                    <ol className="breadcrumb">
+                      <li className="breadcrumb-item">
+                        <a href="/">Home</a>
+                      </li>
+                      <li
+                        className="breadcrumb-item active"
+                        aria-current="page"
+                      >
+                        Login
+                      </li>
+                    </ol>
+                  </nav>
+                </div>
+              </div>
+              <div className="col-lg-6">
+                <div className="banner-img d-lg-block d-none">
+                  <div className="banner-img-bg">
+                    <img
+                      className="img-fluid"
+                      src="assets/images/bg/inner-banner-vec.png"
+                      alt=""
+                    />
+                  </div>
+                  <img
+                    className="img-fluid"
+                    src="assets/images/bg/inner-banner-img.png"
+                    alt=""
+                  />
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <center>
+          <div className="login-section pt-120 pb-120">
+            <div className="container">
+              <div className="row d-flex justify-content-center g-4">
+                <div className="col-xl-6 col-lg-8 col-md-10">
+                  <div
+                    className="form-wrapper wow fadeInUp"
+                    data-wow-duration="1.5s"
+                    data-wow-delay=".2s"
+                  >
+                    <div className="form-title">
+                      <h3>Log In</h3>
+                      <p>
+                        New Member? <NavLink to="/Register"> Sign Up</NavLink>
+                      </p>
+                    </div>
+                    <form className="w-100" onSubmit={handleSubmit}>
+                      <div className="row">
+                        <div className="col-12">
+                          <div className="form-inner">
+                            <label style={{ float: "left" }}>Username </label>
+                            <input
+                              type="text"
+                              placeholder="Enter Your Username..."
+                              value={username}
+                              onChange={(e) => setUsername(e.target.value)}
+                            />
+                          </div>
+                        </div>
+                        <div className="col-12">
+                          <div className="form-inner">
+                            <label style={{ float: "left" }}>Password </label>
+                            <input
+                              type="password"
+                              name="password"
+                              id="password"
+                              placeholder="Enter Password..."
+                              value={password}
+                              onChange={(e) => setPassword(e.target.value)}
+                            />
+                            <i
+                              className="bi bi-eye-slash"
+                              id="togglePassword"
+                            ></i>
+                          </div>
+                        </div>
+                        <div className="col-12">
+                          <div className="form-agreement form-inner d-flex justify-content-between flex-wrap">
+                            <div className="form-group">
+                              <input type="checkbox" id="html" />
+                              <label for="html">
+                                I agree to the <a href="#">Terms & Policy</a>
+                              </label>
+                            </div>
+                            <a href="#" className="forgot-pass">
+                              Forgotten Password
+                            </a>
+                          </div>
+                        </div>
+                      </div>
+                      <button className="account-btn">
+                        {" "}
+                        <i className="fa fa-paw" aria-hidden="true"></i>
+                        &nbsp;Log in
+                      </button>
+                    </form>
+                    <div className="alternate-signup-box">
+                      <h6>or signup WITH</h6>
+                      <div className="btn-group gap-4">
+                        {/* <a
+                          id="signInDiv"
+                          href="#"
+                          className="eg-btn google-btn d-flex align-items-center"
+                        >
+                          <i className="bx bxl-google"></i>
+                          <span>signup with google</span>
+                        </a> */}
+                        <div id="signInDiv"></div>
+                        <a
+                          href="#"
+                          className="eg-btn facebook-btn d-flex align-items-center"
+                        >
+                          <i className="bx bxl-facebook"></i>signup with
+                          facebook
+                        </a>
+
+                        <a
+                          href="#"
+                          className="eg-btn facebook-btn d-flex align-items-center"
+                          style={{ backgroundColor: "green" }}
+                        >
+                          <i className="bx bxl-facebook"></i>signup with
+                          linkedin
+                        </a>
+                      </div>
+                    </div>
+                    <div className="form-poicy-area">
+                      <p>
+                        By clicking the "signup" button, you create a Cobiro
+                        account, and you agree to Cobiro's{" "}
+                        <a href="#">Terms & Conditions</a> &{" "}
+                        <a href="#">Privacy Policy.</a>
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </center>
+      </>
+    );
+}
+
+export default Login;
