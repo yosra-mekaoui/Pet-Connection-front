@@ -1,10 +1,10 @@
-import React, { useState, useEffect } from "react";
+import React, { useRef,useState, useEffect } from "react";
 import { Form, Button } from 'react-bootstrap';
 import { login, register } from "./api";
 import { useNavigate } from "react-router-dom";
 import { NavLink, Routes, Route } from "react-router-dom";
-
-
+import ReCAPTCHA from "react-google-recaptcha"
+ 
 function Register() {
     const [username, setUsername] = useState(''); 
     const [name, setName] = useState(''); 
@@ -13,11 +13,25 @@ function Register() {
     const [repass, setRepass] = useState('');   
     const [user, setUser] = useState('');  
     const [errors, setErrors] = useState({}); 
-
-    
     const navigate = useNavigate(); 
+    // recaptcha validation ==========================
+    const [captchaToken, setCaptchaToken] = useState(null);
+    const captchaRef = useRef(null);
+     const SITE_KEY = "6LdG_OQkAAAAAHTULkl1kxv161mv9mTUDQ3UM81w";
 
+     const verify = () =>{
+      captchaRef.current.getResponse().then(res => {
+          setCaptchaToken(res)
+      })
+
+  }
+    // end recaptcha validation 
     const handleSubmit = (event) => {
+
+      // validation recaptcha 
+const token = captchaRef.current.getValue();
+captchaRef.current.reset();
+
 // Form validation ================================
  
 const errors = {};
@@ -47,11 +61,15 @@ if (repass.trim() === "") {
 } else if (password !== repass) {
   errors.repass = "Passwords do not match";
 }
+if (!token) {
+  errors.ReCAPTCHAError="Please verify reCAPTCHA";
+}
 
 setErrors(errors);
 event.preventDefault(); 
+
 //Object.keys(errors).length === 0
-if (Object.keys(errors).length === 0) {
+if (Object.keys(errors).length === 0 && token) {
   const user = {
     "username": username,
     "password": password,
@@ -231,6 +249,7 @@ if (Object.keys(errors).length === 0) {
                         </div>
                         {errors.password && <p  style={{ fontSize: 12, color: "red" }}>{errors.password}</p>}
 
+                        
                         <div class="col-12">
                           <div class="form-inner">
                             <label style={{ float: "left" }}>
@@ -248,6 +267,12 @@ if (Object.keys(errors).length === 0) {
                           </div>
                         </div>
                         {errors.repass && <p  style={{ fontSize: 12, color: "red" }}>{errors.repass}</p>}
+                        <ReCAPTCHA
+sitekey={SITE_KEY}
+ref={captchaRef}
+
+/>
+{errors.ReCAPTCHAError && <p  style={{ fontSize: 12, color: "red" }}>{errors.ReCAPTCHAError}</p>}
 
                         <div class="col-12">
                           <div class="form-agreement form-inner d-flex justify-content-between flex-wrap">
@@ -296,6 +321,9 @@ if (Object.keys(errors).length === 0) {
                         </a>
                       </div>
                     </div>
+
+                    
+                    
                     <div class="form-poicy-area">
                       <p>
                         By clicking the "signup" button, you create a Cobiro

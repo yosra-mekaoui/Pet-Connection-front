@@ -12,15 +12,11 @@ function Login() {
     const [user, setUser] = useState(''); 
     const [errors, setErrors] = useState({});
     const navigate = useNavigate(); 
- 
-
+   
     const handleSubmit = (event) => {
-
       // form validation 
-
-
       const errors = {};
-      if (username.trim() === "") {
+ if (username.trim() === "") {
         errors.username = "Username is required";
       }
       if (password.trim() === "") {
@@ -30,18 +26,20 @@ function Login() {
       }
       setErrors(errors);
         event.preventDefault(); 
+        
         if (Object.keys(errors).length === 0){
-        const user = {
-            'username': username,
-            'password': password
-        }; 
+          const user = {
+              'username': username,
+              'password': password
+          }; 
+  
+          login(user).then(data => {
+              //window.location.reload()
+              navigate("/home") 
+              console.log(data["data"])
+          });
+        }
 
-        login(user).then(data => {
-            //window.location.reload()
-            navigate("/home") 
-            console.log(data["data"])
-        });
-      }
     }
 
     useEffect(() => {   
