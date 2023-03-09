@@ -53,6 +53,8 @@ function Header() {
                 <li>
                   <NavLink to="/About">About</NavLink>
                 </li>
+
+                <li><NavLink to='/profile'>profile</NavLink></li>
                 <li>
                   <a href="#">Services</a>
                 </li>

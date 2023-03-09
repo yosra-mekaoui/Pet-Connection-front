@@ -12,6 +12,7 @@ const Market = React.lazy(()=> import ('./Components/Pages/Market'))
 const About = React.lazy(() => import('./Components/Pages/About'))
 const Login = React.lazy(() => import('./Components/User/login'))
 const Register = React.lazy(()=> import ('./Components/User/register'))
+const Profile = React.lazy(()=> import ('./Components/User/profile'))
 
 
 function App() {
@@ -63,6 +64,8 @@ useScript("./assets/js/masonry.pkgd.min.js");
           {user ==null &&
             <Route path='/Register' element={<Register />}></Route>
           }
+          <Route path='/profile' element={<Profile />}></Route>
+
         </Routes>
       
         
