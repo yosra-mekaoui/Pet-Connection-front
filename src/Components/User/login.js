@@ -90,6 +90,15 @@ function Login() {
 
 
 
+  // ====== test login google 2 ==========
+  const googleAuth = () => {
+    window.open(
+      `http://localhost:3001/auth/google/callback `,
+      "_self"
+    );
+  };
+
+
     return (
       <>
         <script
@@ -223,6 +232,7 @@ function Login() {
                           <span>signup with google</span>
                         </a> */}
                         <div id="signInDiv"></div>
+                        <button onClick={googleAuth}>google</button>
                         <a
                           href="#"
                           className="eg-btn facebook-btn d-flex align-items-center"
