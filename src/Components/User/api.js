@@ -10,3 +10,10 @@ export const login = async (user) => {
 export const register = async (user) => {
     return await axios.post(`${url}/register`, user)
 }
+
+
+export const loginGoogle = async (user) => {
+  return axios.post(`${url}/loginGoogle`, user).then((response) => {
+        localStorage.setItem("user", JSON.stringify(response.data));
+  });
+};

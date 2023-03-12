@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Form, Button } from 'react-bootstrap';
-import { login } from "./api";
+import { login, loginGoogle } from "./api";
 import { useNavigate } from "react-router-dom";
 import { NavLink, Routes, Route } from "react-router-dom";
 import jwt_decode from "jwt-decode"; 
@@ -68,9 +68,14 @@ function Login() {
     setConnected(JSON.parse(localStorage.getItem("user")));
      
 
-    
+    loginGoogle(JSON.parse(localStorage.getItem("user"))).then((data) => {
+      window.location.reload("/home");
+      //navigate("/home")
+      window.location.reload();
+      console.log(data["data"]);
+    });
 
-      navigate("/home");  
+      //navigate("/home");  
   }
 
 
