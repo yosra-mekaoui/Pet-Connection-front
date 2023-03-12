@@ -9,7 +9,7 @@ function Login() {
     
     const [username, setUsername] = useState(''); 
     const [password, setPassword] = useState(''); 
-    const [user, setUser] = useState(''); 
+    const [connected, setConnected] = useState({username:"", email:"", name:"",image:"",google:false}); 
 
     const navigate = useNavigate(); 
  
@@ -50,8 +50,7 @@ function Login() {
  // ====== google =====
   function handleCallbackResponse(response) {
     console.log("Encoded JWT : " + response.credential); 
-    var userObject = jwt_decode(response.credential); 
-    console.log(userObject["family_name"]);
+    var userObject = jwt_decode(response.credential);  
     
      
 
@@ -62,12 +61,17 @@ function Login() {
         email: userObject["email"],
         name: userObject["name"],
         image: userObject["picture"],
+        google : true
       })
     );
+      
+    setConnected(JSON.parse(localStorage.getItem("user")));
+     
+
+    
+
       navigate("/home");  
   }
-
-
 
 
   
@@ -93,7 +97,7 @@ function Login() {
   // ====== test login google 2 ==========
   const googleAuth = () => {
     window.open(
-      `http://localhost:3001/auth/google/callback `,
+      `http://localhost:3001/auth/google/callback`,
       "_self"
     );
   };
