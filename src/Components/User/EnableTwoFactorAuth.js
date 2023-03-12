@@ -14,7 +14,9 @@ function EnableTwoFactorAuth() {
   const token = User.accessToken;
 
   const handleEnable2FA = () => {
-    const id = User._id;
+    const id = User._id||User.facebookId;
+    console.log(id)
+    
     enable2FA(id)
       .then((response) => {
         const qrCode = response.data.qrCode;
@@ -55,12 +57,64 @@ function EnableTwoFactorAuth() {
   }, [qrCodeData, showResults]);
 
   return (
-    <div>
-      <button onClick={handleEnable2FA}>
-        Enable Two-Factor Authentication
+    <>
+    <div className="inner-page-banner">
+          
+          <div className="container">
+            <div className="row justify-content-center align-items-center text-center">
+              <div className="col-lg-6 align-items-center">
+                <div className="banner-content">
+                  <h1>Login</h1>
+                  <nav aria-label="breadcrumb">
+                    <ol className="breadcrumb">
+                      <li className="breadcrumb-item">
+                        <a href="/">Home</a>
+                      </li>
+                      <li className="breadcrumb-item active" aria-current="page">
+                        Login
+                      </li>
+                    </ol>
+                  </nav>
+                </div>
+              </div>
+              <div className="col-lg-6">
+                <div className="banner-img d-lg-block d-none">
+                  <div className="banner-img-bg">
+                    <img
+                      className="img-fluid"
+                      src="assets/images/bg/inner-banner-vec.png"
+                      alt=""
+                    />
+                  </div>
+                  <img
+                    className="img-fluid"
+                    src="assets/images/bg/inner-banner-img.png"
+                    alt=""
+                  />
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <center>
+          <div className="login-section pt-120 pb-120">
+            <div className="container">
+              <div className="row d-flex justify-content-center g-4">
+                <div className="col-xl-6 col-lg-8 col-md-10">
+                 
+    <div className="form-title">
+    <h3> Enable Two-Factor Authentication</h3>
+      <button className="account-btn" onClick={handleEnable2FA}>
+       Enable
       </button>
       {showResults ? <QR /> : null}
     </div>
+    </div>
+    </div>
+    </div>
+    </div>
+    </center>
+    </>
   );
 }
 

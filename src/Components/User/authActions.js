@@ -42,14 +42,11 @@ export const resetQRCode = () => {
   };
 };
 
-export const connectFacebook = (facebookData) => {
-  return (dispatch) => {
-    axios.post('http://localhost:3000/user/facebook', facebookData)
-      .then((response) => {
-        dispatch(loginSuccess(response.data.user));
-      })
-      .catch((error) => {
-        dispatch(loginFailure());
-      });
+export const facebookSuccess = ( user) =>{
+    return {
+        type: 'CONNECT_FACEBOOK',
+        payload: {
+        user
+        }
+    };
   };
-};

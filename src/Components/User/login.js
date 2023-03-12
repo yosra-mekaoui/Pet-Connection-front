@@ -4,10 +4,9 @@ import { login } from "./api";
 import { useNavigate } from "react-router-dom";
 import { NavLink, Routes, Route } from "react-router-dom";
 import jwt_decode from "jwt-decode";
-import TwoFactorVerification from "./TwoFactorVerification";
 import FacebookLogin from "react-facebook-login";
 import axios from "axios";
-import { loginSuccess } from './authActions';
+import { facebookSuccess, loginSuccess } from './authActions';
 import { useDispatch } from 'react-redux';
 
 function Login() {
@@ -29,11 +28,19 @@ function Login() {
         }; 
 
         login(user).then(data => {
-           
+          const twoFactorEnabled = localStorage.getItem('twoFactorEnabled');
+          if (twoFactorEnabled ) {
+            window.location.href = '/home';
+          } else {
+            // redirect user to 2FA verification page
+            window.location.href = '/2faverify';
+          }
+        
        
-            dispatch(loginSuccess(data))
-            window.location.reload();
-            console.log(data["data"])
+            // dispatch(loginSuccess(data))
+            
+            // window.location.reload();
+            // console.log(data["data"].twoFactorEnabled)
         })
       
 
@@ -144,8 +151,15 @@ function Login() {
       .then((res) => {
         if (res.ok) {
           console.log("Data sent successfully");
-          dispatch(loginSuccess(user));
-          navigate("/home");
+          dispatch(facebookSuccess(user));
+          const twoFactorEnabled = localStorage.getItem('twoFactorEnabled');
+          if (twoFactorEnabled ) {
+            window.location.href = '/home';
+          } else {
+            // redirect user to 2FA verification page
+            window.location.href = '/2faverify';
+          }
+       
         } else {
           console.error("Failed to send data");
         }

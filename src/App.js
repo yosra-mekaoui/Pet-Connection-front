@@ -4,7 +4,7 @@ import { Suspense } from 'react';
 import {  Route, Routes } from 'react-router-dom';
 
 import { useScript } from 'usehooks-ts'
-import TwoFactorVerification from "./Components/User/TwoFactorVerification";
+import TwoFa from "./Components/User/TwoFa";
 //import TwoFactorVerification from "./Components/User/TwoFactorVerification";
 
 
@@ -65,9 +65,9 @@ useScript("./assets/js/masonry.pkgd.min.js");
           {user == null && (
             <Route path="/Register" element={<Register />}></Route>
           )}
-          <Route path="/2fa/verify" element={<TwoFactorVerification />}></Route>
-          <Route path="/2fa/enable" element={<EnableTwoFactorAuth/>}></Route>
-          <Route path="/2fa/disable" element={<DisableTwoFactorAuth/>}></Route>
+          <Route path="/2faenable" element={<EnableTwoFactorAuth/>}></Route>
+          <Route path="/2fadisable" element={<DisableTwoFactorAuth/>}></Route>
+          <Route path="/2faverify" element={<TwoFa/>}></Route>
 
         </Routes>
 
