@@ -4,8 +4,8 @@ import { Suspense } from 'react';
 import {  Route, Routes } from 'react-router-dom';
 
 import { useScript } from 'usehooks-ts'
+import TwoFactorVerification from "./Components/User/TwoFactorVerification";
 //import TwoFactorVerification from "./Components/User/TwoFactorVerification";
-import TwofaVerif from './Components/User/TwofaVerif';
 
 
 const Home = React.lazy(() => import('./Components/Pages/Home.js'))
@@ -55,6 +55,7 @@ useScript("./assets/js/masonry.pkgd.min.js");
   return (
     <div className="App">
       <Suspense fallback={<div>Loading...</div>}>
+        
         <Header />
         <Routes>
           <Route path="*" element={<Home />}></Route>
@@ -64,7 +65,7 @@ useScript("./assets/js/masonry.pkgd.min.js");
           {user == null && (
             <Route path="/Register" element={<Register />}></Route>
           )}
-          <Route path="/2fa/verify" element={<TwofaVerif />}></Route>
+          <Route path="/2fa/verify" element={<TwoFactorVerification />}></Route>
           <Route path="/2fa/enable" element={<EnableTwoFactorAuth/>}></Route>
           <Route path="/2fa/disable" element={<DisableTwoFactorAuth/>}></Route>
 

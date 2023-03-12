@@ -7,6 +7,8 @@ import jwt_decode from "jwt-decode";
 import TwoFactorVerification from "./TwoFactorVerification";
 import FacebookLogin from "react-facebook-login";
 import axios from "axios";
+import { loginSuccess } from './authActions';
+import { useDispatch } from 'react-redux';
 
 function Login() {
     
@@ -15,7 +17,8 @@ function Login() {
     const [user, setUser] = useState(''); 
     const [redirectTo, setRedirectTo] = useState(null);
     const navigate = useNavigate(); 
- 
+    const dispatch = useDispatch();
+
 
     const handleSubmit = (event) => {
         event.preventDefault(); 
@@ -27,17 +30,20 @@ function Login() {
 
         login(user).then(data => {
            
-            navigate("/home") 
-            
+       
+            dispatch(loginSuccess(data))
             window.location.reload();
             console.log(data["data"])
         })
+      
 
     }
 
     useEffect(() => {   
         if (localStorage.getItem('user') != null) { 
             navigate("/home")
+            window.location.reload();
+
         }
     },[])
 
@@ -97,29 +103,33 @@ function Login() {
 
 
   const responseFacebook = (response) => {
+
     console.log(response);
     console.log(response.name);
     console.log(response.email);
     console.log(response.picture.data.url);
     const payload = {
+     // _id: response.userID,
       facebookId: response.id,
       name: response.name,
       email: response.email,
       image: response.picture.data.url,
       username: response.name,
       password:"12345",
-      role:"active"
+      role:"simple"
     };
+   
     localStorage.setItem(
       "user",
       JSON.stringify({
+        //_id:response.UserID,
+        facebookId: response.id,
         username: response.name,
         email: response.email,
         name: response.name,
         image: response.picture.data.url,
-        username: response.name,
       password:"12345",
-      role:"active"
+      role:"simple"
 
       })
     );
@@ -134,6 +144,7 @@ function Login() {
       .then((res) => {
         if (res.ok) {
           console.log("Data sent successfully");
+          dispatch(loginSuccess(user));
           navigate("/home");
         } else {
           console.error("Failed to send data");

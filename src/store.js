@@ -44,6 +44,12 @@ const initialState = {
               qrCode: null,
               isQrCodeVerified: false
             };
+            case 'CONNECT_FACEBOOK':
+      return {
+        ...state,
+        isAuthenticated: true,
+        user: action.payload.user
+      };
             default:
               return state;
           }

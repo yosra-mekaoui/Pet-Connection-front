@@ -37,12 +37,15 @@ export const disable2FA = async (id) => {
   return await axios.post(`${url}/2fa/disable/${id}`);
 };
 
-export const verify2FA = async (id) => {
-    // const token = JSON.parse(localStorage.getItem("user")).token;
-    // const headers = { Authorization: `Bearer ${token}` };
+export const verify2FA = async (id, token) => {
+  try {
+    const response = await axios.post(`${url}/2fa/verify/${id}`, { token });
+    return response.data;
+  } catch (error) {
+    throw new Error(error.response.data.message);
+  }
+};
 
-    return await axios.post(`${url}/2fa/verify/${id}`);
-  };
   
 export const facebook = async() =>
 {
