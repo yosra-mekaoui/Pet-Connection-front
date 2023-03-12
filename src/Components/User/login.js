@@ -3,14 +3,17 @@ import { Form, Button } from 'react-bootstrap';
 import { login } from "./api";
 import { useNavigate } from "react-router-dom";
 import { NavLink, Routes, Route } from "react-router-dom";
-import jwt_decode from "jwt-decode"; 
+import jwt_decode from "jwt-decode";
+import TwoFactorVerification from "./TwoFactorVerification";
+import FacebookLogin from "react-facebook-login";
+import axios from "axios";
 
 function Login() {
     
     const [username, setUsername] = useState(''); 
     const [password, setPassword] = useState(''); 
     const [user, setUser] = useState(''); 
-
+    const [redirectTo, setRedirectTo] = useState(null);
     const navigate = useNavigate(); 
  
 
@@ -23,9 +26,10 @@ function Login() {
         }; 
 
         login(user).then(data => {
-            window.location.reload("/home")
-            //navigate("/home") 
-        window.location.reload();
+           
+            navigate("/home") 
+            
+            window.location.reload();
             console.log(data["data"])
         })
 
@@ -49,9 +53,9 @@ function Login() {
   
  // ====== google =====
   function handleCallbackResponse(response) {
-    console.log("Encoded JWT : " + response.credential); 
+    //console.log("Encoded JWT : " + response.credential); 
     var userObject = jwt_decode(response.credential); 
-    console.log(userObject["family_name"]);
+    //console.log(userObject["family_name"]);
     
      
 
@@ -64,7 +68,9 @@ function Login() {
         image: userObject["picture"],
       })
     );
-      navigate("/home");  
+    navigate("/home")
+  
+    window.location.reload();
   }
 
 
@@ -90,13 +96,65 @@ function Login() {
 
 
 
+  const responseFacebook = (response) => {
+    console.log(response);
+    console.log(response.name);
+    console.log(response.email);
+    console.log(response.picture.data.url);
+    const payload = {
+      facebookId: response.id,
+      name: response.name,
+      email: response.email,
+      image: response.picture.data.url,
+      username: response.name,
+      password:"12345",
+      role:"active"
+    };
+    localStorage.setItem(
+      "user",
+      JSON.stringify({
+        username: response.name,
+        email: response.email,
+        name: response.name,
+        image: response.picture.data.url,
+        username: response.name,
+      password:"12345",
+      role:"active"
+
+      })
+    );
+
+    fetch("http://localhost:3000/user/facebook", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(payload),
+    })
+      .then((res) => {
+        if (res.ok) {
+          console.log("Data sent successfully");
+          navigate("/home");
+        } else {
+          console.error("Failed to send data");
+        }
+      })
+      .catch((err) => console.error(err));
+  };
+  
+    
+  
+
     return (
       <>
+      
+   
         <script
           src="https://accounts.google.com/gsi/client"
           async
           defer
         ></script>
+<script async defer crossorigin="anonymous" src="https://connect.facebook.net/en_US/sdk.js"></script>
 
         <div className="inner-page-banner">
           <div className="breadcrumb-vec-btm">
@@ -223,22 +281,16 @@ function Login() {
                           <span>signup with google</span>
                         </a> */}
                         <div id="signInDiv"></div>
-                        <a
-                          href="#"
-                          className="eg-btn facebook-btn d-flex align-items-center"
-                        >
-                          <i className="bx bxl-facebook"></i>signup with
-                          facebook
-                        </a>
-
-                        <a
-                          href="#"
-                          className="eg-btn facebook-btn d-flex align-items-center"
-                          style={{ backgroundColor: "green" }}
-                        >
-                          <i className="bx bxl-facebook"></i>signup with
-                          linkedin
-                        </a>
+                     
+        <FacebookLogin
+appId="976252610201144"
+autoLoad={false}
+fields="name,email,picture"
+callback={responseFacebook}
+cssClass="eg-btn facebook-btn d-flex align-items-center"
+icon="bx bxl-facebook"
+/>
+                       
                       </div>
                     </div>
                     <div className="form-poicy-area">
@@ -249,14 +301,19 @@ function Login() {
                         <a href="#">Privacy Policy.</a>
                       </p>
                     </div>
+                   
                   </div>
                 </div>
               </div>
             </div>
           </div>
         </center>
+    
       </>
+        
     );
-}
+  }
+ 
 
+  
 export default Login;

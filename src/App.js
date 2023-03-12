@@ -1,10 +1,13 @@
-import logo from './logo.svg';
+//import logo from './logo.svg';
 import React, { useState, useEffect } from "react";
 import { Suspense } from 'react';
-import { NavLink, Route, Routes } from 'react-router-dom';
-import NotFound from './Components/Pages/NotFound';
+import {  Route, Routes } from 'react-router-dom';
 
 import { useScript } from 'usehooks-ts'
+//import TwoFactorVerification from "./Components/User/TwoFactorVerification";
+import TwofaVerif from './Components/User/TwofaVerif';
+
+
 const Home = React.lazy(() => import('./Components/Pages/Home.js'))
 const Header = React.lazy(() => import('./Components/Pages/Header'))
 const Footer = React.lazy(() => import('./Components/Pages/Footer'))
@@ -12,6 +15,9 @@ const Market = React.lazy(()=> import ('./Components/Pages/Market'))
 const About = React.lazy(() => import('./Components/Pages/About'))
 const Login = React.lazy(() => import('./Components/User/login'))
 const Register = React.lazy(()=> import ('./Components/User/register'))
+const EnableTwoFactorAuth = React.lazy(()=> import('./Components/User/EnableTwoFactorAuth'))
+const DisableTwoFactorAuth = React.lazy(()=> import('./Components/User/DisableTwoFactorAuth'))
+
 
 
 function App() {
@@ -58,6 +64,10 @@ useScript("./assets/js/masonry.pkgd.min.js");
           {user == null && (
             <Route path="/Register" element={<Register />}></Route>
           )}
+          <Route path="/2fa/verify" element={<TwofaVerif />}></Route>
+          <Route path="/2fa/enable" element={<EnableTwoFactorAuth/>}></Route>
+          <Route path="/2fa/disable" element={<DisableTwoFactorAuth/>}></Route>
+
         </Routes>
 
         <Footer />

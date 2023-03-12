@@ -230,14 +230,7 @@ function Register() {
                           <i class="bx bxl-facebook"></i>signup with facebook
                         </a>
 
-                        <a
-                          href="#"
-                          class="eg-btn linkedin-btn d-flex align-items-center"
-                          style={{ backgroundColor: "green" }}
-                        >
-                          <i class="bx bxl-google"></i>
-                          <span>signup with linkedin</span>
-                        </a>
+                        
                       </div>
                     </div>
                     <div class="form-poicy-area">
