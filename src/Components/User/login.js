@@ -22,12 +22,12 @@ function Login() {
             'password': password
         }; 
 
-        login(user).then(data => {
-            window.location.reload("/home")
-            //navigate("/home") 
-        window.location.reload();
-            console.log(data["data"])
-        })
+      login(user).then(data => {
+          console.log("DATA === "  );
+          window.location.reload("/home")
+          //navigate("/home") 
+          window.location.reload();
+      })
 
     }
 
@@ -69,13 +69,11 @@ function Login() {
      
 
     loginGoogle(JSON.parse(localStorage.getItem("user"))).then((data) => {
-      window.location.reload("/home");
-      //navigate("/home")
+      window.location.reload("/home"); 
       window.location.reload();
       console.log(data["data"]);
     });
-
-      //navigate("/home");  
+ 
   }
 
 
