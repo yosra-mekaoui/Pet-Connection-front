@@ -19,6 +19,7 @@ const EnableTwoFactorAuth = React.lazy(()=> import('./Components/User/EnableTwoF
 const DisableTwoFactorAuth = React.lazy(()=> import('./Components/User/DisableTwoFactorAuth'))
 
 
+const Profile = React.lazy(()=> import ('./Components/User/Profile'))
 
 function App() {
 useScript("./assets/js/email-decode.min.js");
@@ -69,6 +70,7 @@ useScript("./assets/js/masonry.pkgd.min.js");
           <Route path="/2faenable" element={<EnableTwoFactorAuth/>}></Route>)}
          {user &&( <Route path="/2fadisable" element={<DisableTwoFactorAuth/>}></Route>)}
          {user &&( <Route path="/2faverify" element={<TwoFa/>}></Route>)}
+         {user &&(<Route path='/profile' element={<Profile />}></Route>)}
 
         </Routes>
 

@@ -29,7 +29,7 @@ function Login() {
 
         login(user).then(data => {
           const twoFactorEnabled = localStorage.getItem('twoFactorEnabled');
-          if (twoFactorEnabled ) {
+          if (twoFactorEnabled==true ) {
                         // redirect user to 2FA verification page
 
             window.location.href = '/2faverify';
@@ -108,13 +108,7 @@ function Login() {
     google.accounts.id.prompt()
   }, [])
 
- // ====== test login google 2 ==========
- const googleAuth = () => {
-  window.open(
-    `http://localhost:3001/auth/google/callback`,
-    "_self"
-  );
-};
+//  
 
 
 //======= facebook login ==== ///
@@ -320,7 +314,6 @@ function Login() {
                           <span>signup with google</span>
                         </a> */}
                         <div id="signInDiv"></div>
-                        <button onClick={googleAuth}>google</button>
 
                      
         <FacebookLogin
