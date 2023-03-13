@@ -2,16 +2,57 @@ import axios from "axios";
 const url = "http://localhost:3000/user";
 
 export const login = async (user) => {
-    return axios.post(`${url}/login`, user).then((response) => {
-        localStorage.setItem("user", JSON.stringify(response.data));
-    }) ;
-}
+  return axios.post(`${url}/login`, user).then((response) => {
+    localStorage.setItem("user", JSON.stringify(response.data));
+  });
+};
 
 export const register = async (user) => {
-    return await axios.post(`${url}/register`, user)
+  return await axios.post(`${url}/register`, user);
+};
+export const forgetPwd = async (email) => {
+  return await axios.post(`${url}/forget-password-token`,email);
+};
+export const enable2FA = async (id) => {
+    // const userString = localStorage.getItem("user");
+    // if (!userString) {
+    //   throw new Error("User not found in localStorage");
+    // }
+    //  let user;
+    // try {
+    //   user = JSON.parse(userString);
+    // } catch (error) {
+    //   throw new Error("Invalid user data in localStorage");
+    // }
+    // const token = user.token;
+    // const headers = { Authorization: `Bearer ${token}` };
+    // const accessToken = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImxvbCIsImlkIjoiNjQwYjUwZTNjYzVhNjJlMWZiZmRmNmJiIiwiaWF0IjoxNjc4NDcyMDU4fQ.rt1aYUcEmktPpJ9zeCe3Felr4ETMWXrC-Ow5S0cF3I8; connect.sid=s%3AJJIg855fMw3SDNdaxrTi6ndarAGKyoCF.xtxsJove%2FvlVbEEFkvTb2%2B8Wv7fUWYIgPErkoeKXz2g";
+    
+    // const headers = { Authorization: `Bearer ${accessToken }` };
+    return await axios.post(`${url}/2fa/enable/${id}`);
+  };
+
+
+export const disable2FA = async (id) => {
+//   const token = JSON.parse(localStorage.getItem("user")).token;
+//   const headers = { Authorization: `Bearer ${token}` };
+  return await axios.post(`${url}/2fa/disable/${id}`);
+};
+
+export const verify2FA = async (id, token) => {
+  try {
+    const response = await axios.post(`${url}/2fa/verify/${id}`, { token });
+    return response.data;
+  } catch (error) {
+    throw new Error(error.response.data.message);
+  }
+};
+
+  
+export const facebook = async() =>
+{
+    return await axios.post(`${url}/facebook`);
 }
-
-
 export const loginGoogle = async (user) => {
   return axios.post(`${url}/loginGoogle`, user).then((response) => {
         localStorage.setItem("user", JSON.stringify(response.data));

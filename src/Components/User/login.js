@@ -1,18 +1,23 @@
 import React, { useEffect, useState } from "react";
 import { Form, Button } from 'react-bootstrap';
-import { login, loginGoogle } from "./api";
+import { login } from "./api";
 import { useNavigate } from "react-router-dom";
 import { NavLink, Routes, Route } from "react-router-dom";
-import jwt_decode from "jwt-decode"; 
+import jwt_decode from "jwt-decode";
+import FacebookLogin from "react-facebook-login";
+import axios from "axios";
+import { facebookSuccess, loginSuccess } from './authActions';
+import { useDispatch } from 'react-redux';
 
 function Login() {
     
     const [username, setUsername] = useState(''); 
     const [password, setPassword] = useState(''); 
-    const [connected, setConnected] = useState({username:"", email:"", name:"",image:"",google:false}); 
-
+    const [user, setUser] = useState(''); 
+    const [redirectTo, setRedirectTo] = useState(null);
     const navigate = useNavigate(); 
- 
+    const dispatch = useDispatch();
+
 
     const handleSubmit = (event) => {
         event.preventDefault(); 
@@ -22,18 +27,32 @@ function Login() {
             'password': password
         }; 
 
-      login(user).then(data => {
-          console.log("DATA === "  );
-          window.location.reload("/home")
-          //navigate("/home") 
-          window.location.reload();
-      })
+        login(user).then(data => {
+          const twoFactorEnabled = localStorage.getItem('twoFactorEnabled');
+          if (twoFactorEnabled ) {
+                        // redirect user to 2FA verification page
+
+            window.location.href = '/2faverify';
+          } else {
+           
+            window.location.href = '/home';
+          }
+        
+       
+            // dispatch(loginSuccess(data))
+            
+            // window.location.reload();
+            // console.log(data["data"].twoFactorEnabled)
+        })
+      
 
     }
 
     useEffect(() => {   
         if (localStorage.getItem('user') != null) { 
             navigate("/home")
+            window.location.reload();
+
         }
     },[])
 
@@ -49,8 +68,9 @@ function Login() {
   
  // ====== google =====
   function handleCallbackResponse(response) {
-    console.log("Encoded JWT : " + response.credential); 
-    var userObject = jwt_decode(response.credential);  
+    //console.log("Encoded JWT : " + response.credential); 
+    var userObject = jwt_decode(response.credential); 
+    //console.log(userObject["family_name"]);
     
      
 
@@ -61,20 +81,14 @@ function Login() {
         email: userObject["email"],
         name: userObject["name"],
         image: userObject["picture"],
-        google : true
       })
     );
-      
-    setConnected(JSON.parse(localStorage.getItem("user")));
-     
-
-    loginGoogle(JSON.parse(localStorage.getItem("user"))).then((data) => {
-      window.location.reload("/home"); 
-      window.location.reload();
-      console.log(data["data"]);
-    });
- 
+    navigate("/home")
+  
+    window.location.reload();
   }
+
+
 
 
   
@@ -94,25 +108,92 @@ function Login() {
     google.accounts.id.prompt()
   }, [])
 
+ // ====== test login google 2 ==========
+ const googleAuth = () => {
+  window.open(
+    `http://localhost:3001/auth/google/callback`,
+    "_self"
+  );
+};
 
 
+//======= facebook login ==== ///
+  const responseFacebook = (response) => {
 
-  // ====== test login google 2 ==========
-  const googleAuth = () => {
-    window.open(
-      `http://localhost:3001/auth/google/callback`,
-      "_self"
+    console.log(response);
+    console.log(response.name);
+    console.log(response.email);
+    console.log(response.picture.data.url);
+    console.log(response.twoFactorEnabled);
+    const payload = {
+     // _id: response.userID,
+      facebookId: response.id,
+      name: response.name,
+      email: response.email,
+      image: response.picture.data.url,
+      username: response.name,
+      password:"12345",
+      role:"simple",
+      twoFactorEnabled:response.twoFactorEnabled
+    };
+   
+    localStorage.setItem(
+      "user",
+      JSON.stringify({
+        //_id:response.UserID,
+        facebookId: response.id,
+        username: response.name,
+        email: response.email,
+        name: response.name,
+        image: response.picture.data.url,
+      password:"12345",
+      role:"simple",
+      twoFactorEnabled:response.twoFactorEnabled
+
+      })
     );
-  };
 
+    fetch("http://localhost:3000/user/facebook", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(payload),
+    })
+      .then((res) => {
+        if (res.ok) {
+          console.log("Data sent successfully");
+          dispatch(facebookSuccess(user));
+          const twoFactorEnabled = localStorage.getItem('twoFactorEnabled');
+          if (twoFactorEnabled ) {
+            console.log(twoFactorEnabled);
+            window.location.href = '/2faverify';
+           
+          } else {
+            // redirect user to 2FA verification page
+            window.location.href = '/home';
+          }
+       
+        } else {
+          console.error("Failed to send data");
+        }
+      })
+      .catch((err) => console.error(err));
+  };
+  
+    
+  
 
     return (
       <>
+      
+   
         <script
           src="https://accounts.google.com/gsi/client"
           async
           defer
         ></script>
+<script async defer crossorigin="anonymous" src="https://connect.facebook.net/en_US/sdk.js"></script>
 
         <div className="inner-page-banner">
           <div className="breadcrumb-vec-btm">
@@ -215,9 +296,9 @@ function Login() {
                                 I agree to the <a href="#">Terms & Policy</a>
                               </label>
                             </div>
-                            <a href="#" className="forgot-pass">
+                            <NavLink to="/ForgetPwd" className="forgot-pass">
                               Forgotten Password
-                            </a>
+                            </NavLink>
                           </div>
                         </div>
                       </div>
@@ -240,22 +321,17 @@ function Login() {
                         </a> */}
                         <div id="signInDiv"></div>
                         <button onClick={googleAuth}>google</button>
-                        <a
-                          href="#"
-                          className="eg-btn facebook-btn d-flex align-items-center"
-                        >
-                          <i className="bx bxl-facebook"></i>signup with
-                          facebook
-                        </a>
 
-                        <a
-                          href="#"
-                          className="eg-btn facebook-btn d-flex align-items-center"
-                          style={{ backgroundColor: "green" }}
-                        >
-                          <i className="bx bxl-facebook"></i>signup with
-                          linkedin
-                        </a>
+                     
+        <FacebookLogin
+appId="976252610201144"
+autoLoad={false}
+fields="name,email,picture"
+callback={responseFacebook}
+cssClass="eg-btn facebook-btn d-flex align-items-center"
+icon="bx bxl-facebook"
+/>
+                       
                       </div>
                     </div>
                     <div className="form-poicy-area">
@@ -266,14 +342,19 @@ function Login() {
                         <a href="#">Privacy Policy.</a>
                       </p>
                     </div>
+                   
                   </div>
                 </div>
               </div>
             </div>
           </div>
         </center>
+    
       </>
+        
     );
-}
+  }
+ 
 
+  
 export default Login;

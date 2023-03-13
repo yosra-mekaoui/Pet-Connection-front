@@ -1,7 +1,7 @@
 import { NavLink,Routes ,Route } from "react-router-dom";
 import { Link } from "react-router-dom";
 import React, { useState, useEffect } from "react";
-
+import {MdOutlineLogout} from "react-icons/md";
 
 
 
@@ -201,7 +201,7 @@ function Header() {
                   </NavLink>
                 </li>
 
-                <li>{user && <button onClick={logout}>Logout</button>}</li>
+                <li>{user && <button  onClick={logout} height={15} width={15}><MdOutlineLogout/></button>}</li>
               </ul>
               <div className="hotline-info">
                 <span>Call Us Now</span>
