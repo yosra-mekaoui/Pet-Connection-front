@@ -30,10 +30,12 @@ function Login() {
         login(user).then(data => {
           const twoFactorEnabled = localStorage.getItem('twoFactorEnabled');
           if (twoFactorEnabled ) {
-            window.location.href = '/home';
-          } else {
-            // redirect user to 2FA verification page
+                        // redirect user to 2FA verification page
+
             window.location.href = '/2faverify';
+          } else {
+           
+            window.location.href = '/home';
           }
         
        
@@ -106,15 +108,23 @@ function Login() {
     google.accounts.id.prompt()
   }, [])
 
+ // ====== test login google 2 ==========
+ const googleAuth = () => {
+  window.open(
+    `http://localhost:3001/auth/google/callback`,
+    "_self"
+  );
+};
 
 
-
+//======= facebook login ==== ///
   const responseFacebook = (response) => {
 
     console.log(response);
     console.log(response.name);
     console.log(response.email);
     console.log(response.picture.data.url);
+    console.log(response.twoFactorEnabled);
     const payload = {
      // _id: response.userID,
       facebookId: response.id,
@@ -123,7 +133,8 @@ function Login() {
       image: response.picture.data.url,
       username: response.name,
       password:"12345",
-      role:"simple"
+      role:"simple",
+      twoFactorEnabled:response.twoFactorEnabled
     };
    
     localStorage.setItem(
@@ -136,7 +147,8 @@ function Login() {
         name: response.name,
         image: response.picture.data.url,
       password:"12345",
-      role:"simple"
+      role:"simple",
+      twoFactorEnabled:response.twoFactorEnabled
 
       })
     );
@@ -154,10 +166,12 @@ function Login() {
           dispatch(facebookSuccess(user));
           const twoFactorEnabled = localStorage.getItem('twoFactorEnabled');
           if (twoFactorEnabled ) {
-            window.location.href = '/home';
+            console.log(twoFactorEnabled);
+            window.location.href = '/2faverify';
+           
           } else {
             // redirect user to 2FA verification page
-            window.location.href = '/2faverify';
+            window.location.href = '/home';
           }
        
         } else {
@@ -306,6 +320,8 @@ function Login() {
                           <span>signup with google</span>
                         </a> */}
                         <div id="signInDiv"></div>
+                        <button onClick={googleAuth}>google</button>
+
                      
         <FacebookLogin
 appId="976252610201144"

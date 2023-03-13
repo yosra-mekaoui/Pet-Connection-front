@@ -65,9 +65,10 @@ useScript("./assets/js/masonry.pkgd.min.js");
           {user == null && (
             <Route path="/Register" element={<Register />}></Route>
           )}
-          <Route path="/2faenable" element={<EnableTwoFactorAuth/>}></Route>
-          <Route path="/2fadisable" element={<DisableTwoFactorAuth/>}></Route>
-          <Route path="/2faverify" element={<TwoFa/>}></Route>
+          {user &&(
+          <Route path="/2faenable" element={<EnableTwoFactorAuth/>}></Route>)}
+         {user &&( <Route path="/2fadisable" element={<DisableTwoFactorAuth/>}></Route>)}
+         {user &&( <Route path="/2faverify" element={<TwoFa/>}></Route>)}
 
         </Routes>
 
