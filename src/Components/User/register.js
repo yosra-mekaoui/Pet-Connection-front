@@ -24,6 +24,8 @@ function Register() {
     console.log(value);
     setCaptchaToken(value);
   }
+//toast l wess zidha
+//check your email
 
   const verify = () => {
       captchaRef.current.getResponse().then(res => {

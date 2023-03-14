@@ -343,9 +343,9 @@ return (
                             I agree to the <a href="#">Terms & Policy</a>
                           </label>
                         </div>
-                        <a href="#" className="forgot-pass">
-                          Forgotten Password
-                        </a>
+                        <NavLink to="/ForgetPwd" className="forgot-pass">
+                              Forgotten Password
+                            </NavLink>
                       </div>
                     </div>
                   </div>
