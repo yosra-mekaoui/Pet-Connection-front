@@ -15,7 +15,7 @@ import * as yup from "yup";
 import { enable2FA } from './api';
 import { disable2FA } from './api';
 
-
+import './profile.css'
 const schema = yup.object().shape({
   username: yup.string()
       .required()
