@@ -8,7 +8,8 @@ import FacebookLogin from "react-facebook-login";
 import axios from "axios";
 import { facebookSuccess, loginSuccess } from './authActions';
 import { useDispatch } from 'react-redux';
-
+import ReCAPTCHA from "react-google-recaptcha";
+import { createBrowserHistory } from 'history';
 function Login() {
     
     const [username, setUsername] = useState(''); 
@@ -19,22 +20,36 @@ function Login() {
 
     const navigate = useNavigate(); 
     const dispatch = useDispatch();
+    const [errors, setErrors] = useState({});
 
 
     const handleSubmit = (event) => {
+      const errors = {};
+      if (username.trim() === "") {
+             errors.username = "Username is required";
+           }
+           if (password.trim() === "") {
+             errors.password = "Password is required";
+           } else if (password.trim().length < 6) {
+             errors.password = "Password must be at least 6 characters";
+           }
+           setErrors(errors);
         event.preventDefault(); 
         
-        const user = {
-            'username': username,
-            'password': password
-        }; 
+        if (Object.keys(errors).length === 0){
+          const user = {
+              'username': username,
+              'password': password
+          }; 
 
         login(user).then(data => {
           const twoFactorEnabled = localStorage.getItem('twoFactorEnabled');
+          console.log(twoFactorEnabled)
           if (twoFactorEnabled==true ) {
                         // redirect user to 2FA verification page
 
             window.location.href = '/2faverify';
+             window.location.reload();
           } else {
            
             window.location.href = '/home';
@@ -50,6 +65,7 @@ function Login() {
 
 
     }
+  }
 
     useEffect(() => {   
         if (localStorage.getItem('user') != null) { 
@@ -174,6 +190,7 @@ function Login() {
           console.log("Data sent successfully");
           dispatch(facebookSuccess(user));
           const twoFactorEnabled = localStorage.getItem('twoFactorEnabled');
+          console.log(twoFactorEnabled)
           if (twoFactorEnabled ) {
             console.log(twoFactorEnabled);
             window.location.href = '/2faverify';
@@ -288,6 +305,8 @@ function Login() {
                               onChange={(e) => setUsername(e.target.value)}
                             />
                           </div>
+                          {errors.username && <p  style={{ fontSize: 12, color: "red" }}>{errors.username}</p>}
+
                         </div>
                         <div className="col-12">
                           <div className="form-inner">
@@ -305,6 +324,8 @@ function Login() {
                               id="togglePassword"
                             ></i>
                           </div>
+                          {errors.password && <p  style={{ fontSize: 12, color: "red" }}>{errors.password}</p>}
+
                         </div>
                         <div className="col-12">
                           <div className="form-agreement form-inner d-flex justify-content-between flex-wrap">
