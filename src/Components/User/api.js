@@ -51,11 +51,15 @@ export const facebook = async() =>
 {
     return await axios.post(`${url}/facebook`);
 }
+
 export const loginGoogle = async (user) => {
   return axios.post(`${url}/loginGoogle`, user).then((response) => {
         localStorage.setItem("user", JSON.stringify(response.data));
   });
+  
+  
 };
+
 export const editProfil = async (id, xx) => {
 
   //const accessToken = localStorage.getItem("access-token");
@@ -63,6 +67,5 @@ export const editProfil = async (id, xx) => {
       localStorage.setItem("user", JSON.stringify(response.data));
   }) ;
 
-
-
 }
+
