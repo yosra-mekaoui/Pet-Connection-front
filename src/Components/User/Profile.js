@@ -396,8 +396,9 @@ const handleDisable2FA = async () => {
                     <div className="col-lg-3 order-lg-2">
                       <div className="card-profile-image">
                         <a>
-                          <img src={imageSrc} alt={user.name} className="rounded-circle" />
-                        </a>
+                        {imageSrc !== '' ? <img src={imageSrc} alt={user.name} className="rounded-circle" /> :
+
+<img  src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQSOGcje-B89rfsytrpDJELPk1OPGA0tXLElNx837LS&s" className="rounded-circle" />}                        </a>
                       </div>
                     </div>
                   </div>
