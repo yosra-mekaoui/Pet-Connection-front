@@ -18,7 +18,8 @@ const Register = React.lazy(()=> import ('./Components/User/register'))
 const EnableTwoFactorAuth = React.lazy(()=> import('./Components/User/EnableTwoFactorAuth'))
 const DisableTwoFactorAuth = React.lazy(()=> import('./Components/User/DisableTwoFactorAuth'))
 
-
+const ForgetPwd = React.lazy(()=> import ('./Components/User/forgetPwd'))
+const ResetPwd = React.lazy(()=> import ('./Components/User/resetPwd'))
 const Profile = React.lazy(()=> import ('./Components/User/Profile'))
 
 function App() {
@@ -71,6 +72,9 @@ useScript("./assets/js/masonry.pkgd.min.js");
          {user &&( <Route path="/2fadisable" element={<DisableTwoFactorAuth/>}></Route>)}
          {user &&( <Route path="/2faverify" element={<TwoFa/>}></Route>)}
          {user &&(<Route path='/profile' element={<Profile />}></Route>)}
+         <Route path='/ForgetPwd' element={<ForgetPwd />}></Route>
+          <Route path='/resetPwd/:t' element={<ResetPwd />}></Route>
+          <Route exact path='/resetpassword/:token' element={<ResetPwd />}></Route>
 
         </Routes>
 

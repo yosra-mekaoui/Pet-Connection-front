@@ -69,3 +69,12 @@ export const editProfil = async (id, xx) => {
 
 }
 
+export const forgetPwd = async (email) => {
+  return await axios.post(`${url}/forget-password-token`, { email });
+};
+export const resetPassword = async (token, password) => {
+  const endpoint = `${url}/resetpassword`;
+  const data = { token, password };
+  const response = await axios.post(endpoint, data);
+  return response.data;
+};
