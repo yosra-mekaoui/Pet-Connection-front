@@ -98,8 +98,8 @@ function Profile() {
   useEffect(() => {
 
     const userFromLocalStorage = JSON.parse(localStorage.getItem('user'));
-
-    console.log("iduserconnecte " + userFromLocalStorage._id)
+    const id = userFromLocalStorage._id|userFromLocalStorage.facebookId;
+    console.log("iduserconnecte " + id)
 
     setUser(userFromLocalStorage);
 
@@ -171,6 +171,7 @@ function Profile() {
 
   ////// envoi de formulaire
   const handleSubmit = async e => {
+    const id = user._id||user.facebookId;
     e.preventDefault();
     setFormSubmitted(true);
 
@@ -190,7 +191,7 @@ function Profile() {
 
 
 
-      const res = editProfil(user._id, formData).then(
+      const res = editProfil(id, formData).then(
         notify()
       )
 
