@@ -213,33 +213,7 @@ function Register() {
                         &nbsp;Register
                       </button>
                     </form>
-                    <div class="alternate-signup-box">
-                      <h6>or signup WITH</h6>
-                      <div class="btn-group gap-4">
-                        <a
-                          href="#"
-                          class="eg-btn google-btn d-flex align-items-center"
-                        >
-                          <i class="bx bxl-google"></i>
-                          <span>signup with google</span>
-                        </a>
-                        <a
-                          href="#"
-                          class="eg-btn facebook-btn d-flex align-items-center"
-                        >
-                          <i class="bx bxl-facebook"></i>signup with facebook
-                        </a>
-
-                        <a
-                          href="#"
-                          class="eg-btn linkedin-btn d-flex align-items-center"
-                          style={{ backgroundColor: "green" }}
-                        >
-                          <i class="bx bxl-google"></i>
-                          <span>signup with linkedin</span>
-                        </a>
-                      </div>
-                    </div>
+                  
                     <div class="form-poicy-area">
                       <p>
                         By clicking the "signup" button, you create a Cobiro

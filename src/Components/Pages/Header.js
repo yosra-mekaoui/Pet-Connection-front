@@ -1,7 +1,7 @@
 import { NavLink,Routes ,Route } from "react-router-dom";
 import { Link } from "react-router-dom";
 import React, { useState, useEffect } from "react";
-
+import {MdOutlineLogout} from "react-icons/md";
 
 
 
@@ -36,8 +36,13 @@ function Header() {
               <div className="mobile-logo-area d-lg-none d-flex justify-content-between align-items-center">
                 <div className="mobile-logo-wrap">
                   <a href="index.html">
-                    <img alt="image" src="assets/images/header2-logo.svg" />
-                  </a>
+                  <img
+                  alt="image"
+                  className="img-fluid"
+                  src="assets/images/logo-01.png"
+                  height={50}
+                  width={50}
+                />                  </a>
                 </div>
                 <div className="menu-close-btn">
                   <i className="bi bi-x-lg" />
@@ -56,6 +61,9 @@ function Header() {
                 <li>
                   <a href="#">Services</a>
                 </li>
+
+<li><NavLink to='/profile'>profile</NavLink></li>
+
 
                 <li>
                   <NavLink to="/shop">Shop</NavLink>
@@ -201,7 +209,7 @@ function Header() {
                   </NavLink>
                 </li>
 
-                <li>{user && <button onClick={logout}>Logout</button>}</li>
+                <li>{user && <button  onClick={logout} height={15} width={15}><MdOutlineLogout/></button>}</li>
               </ul>
               <div className="hotline-info">
                 <span>Call Us Now</span>

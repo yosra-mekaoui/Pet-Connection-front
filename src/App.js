@@ -1,10 +1,13 @@
-import logo from './logo.svg';
+//import logo from './logo.svg';
 import React, { useState, useEffect } from "react";
 import { Suspense } from 'react';
-import { NavLink, Route, Routes } from 'react-router-dom';
-import NotFound from './Components/Pages/NotFound';
+import {  Route, Routes } from 'react-router-dom';
 
 import { useScript } from 'usehooks-ts'
+import TwoFa from "./Components/User/TwoFa";
+//import TwoFactorVerification from "./Components/User/TwoFactorVerification";
+
+
 const Home = React.lazy(() => import('./Components/Pages/Home.js'))
 const Header = React.lazy(() => import('./Components/Pages/Header'))
 const Footer = React.lazy(() => import('./Components/Pages/Footer'))
@@ -12,7 +15,11 @@ const Market = React.lazy(()=> import ('./Components/Pages/Market'))
 const About = React.lazy(() => import('./Components/Pages/About'))
 const Login = React.lazy(() => import('./Components/User/login'))
 const Register = React.lazy(()=> import ('./Components/User/register'))
+const EnableTwoFactorAuth = React.lazy(()=> import('./Components/User/EnableTwoFactorAuth'))
+const DisableTwoFactorAuth = React.lazy(()=> import('./Components/User/DisableTwoFactorAuth'))
 
+
+const Profile = React.lazy(()=> import ('./Components/User/Profile'))
 
 function App() {
 useScript("./assets/js/email-decode.min.js");
@@ -49,6 +56,7 @@ useScript("./assets/js/masonry.pkgd.min.js");
   return (
     <div className="App">
       <Suspense fallback={<div>Loading...</div>}>
+        
         <Header />
         <Routes>
           <Route path="*" element={<Home />}></Route>
@@ -58,6 +66,12 @@ useScript("./assets/js/masonry.pkgd.min.js");
           {user == null && (
             <Route path="/Register" element={<Register />}></Route>
           )}
+          {user &&(
+          <Route path="/2faenable" element={<EnableTwoFactorAuth/>}></Route>)}
+         {user &&( <Route path="/2fadisable" element={<DisableTwoFactorAuth/>}></Route>)}
+         {user &&( <Route path="/2faverify" element={<TwoFa/>}></Route>)}
+         {user &&(<Route path='/profile' element={<Profile />}></Route>)}
+
         </Routes>
 
         <Footer />
