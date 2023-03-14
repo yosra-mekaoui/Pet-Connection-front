@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Form, Button } from 'react-bootstrap';
-import { login } from "./api";
+import { login, loginGoogle } from "./api";
 import { useNavigate } from "react-router-dom";
 import { NavLink, Routes, Route } from "react-router-dom";
 import jwt_decode from "jwt-decode";
@@ -15,6 +15,8 @@ function Login() {
     const [password, setPassword] = useState(''); 
     const [user, setUser] = useState(''); 
     const [redirectTo, setRedirectTo] = useState(null);
+    const [connected, setConnected] = useState({username:"", email:"", name:"",image:"",google:false}); 
+
     const navigate = useNavigate(); 
     const dispatch = useDispatch();
 
@@ -46,6 +48,7 @@ function Login() {
         })
       
 
+
     }
 
     useEffect(() => {   
@@ -71,6 +74,7 @@ function Login() {
     //console.log("Encoded JWT : " + response.credential); 
     var userObject = jwt_decode(response.credential); 
     //console.log(userObject["family_name"]);
+
     
      
 
@@ -81,6 +85,7 @@ function Login() {
         email: userObject["email"],
         name: userObject["name"],
         image: userObject["picture"],
+        google : true
       })
     );
     navigate("/home")
@@ -88,7 +93,17 @@ function Login() {
     window.location.reload();
   }
 
+      
+    setConnected(JSON.parse(localStorage.getItem("user")));
+     
 
+    loginGoogle(JSON.parse(localStorage.getItem("user"))).then((data) => {
+      window.location.reload("/home"); 
+      window.location.reload();
+      console.log(data["data"]);
+    });
+ 
+  }
 
 
   
@@ -177,6 +192,15 @@ function Login() {
   
     
   
+
+  // ====== test login google 2 ==========
+  const googleAuth = () => {
+    window.open(
+      `http://localhost:3001/auth/google/callback`,
+      "_self"
+    );
+  };
+
 
     return (
       <>
@@ -314,6 +338,7 @@ function Login() {
                           <span>signup with google</span>
                         </a> */}
                         <div id="signInDiv"></div>
+
 
                      
         <FacebookLogin
