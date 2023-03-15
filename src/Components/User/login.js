@@ -22,6 +22,9 @@ function Login() {
   const dispatch = useDispatch();
   const [errors, setErrors] = useState({});
 
+  const [banned, setBanned] = useState(false);
+
+
 
   const handleSubmit = (event) => {
     const errors = {};
@@ -43,21 +46,56 @@ function Login() {
       };
 
       login(user).then(data => {
-        const twoFactorEnabled = JSON.parse(localStorage.getItem('user'))['twoFactorEnabled'];
-        console.log(localStorage.getItem("user"));
-        console.log(twoFactorEnabled)
-        if (twoFactorEnabled == true) {
-          // redirect user to 2FA verification page
-          navigate('/2faverify');
+
+
+
+        if (JSON.parse(localStorage.getItem("user"))["active"] == true) {
+          if (JSON.parse(localStorage.getItem("user"))["role"] == "admin") {
+                  // window.location.href="http://localhost:3002/profile";
+                  // window.location.href="http://www.facebook.com";
+                  // history.push('http://www.facebook.com');
+                  window.location.href = 'http://localhost:3002'; // Replace 3001 with the port number of the new page
+
+
+
+
+          } else {
+
+
+            const twoFactorEnabled = JSON.parse(localStorage.getItem('user'))['twoFactorEnabled'];
+            console.log(localStorage.getItem("user"));
+            console.log(twoFactorEnabled)
+            if (twoFactorEnabled == true) {
+              // redirect user to 2FA verification page
+              navigate('/2faverify');
+            } else {
+              navigate('/home');
+            }
+    
+    
+            dispatch(loginSuccess(data))
+    
+            window.location.reload();
+            // console.log(data["data"].twoFactorEnabled)
+
+
+
+
+            window.location.reload("/home");
+          }
+          // window.location.reload();
         } else {
-          navigate('/home');
+          setBanned(true); 
+          localStorage.removeItem("user");
         }
 
 
-        dispatch(loginSuccess(data))
 
-        window.location.reload();
-        // console.log(data["data"].twoFactorEnabled)
+
+
+
+
+   
       })
 
 
@@ -299,7 +337,12 @@ return (
                   <h3>Log In</h3>
                   <p>
                     New Member? <NavLink to="/Register"> Sign Up</NavLink>
+
+
                   </p>
+
+                  {banned && <h1>Account Banned ! </h1>}
+
                 </div>
                 <form className="w-100" onSubmit={handleSubmit}>
                   <div className="row">

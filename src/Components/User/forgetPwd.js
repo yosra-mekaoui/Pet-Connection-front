@@ -4,7 +4,8 @@ import { useNavigate } from "react-router-dom";
 import { forgetPwd } from "./api";
 import { NavLink, Routes, Route } from "react-router-dom";
 
- 
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 
 function ForgetPwd() {
@@ -27,10 +28,16 @@ function ForgetPwd() {
     try {
         if (Object.keys(errors).length === 0 /*&& token*/) {
 
-     const response = await forgetPwd(email);
-      console.log(response);
-      setMessage(response.msg);
-   } } catch (error) {
+     const response = await forgetPwd(email).then(
+      notify()
+     )
+      console.log(response)
+      setMessage(response.msg)
+      console.log("wsel??")
+   
+     }
+
+    } catch (error) {
       console.log(error.message);
     }
 
@@ -50,9 +57,25 @@ function ForgetPwd() {
         
     }
 
+
+
+    const notify = () => toast.success(' 👤 check your email please !', {
+      position: "bottom-right",
+      autoClose: 3000,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+      theme: "colored",
+    });
+
+
     return (
       <>
+         <ToastContainer />
         <div className="inner-page-banner">
+
           <div className="breadcrumb-vec-btm">
             <img
               className="img-fluid"
