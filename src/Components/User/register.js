@@ -6,6 +6,13 @@ import { Link,NavLink, Routes, Route } from "react-router-dom";
 import ReCAPTCHA from "react-google-recaptcha"
 import { createBrowserHistory } from 'history';
 
+
+
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css'; 
+
+
+
 function Register() {
   const history = createBrowserHistory();
   const [username, setUsername] = useState('');
@@ -24,8 +31,9 @@ function Register() {
     console.log(value);
     setCaptchaToken(value);
   }
-//toast l wess zidha
-//check your email
+
+
+
 
   const verify = () => {
       captchaRef.current.getResponse().then(res => {
@@ -91,9 +99,13 @@ function Register() {
 
           register(user).then(data => { // window.location.reload()
               //navigate("/login")
+              notify()
+
               history.push('/login');
               window.location.reload();
               console.log(data["data"])
+
+              
           })
       }
 
@@ -132,9 +144,34 @@ function Register() {
       borderRadius: '10px'
   }
 
+
+
+
+
+
+  const notify = () => toast.success(' 👤 check you mail please !', {
+    position: "bottom-right",
+    autoClose: 6000,
+    hideProgressBar: false,
+    closeOnClick: true,
+    pauseOnHover: true,
+    draggable: true,
+    progress: undefined,
+    theme: "colored",
+  });
+
+
+
+
+
+
   return (
       <>
+
           <div className="inner-page-banner">
+          <ToastContainer />
+
+
               <div className="breadcrumb-vec-btm">
                   <img className="img-fluid" src="assets/images/bg/inner-banner-btm-vec.png" alt=""/>
               </div>
@@ -396,7 +433,7 @@ function Register() {
 }
 
 export default Register;
-//     const [username, setUsername] = useState(''); 
+
 //     const [name, setName] = useState(''); 
 //     const [email, setEmail] = useState(''); 
 //     const [password, setPassword] = useState('');
