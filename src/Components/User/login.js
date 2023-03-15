@@ -47,6 +47,7 @@ function Login() {
 
       login(user).then(data => {
 
+
         if (JSON.parse(localStorage.getItem("user"))["active"] == true) {
          
           const twoFactorEnabled = JSON.parse(localStorage.getItem('user'))['twoFactorEnabled'];
@@ -64,14 +65,17 @@ function Login() {
   
           window.location.reload();
          
+
         } else {
           setBanned(true); 
           localStorage.removeItem("user");
         }
 
+
       
        
         // console.log(data["data"].twoFactorEnabled)
+
       })
 
 
