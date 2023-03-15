@@ -48,54 +48,34 @@ function Login() {
       login(user).then(data => {
 
 
-
         if (JSON.parse(localStorage.getItem("user"))["active"] == true) {
-          if (JSON.parse(localStorage.getItem("user"))["role"] == "admin") {
-                  // window.location.href="http://localhost:3002/profile";
-                  // window.location.href="http://www.facebook.com";
-                  // history.push('http://www.facebook.com');
-                  window.location.href = 'http://localhost:3002'; // Replace 3001 with the port number of the new page
-
-
-
-
+         
+          const twoFactorEnabled = JSON.parse(localStorage.getItem('user'))['twoFactorEnabled'];
+          console.log(localStorage.getItem("user"));
+          console.log(twoFactorEnabled)
+          if (twoFactorEnabled == true) {
+            // redirect user to 2FA verification page
+            navigate('/2faverify');
           } else {
-
-
-            const twoFactorEnabled = JSON.parse(localStorage.getItem('user'))['twoFactorEnabled'];
-            console.log(localStorage.getItem("user"));
-            console.log(twoFactorEnabled)
-            if (twoFactorEnabled == true) {
-              // redirect user to 2FA verification page
-              navigate('/2faverify');
-            } else {
-              navigate('/home');
-            }
-    
-    
-            dispatch(loginSuccess(data))
-    
-            window.location.reload();
-            // console.log(data["data"].twoFactorEnabled)
-
-
-
-
-            window.location.reload("/home");
+            navigate('/home');
           }
-          // window.location.reload();
+  
+  
+          dispatch(loginSuccess(data))
+  
+          window.location.reload();
+         
+
         } else {
           setBanned(true); 
           localStorage.removeItem("user");
         }
 
 
+      
+       
+        // console.log(data["data"].twoFactorEnabled)
 
-
-
-
-
-   
       })
 
 
@@ -105,6 +85,7 @@ function Login() {
 
 
   }
+
 
   // useEffect(() => {
   //   if (localStorage.getItem('user') != null) {
