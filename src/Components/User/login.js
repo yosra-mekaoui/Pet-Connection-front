@@ -69,14 +69,17 @@ function Login() {
   
           window.location.reload();
          
+
         } else {
           setBanned(true); 
           localStorage.removeItem("user");
         }
 
+
       
        
         // console.log(data["data"].twoFactorEnabled)
+
       })
 
 
