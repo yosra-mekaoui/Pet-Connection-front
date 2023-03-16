@@ -334,14 +334,7 @@ const handleDisable2FA = async () => {
               <ul className="navbar-nav align-items-center d-none d-md-flex">
                 <li className="nav-item dropdown">
                   <a className="nav-link pr-0" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                    <div className="media align-items-center">
-                      <span className="avatar avatar-sm rounded-circle">
-                        <img alt="Image placeholder" src="https://demos.creative-tim.com/argon-dashboard/assets-old/img/theme/team-4.jpg" />
-                      </span>
-                      <div className="media-body ml-2 d-none d-lg-block">
-                        <span className="mb-0 text-sm  font-weight-bold">Jessica Jones</span>
-                      </div>
-                    </div>
+                  
                   </a>
                   <div className="dropdown-menu dropdown-menu-arrow dropdown-menu-right">
                     <div className=" dropdown-header noti-title">

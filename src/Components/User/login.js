@@ -23,6 +23,8 @@ function Login() {
   const [errors, setErrors] = useState({});
 
   const [banned, setBanned] = useState(false);
+  const [confirmed, setConfirmed] = useState(true);
+
 
 
 
@@ -46,8 +48,10 @@ function Login() {
       };
 
       login(user).then(data => {
-
-
+        if (JSON.parse(localStorage.getItem("user"))["isUserVerified"] == false) {
+          setConfirmed(false);
+          localStorage.removeItem("user");
+        }
         if (JSON.parse(localStorage.getItem("user"))["active"] == true) {
          
           const twoFactorEnabled = JSON.parse(localStorage.getItem('user'))['twoFactorEnabled'];
@@ -323,6 +327,8 @@ return (
                   </p>
 
                   {banned && <h1>Account Banned ! </h1>}
+                  {!confirmed && <h1>Please verify your email ! </h1>}
+
 
                 </div>
                 <form className="w-100" onSubmit={handleSubmit}>
