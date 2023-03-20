@@ -4,6 +4,7 @@ import { Suspense } from 'react';
 import {  Route, Routes } from 'react-router-dom';
 
 import { useScript } from 'usehooks-ts'
+import Loading from "./Components/Pages/Loading";
 import TwoFa from "./Components/User/TwoFa";
 //import TwoFactorVerification from "./Components/User/TwoFactorVerification";
 
@@ -46,19 +47,30 @@ useScript("./assets/js/jquery.magnific-popup.min.js");
 useScript("./assets/js/masonry.pkgd.min.js");
   useScript("./assets/js/main.js");
   
+  const [isLoaded, setIsLoaded] = useState(false);
 
   const [user, setUser] = useState(null)
   useEffect(() => {
     if (localStorage.getItem("user") != null)
       setUser(localStorage.getItem("user"));
-    
+      setIsLoaded(true);
+      setTimeout(() => {
+        setIsLoaded(false);
+      }, 1000);
+   
+
     console.log(user)
   },[])
 
-
+ 
   return (
     <div className="App">
-      <Suspense fallback={<div>Loading...</div>}>
+      {isLoaded ? (
+        <div className="loader-container">
+       <Loading/>
+      </div>
+      ):(
+      <Suspense fallback={<div></div>}>
         
         <Header />
         <Routes>
@@ -83,6 +95,8 @@ useScript("./assets/js/masonry.pkgd.min.js");
 
         <Footer />
       </Suspense>
+      ) 
+      }
       
     </div>
   );
