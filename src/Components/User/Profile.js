@@ -116,7 +116,7 @@ function Profile() {
 
     //////////importer image user 
     if (userFromLocalStorage.image) {
-      axios.get(`http://localhost:3000/user/imageUser/${userFromLocalStorage._id}/image`, { responseType: 'blob' })
+      axios.get(`http://localhost:3000/user/imageUser/${userFromLocalStorage.id}/image`, { responseType: 'blob' })
         .then(res => {
           const url = URL.createObjectURL(res.data);
           setImageSrc(url);
@@ -533,15 +533,16 @@ const handleDisable2FA = async () => {
                         </div>
                       </div>
                       <div className="col-12 text-right mr-5">
-                      <button className="btn btn-sm btn-primary" onClick={handleDisable2FA}>Disable Two-Factor Authentication</button>
-
-                        <button className="btn btn-sm btn-primary" onClick={handleEnable2FA}>
-       Enable Two factor Authentication
-      </button>
-      {showResults ? <QR /> : null}
+                     
                         <button type="submit" className="btn btn-sm btn-primary">Modifier Profile</button >
                       </div>
                     </form>
+                    <button className="btn btn-sm btn-primary" onClick={handleDisable2FA}>Disable Two-Factor Authentication</button>
+
+<button className="btn btn-sm btn-primary" onClick={handleEnable2FA}>
+Enable Two factor Authentication
+</button>
+{showResults ? <QR /> : null}
                     {/*-------------------------------------------------------------------------------------------------------------------  */}
                     {/*-------------------------------------------------------------------------------------------------------------------  */}
 

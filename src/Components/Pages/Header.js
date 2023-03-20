@@ -2,7 +2,7 @@ import { NavLink,Routes ,Route } from "react-router-dom";
 import { Link } from "react-router-dom";
 import React, { useState, useEffect } from "react";
 import {MdOutlineLogout} from "react-icons/md";
-
+import { useLocation } from 'react-router-dom';
 
 
 function Header() {
@@ -15,7 +15,12 @@ function Header() {
     localStorage.removeItem("user");
     window.location.reload();
   };
-
+ const location = useLocation();
+  
+    if (location.pathname === "/Login" || location.pathname === "/Register" || location.pathname=="/2faverify") {
+      return <></>;
+    }
+    else
 
     return (
       <div>

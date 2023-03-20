@@ -22,6 +22,8 @@ const ForgetPwd = React.lazy(()=> import ('./Components/User/forgetPwd'))
 const ResetPwd = React.lazy(()=> import ('./Components/User/resetPwd'))
 const Profile = React.lazy(()=> import ('./Components/User/Profile'))
 
+
+
 function App() {
 useScript("./assets/js/email-decode.min.js");
 
@@ -70,8 +72,9 @@ useScript("./assets/js/masonry.pkgd.min.js");
           {user &&(
           <Route path="/2faenable" element={<EnableTwoFactorAuth/>}></Route>)}
          {user &&( <Route path="/2fadisable" element={<DisableTwoFactorAuth/>}></Route>)}
-         {user &&( <Route path="/2faverify" element={<TwoFa/>}></Route>)}
-         {user &&(<Route path='/profile' element={<Profile />}></Route>)}
+         {user && JSON.parse(localStorage.getItem('user'))['twoFactorEnabled'] && (
+  <Route path="/2faverify" element={<TwoFa />} />
+)}         {user &&(<Route path='/profile' element={<Profile />}></Route>)}
          <Route path='/ForgetPwd' element={<ForgetPwd />}></Route>
           <Route path='/resetPwd/:t' element={<ResetPwd />}></Route>
           <Route exact path='/resetpassword/:token' element={<ResetPwd />}></Route>
