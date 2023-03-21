@@ -12,11 +12,11 @@ function Upgrade() {
     const [role, setRole] = useState("");
     const [image, setImage] = useState("");
     const [type, setType] = useState("");
-    console.log(image); 
+     
     
 
     function handleSubmit() {
-          
+        const verify = { 'role': role, 'image': image, 'type': type };
     }
   return (
     <>
