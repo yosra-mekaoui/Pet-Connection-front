@@ -23,7 +23,7 @@ const DisableTwoFactorAuth = React.lazy(()=> import('./Components/User/DisableTw
 const ForgetPwd = React.lazy(()=> import ('./Components/User/forgetPwd'))
 const ResetPwd = React.lazy(()=> import ('./Components/User/resetPwd'))
 const Profile = React.lazy(()=> import ('./Components/User/Profile'))
-
+const Upgrade = React.lazy(() => import("./Components/Pages/Upgrade"));
 
 
 function App() {
@@ -69,43 +69,57 @@ useScript("./assets/js/masonry.pkgd.min.js");
     <div className="App">
       {isLoaded ? (
         <div className="loader-container">
-       <Loading/>
-      </div>
-      ):(
-      <Suspense fallback={<div></div>}>
-            <Cursor
-  showRing={true}
-  color="#000000"
-  ringSize={50}
-  cursorSize={10}
-  ringBorder={2}
-/>
-        <Header />
-        <Routes>
-          <Route path="*" element={<Home />}></Route>
-          <Route path="/shop" element={<Market />}></Route>
-          <Route path="/About" element={<About />}></Route>
-          {user == null && <Route path="/Login" element={<Login />}></Route>}
-          {user == null && (
-            <Route path="/Register" element={<Register />}></Route>
-          )}
-          {user &&(
-          <Route path="/2faenable" element={<EnableTwoFactorAuth/>}></Route>)}
-         {user &&( <Route path="/2fadisable" element={<DisableTwoFactorAuth/>}></Route>)}
-         {user && JSON.parse(localStorage.getItem('user'))['twoFactorEnabled'] && (
-  <Route path="/2faverify" element={<TwoFa />} />
-)}         {user &&(<Route path='/profile' element={<Profile />}></Route>)}
-         <Route path='/ForgetPwd' element={<ForgetPwd />}></Route>
-          <Route path='/resetPwd/:t' element={<ResetPwd />}></Route>
-          <Route exact path='/resetpassword/:token' element={<ResetPwd />}></Route>
+          <Loading />
+        </div>
+      ) : (
+        <Suspense fallback={<div></div>}>
+          <Cursor
+            showRing={true}
+            color="#000000"
+            ringSize={50}
+            cursorSize={10}
+            ringBorder={2}
+          />
+          <Header />
+          <Routes>
+            <Route path="*" element={<Home />}></Route>
+            <Route path="/shop" element={<Market />}></Route>
+            <Route path="/About" element={<About />}></Route>
+            {user == null && <Route path="/Login" element={<Login />}></Route>}
+            {user == null && (
+              <Route path="/Register" element={<Register />}></Route>
+            )}
+            {user && (
+              <Route
+                path="/2faenable"
+                element={<EnableTwoFactorAuth />}
+              ></Route>
+            )}
+            {user && (
+              <Route
+                path="/2fadisable"
+                element={<DisableTwoFactorAuth />}
+              ></Route>
+            )}
+            {user &&
+              JSON.parse(localStorage.getItem("user"))["twoFactorEnabled"] && (
+                <Route path="/2faverify" element={<TwoFa />} />
+              )}{" "}
+            {user && <Route path="/profile" element={<Profile />}></Route>}
+            <Route path="/ForgetPwd" element={<ForgetPwd />}></Route>
+            <Route path="/resetPwd/:t" element={<ResetPwd />}></Route>
+            <Route
+              exact
+              path="/resetpassword/:token"
+              element={<ResetPwd />}
+            ></Route>
+            <Route path="/About" element={<About />}></Route>
+            <Route path="/upgrade" element={<Upgrade />}></Route>
+          </Routes>
 
-        </Routes>
-
-        <Footer />
-      </Suspense>
-      ) 
-      }
-      
+          <Footer />
+        </Suspense>
+      )}
     </div>
   );
 }

@@ -74,10 +74,6 @@ function Header() {
                 </li>
 
                 <li>
-                  <NavLink to="/profile">profile</NavLink>
-                </li>
-
-                <li>
                   <NavLink to="/shop">Shop</NavLink>
                 </li>
                 <li>
@@ -89,7 +85,13 @@ function Header() {
 
                 {user && (
                   <li>
-                    <a href="contact.html">Upgrade</a>
+                    <NavLink to="/profile">profile</NavLink>
+                  </li>
+                )}
+
+                {user && (
+                  <li>
+                    <a href="/upgrade">Upgrade</a>
                   </li>
                 )}
                 {/* <Link to="About">Contact</Link> */}
