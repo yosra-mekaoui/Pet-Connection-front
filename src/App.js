@@ -19,12 +19,13 @@ const Login = React.lazy(() => import('./Components/User/login'))
 const Register = React.lazy(()=> import ('./Components/User/register'))
 const EnableTwoFactorAuth = React.lazy(()=> import('./Components/User/EnableTwoFactorAuth'))
 const DisableTwoFactorAuth = React.lazy(()=> import('./Components/User/DisableTwoFactorAuth'))
-
+const Event = React.lazy(()=> import ('./Components/Events/Event'))
 const ForgetPwd = React.lazy(()=> import ('./Components/User/forgetPwd'))
 const ResetPwd = React.lazy(()=> import ('./Components/User/resetPwd'))
 const Profile = React.lazy(()=> import ('./Components/User/Profile'))
+const EventDetails = React.lazy(()=> import ('./Components/Events/EventDetails'))
 
-
+const Upgrade = React.lazy(() => import("./Components/Pages/Upgrade"));
 
 function App() {
 useScript("./assets/js/email-decode.min.js");
@@ -85,6 +86,9 @@ useScript("./assets/js/masonry.pkgd.min.js");
           <Route path="*" element={<Home />}></Route>
           <Route path="/shop" element={<Market />}></Route>
           <Route path="/About" element={<About />}></Route>
+          <Route path="/Event" element={<Event />}></Route>
+          <Route path="/EventDetails" element={ <EventDetails/>}></Route>
+
           {user == null && <Route path="/Login" element={<Login />}></Route>}
           {user == null && (
             <Route path="/Register" element={<Register />}></Route>
@@ -98,6 +102,7 @@ useScript("./assets/js/masonry.pkgd.min.js");
          <Route path='/ForgetPwd' element={<ForgetPwd />}></Route>
           <Route path='/resetPwd/:t' element={<ResetPwd />}></Route>
           <Route exact path='/resetpassword/:token' element={<ResetPwd />}></Route>
+          <Route path="/upgrade" element={<Upgrade />}></Route>
 
         </Routes>
 
