@@ -8,6 +8,7 @@ import Loading from "./Components/Pages/Loading";
 import TwoFa from "./Components/User/TwoFa";
 //import TwoFactorVerification from "./Components/User/TwoFactorVerification";
 
+import { Cursor } from 'custom-pointer-react'
 
 const Home = React.lazy(() => import('./Components/Pages/Home.js'))
 const Header = React.lazy(() => import('./Components/Pages/Header'))
@@ -62,7 +63,8 @@ useScript("./assets/js/masonry.pkgd.min.js");
     console.log(user)
   },[])
 
- 
+
+
   return (
     <div className="App">
       {isLoaded ? (
@@ -71,7 +73,13 @@ useScript("./assets/js/masonry.pkgd.min.js");
       </div>
       ):(
       <Suspense fallback={<div></div>}>
-        
+            <Cursor
+  showRing={true}
+  color="#000000"
+  ringSize={50}
+  cursorSize={10}
+  ringBorder={2}
+/>
         <Header />
         <Routes>
           <Route path="*" element={<Home />}></Route>
@@ -101,5 +109,6 @@ useScript("./assets/js/masonry.pkgd.min.js");
     </div>
   );
 }
+
 
 export default App;
