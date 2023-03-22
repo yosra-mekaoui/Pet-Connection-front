@@ -12,10 +12,17 @@ function Upgrade() {
     const [type, setType] = useState("");
     const [done, setDone] = useState(false);
   
+    const [latitude, setLatitude] = useState("");
+    const [longitude, setLongitude] = useState("");
+
+  
   
     console.log(user);  
     console.log("type : " + type);   
-    console.log("Name : " + name);   
+    console.log("Name : " + name);  
+    console.log("Latitude : " + latitude);   
+    console.log("Longitude : " + longitude);   
+  
 
     const [file, setFile] = useState(null);
     const handleFileUpload = async (acceptedFiles) => {
@@ -30,15 +37,35 @@ function Upgrade() {
       e.preventDefault();
       const formData = new FormData();
       formData.append("file", file);
-      formData.append("name", name);
       formData.append("type", type);
       formData.append("user", user);
 
-       
+      if (type != "Association") {
+        formData.append("name", "none"); 
+      } else {
+        formData.append("name", name)
+      }
+
       UpgradeUser(formData);
       setDone(true); 
     };
+    
   
+  const getLocation = (e) => {
+    e.preventDefault();
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(showPosition);
+    } else {
+      console.log("Geolocation is not supported by this browser.");
+    }
+
+    function showPosition(position) {
+      setLatitude(position.coords.latitude);
+      setLongitude(position.coords.longitude);
+       
+    }
+       
+  }
 
   return (
     <>
@@ -58,44 +85,16 @@ function Upgrade() {
                       Are you a veterinarian or an association? Verify your
                       account now.
                     </p>
-                    {done &&
-                      (
-                        <h4 style={{color : "green"}}> Thank you for your submit. It may take a few hours to upgrade your account.</h4>
-                      )
-                    } 
+                    {done && (
+                      <h4 style={{ color: "green" }}>
+                        {" "}
+                        Thank you for your submit. It may take a few hours to
+                        upgrade your account.
+                      </h4>
+                    )}
                   </div>
                   <form className="w-100" onSubmit={handleSubmit}>
                     <div className="row">
-                      <div className="col-12">
-                        <div className="form-inner">
-                          <label style={{ float: "left" }}>
-                            <span style={{ fontWeight: "800" }}>
-                              Association Name{" "}
-                            </span>
-                            (Only if you are submitting for an association){" "}
-                          </label>
-                          <input
-                            type="text"
-                            placeholder="Enter Your Username..."
-                            onChange={(e) => setName(e.target.value)}
-                          />
-                        </div>
-                      </div>
-
-                      {/* <div className="col-6">
-                        <div className="form-inner">
-                          <label style={{ float: "left" }}>Account Type </label>
-
-                          <select
-                            type="text"
-                            onChange={(e) => setType(e.target.value)}
-                          >
-                            <option value={"Veterinarian"}>Veterinarian</option>
-                            <option value={"Association"}>Association</option>
-                          </select>
-                        </div>
-                      </div> */}
-
                       <div className="col-12">
                         <div className="form-inner">
                           <label style={{ float: "left", fontWeight: "800" }}>
@@ -143,6 +142,85 @@ function Upgrade() {
                               Association
                             </label>
                           </div>
+                        </div>
+                      </div>
+
+                      {type == "Association" && (
+                        <div className="col-12">
+                          <div className="form-inner">
+                            <label style={{ float: "left" }}>
+                              <span
+                                style={{ fontWeight: "800", marginTop: "30px" }}
+                              >
+                                Association Name{" "}
+                              </span>
+                            </label>
+                            <input
+                              type="text"
+                              placeholder="Enter Your Association name..."
+                              onChange={(e) => setName(e.target.value)}
+                            />
+                          </div>
+                        </div>
+                      )}
+
+                      <div className="col-12">
+                        <button
+                          onClick={getLocation}
+                          style={{
+                            padding: "10px",
+                            float: "left",
+                            boxShadow: "rgba(99, 99, 99, 0.2) 0px 2px 8px 0px",
+                            border: "1px solid black",
+                            marginBottom : "20px"
+                          }}
+                        >
+                          <i
+                            class="fa fa-map-marker"
+                            style={{
+                              fontSize: "20px",
+                              marginRight: "10px",
+                            }}
+                          ></i>
+                          Locate Me
+                        </button>
+                      </div>
+
+                      <div className="col-6">
+                        <div className="form-inner">
+                          <label style={{ float: "left" }}>
+                            <span
+                              style={{ fontWeight: "800", marginTop: "30px" }}
+                            >
+                              Longitude
+                            </span>
+                          </label>
+                          <input
+                            type="text"
+                            placeholder="Enter Your Association name..."
+                            onChange={(e) => setLongitude(e.target.value)}
+                            value={longitude}
+                            disabled="true"
+                          />
+                        </div>
+                      </div>
+
+                      <div className="col-6">
+                        <div className="form-inner">
+                          <label style={{ float: "left" }}>
+                            <span
+                              style={{ fontWeight: "800", marginTop: "30px" }}
+                            >
+                              Latitude
+                            </span>
+                          </label>
+                          <input
+                            type="text"
+                            placeholder="Enter Your Association name..."
+                            onChange={(e) => setLatitude(e.target.value)}
+                            value={latitude}
+                            disabled="true"
+                          />
                         </div>
                       </div>
 
@@ -194,7 +272,7 @@ function Upgrade() {
                         )}
                       </Dropzone>
                     </div>
-                    <button className="account-btn" hidden={!file}>
+                    <button className="account-btn" disabled={!file}>
                       {" "}
                       <i className="fa fa-paw" aria-hidden="true"></i>
                       &nbsp;Submit
