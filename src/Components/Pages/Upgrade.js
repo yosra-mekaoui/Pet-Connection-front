@@ -1,20 +1,20 @@
-import React, { useEffect, useState } from "react";
-import { Form, Button } from "react-bootstrap"; 
-import { useNavigate } from "react-router-dom";
-import { NavLink, Routes, Route } from "react-router-dom";
-import jwt_decode from "jwt-decode";
-import FacebookLogin from "react-facebook-login";
-import axios from "axios"; 
-import { useDispatch } from "react-redux";
-import ReCAPTCHA from "react-google-recaptcha";
-
+import React, { useEffect, useState } from "react"; 
+import Dropzone from "react-dropzone";
 function Upgrade() {
+    const [user, setUser] = useState(localStorage.getItem("user")); 
+  console.log(user); 
     const [role, setRole] = useState("");
     const [image, setImage] = useState("");
     const [type, setType] = useState("");
-    console.log(image); 
+   
     
+    const [file, setFile] = useState(null);
+  const handleFileUpload = async (acceptedFiles) => {
+    setFile(acceptedFiles[0]);
+  };
 
+
+   console.log(file); 
     function handleSubmit() {
           
     }
@@ -32,7 +32,7 @@ function Upgrade() {
                 >
                   <div className="form-title">
                     <h3>Upgrade Account</h3>
-                    <p>
+                    <p style={{ fontSize: "14px" }}>
                       Are you a veterinarian or an association? Verify your
                       account now.
                     </p>
@@ -42,8 +42,10 @@ function Upgrade() {
                       <div className="col-12">
                         <div className="form-inner">
                           <label style={{ float: "left" }}>
-                            Association Name (Only if you are submitting for an
-                            association){" "}
+                            <span style={{ fontWeight: "800" }}>
+                              Association Name{" "}
+                            </span>
+                            (Only if you are submitting for an association){" "}
                           </label>
                           <input
                             type="text"
@@ -53,7 +55,7 @@ function Upgrade() {
                         </div>
                       </div>
 
-                      <div className="col-6">
+                      {/* <div className="col-6">
                         <div className="form-inner">
                           <label style={{ float: "left" }}>Account Type </label>
 
@@ -65,34 +67,112 @@ function Upgrade() {
                             <option value={"Association"}>Association</option>
                           </select>
                         </div>
-                      </div>
+                      </div> */}
 
-                      <div className="col-6">
+                      <div className="col-12">
                         <div className="form-inner">
-                          <label style={{ float: "left" }}>Document </label>
-                          <input
-                            type="file"
-                            placeholder="Enter Your Username..."
-                            onChange={(e) => setImage(e.target.files[0])}
-                          />
+                          <label style={{ float: "left", fontWeight: "800" }}>
+                            Type{" "}
+                          </label>
+                          <div style={{ display: "flex" }}>
+                            <input
+                              style={{
+                                transform: "scale(0.5)",
+                                marginTop: "-10px",
+                              }}
+                              type="radio"
+                              id="Veterinarian"
+                              name="type"
+                              value="Veterinarian"
+                              onChange={(e) => setType(e.target.value)}
+                            />
+                            <label
+                              for="html"
+                              style={{
+                                marginLeft: "-40px",
+                                marginRight: "10px",
+                              }}
+                            >
+                              Veterinarian
+                            </label>
+                            <input
+                              style={{
+                                transform: "scale(0.5)",
+                                marginTop: "-10px",
+                              }}
+                              type="radio"
+                              id="Association"
+                              name="type"
+                              value="Association"
+                              onChange={(e) => setType(e.target.value)}
+                            />
+                            <label
+                              for="css"
+                              style={{
+                                marginLeft: "-40px",
+                                marginRight: "10px",
+                              }}
+                            >
+                              Association
+                            </label>
+                          </div>
                         </div>
                       </div>
+
+                      <Dropzone onDrop={handleFileUpload}>
+                        {({ getRootProps, getInputProps }) => (
+                          <div
+                            {...getRootProps()}
+                            style={{
+                              color: "black !important",
+                              height: "100px",
+                              paddingTop: "20px",
+                              marginTop: "20px",
+                              marginBottom: "30px",
+                              boxShadow:
+                                "rgba(99, 99, 99, 0.2) 0px 2px 8px 0px",
+                              border: "1px solid black",
+                              background:
+                                "linear-gradient(217deg, rgba(255,130,130,.8), rgba(255,130,130,0) 70.71%),            linear-gradient(127deg, rgba(230,207,207,.8), rgba(230,207,207,0) 70.71%),            linear-gradient(336deg, rgba(255,225,225,.8), rgba(255,225,225,0) 70.71%)",
+                            }}
+                          >
+                            <input {...getInputProps()} />
+                            <p
+                              style={{
+                                color: "black",
+                                fontSize: "17px",
+                              }}
+                            >
+                              <i
+                                className="fa fa-upload"
+                                style={{
+                                  fontSize: "20px",
+                                  marginRight: "10px",
+                                }}
+                              ></i>
+                              Drag and drop your image here or click to select a
+                              file
+                              {file != null && (
+                                <p
+                                  style={{
+                                    color: "darkGreen",
+                                  }}
+                                >
+                                  {" "}
+                                  {file["path"]}{" "}
+                                </p>
+                              )}
+                            </p>
+                          </div>
+                        )}
+                      </Dropzone>
                     </div>
                     <button className="account-btn">
                       {" "}
                       <i className="fa fa-paw" aria-hidden="true"></i>
-                      &nbsp;Log in
+                      &nbsp;Submit
                     </button>
                   </form>
-
-                  <div className="form-poicy-area">
-                    <p>
-                      By clicking the "signup" button, you create a Cobiro
-                      account, and you agree to Cobiro's{" "}
-                      <a href="#">Terms & Conditions</a> &{" "}
-                      <a href="#">Privacy Policy.</a>
-                    </p>
-                  </div>
                 </div>
               </div>
             </div>
