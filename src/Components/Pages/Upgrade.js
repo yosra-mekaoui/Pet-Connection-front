@@ -14,14 +14,16 @@ function Upgrade() {
   
     const [latitude, setLatitude] = useState("");
     const [longitude, setLongitude] = useState("");
+    const [bio, setBio] = useState("");
+  
 
   
   
-    console.log(user);  
-    console.log("type : " + type);   
-    console.log("Name : " + name);  
-    console.log("Latitude : " + latitude);   
-    console.log("Longitude : " + longitude);   
+    // console.log(user);  
+    // console.log("type : " + type);   
+    // console.log("Name : " + name);  
+    // console.log("Latitude : " + latitude);   
+    // console.log("Longitude : " + longitude);   
   
 
     const [file, setFile] = useState(null);
@@ -39,6 +41,11 @@ function Upgrade() {
       formData.append("file", file);
       formData.append("type", type);
       formData.append("user", user);
+      formData.append("longitude", longitude);
+      formData.append("latitude", latitude);
+      formData.append("bio", bio);
+
+
 
       if (type != "Association") {
         formData.append("name", "none"); 
@@ -165,6 +172,23 @@ function Upgrade() {
                       )}
 
                       <div className="col-12">
+                        <div className="form-inner">
+                          <label style={{ float: "left" }}>
+                            <span
+                              style={{ fontWeight: "800", marginTop: "30px" }}
+                            >
+                              Bio
+                            </span>
+                          </label>
+                          <input
+                            type="text"
+                            placeholder="Enter description..."
+                            onChange={(e) => setBio(e.target.value)}
+                          />
+                        </div>
+                      </div>
+
+                      <div className="col-12">
                         <button
                           onClick={getLocation}
                           style={{
@@ -172,7 +196,7 @@ function Upgrade() {
                             float: "left",
                             boxShadow: "rgba(99, 99, 99, 0.2) 0px 2px 8px 0px",
                             border: "1px solid black",
-                            marginBottom : "20px"
+                            marginBottom: "20px",
                           }}
                         >
                           <i
@@ -223,7 +247,10 @@ function Upgrade() {
                           />
                         </div>
                       </div>
+                      
 
+
+                      <div className="col-12">
                       <Dropzone onDrop={handleFileUpload}>
                         {({ getRootProps, getInputProps }) => (
                           <div
@@ -270,7 +297,8 @@ function Upgrade() {
                             </p>
                           </div>
                         )}
-                      </Dropzone>
+                        </Dropzone>
+                        </div>
                     </div>
                     <button className="account-btn" disabled={!file}>
                       {" "}
