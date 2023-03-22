@@ -1,23 +1,45 @@
 import React, { useEffect, useState } from "react"; 
 import Dropzone from "react-dropzone";
+import { UpgradeUser } from "./api";
+
+
+
 function Upgrade() {
-    const [user, setUser] = useState(localStorage.getItem("user")); 
-  console.log(user); 
-    const [role, setRole] = useState("");
+    const [user, setUser] = useState(JSON.parse(localStorage.getItem("user"))["_id"]); 
+  
+    const [name, setName] = useState("");
     const [image, setImage] = useState("");
     const [type, setType] = useState("");
-   
-    
+  
+    console.log(user);  
+    console.log("type : " + type);   
+    console.log("Name : " + name);   
+
     const [file, setFile] = useState(null);
-  const handleFileUpload = async (acceptedFiles) => {
-    setFile(acceptedFiles[0]);
-  };
+    const handleFileUpload = async (acceptedFiles) => {
+      setFile(acceptedFiles[0]);
+     };
 
 
-   console.log(file); 
-    function handleSubmit() {
-          
-    }
+   //console.log(file);
+  
+  
+    const handleSubmit = async (e) => {
+      e.preventDefault();
+      const formData = new FormData();
+      formData.append("file", file);
+
+      const Upgrade = {
+        user: user,
+        name: name,
+        file: formData,
+        type : type
+      }
+
+      UpgradeUser(Upgrade); 
+    };
+  
+
   return (
     <>
       <center>
@@ -50,7 +72,7 @@ function Upgrade() {
                           <input
                             type="text"
                             placeholder="Enter Your Username..."
-                            onChange={(e) => setRole(e.target.value)}
+                            onChange={(e) => setName(e.target.value)}
                           />
                         </div>
                       </div>
@@ -167,7 +189,7 @@ function Upgrade() {
                         )}
                       </Dropzone>
                     </div>
-                    <button className="account-btn">
+                    <button className="account-btn" hidden={!file}>
                       {" "}
                       <i className="fa fa-paw" aria-hidden="true"></i>
                       &nbsp;Submit
