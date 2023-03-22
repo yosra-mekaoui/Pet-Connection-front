@@ -10,6 +10,8 @@ function Upgrade() {
     const [name, setName] = useState("");
     const [image, setImage] = useState("");
     const [type, setType] = useState("");
+    const [done, setDone] = useState(false);
+  
   
     console.log(user);  
     console.log("type : " + type);   
@@ -24,19 +26,17 @@ function Upgrade() {
    //console.log(file);
   
   
-    const handleSubmit = async (e) => {
+    const handleSubmit = (e) => {
       e.preventDefault();
       const formData = new FormData();
       formData.append("file", file);
+      formData.append("name", name);
+      formData.append("type", type);
+      formData.append("user", user);
 
-      const Upgrade = {
-        user: user,
-        name: name,
-        file: formData,
-        type : type
-      }
-
-      UpgradeUser(Upgrade); 
+       
+      UpgradeUser(formData);
+      setDone(true); 
     };
   
 
@@ -58,6 +58,11 @@ function Upgrade() {
                       Are you a veterinarian or an association? Verify your
                       account now.
                     </p>
+                    {done &&
+                      (
+                        <h4 style={{color : "green"}}> Thank you for your submit. It may take a few hours to upgrade your account.</h4>
+                      )
+                    } 
                   </div>
                   <form className="w-100" onSubmit={handleSubmit}>
                     <div className="row">
