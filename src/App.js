@@ -68,26 +68,26 @@ useScript("./assets/js/masonry.pkgd.min.js");
 
   return (
     <div className="App">
-      {isLoaded ? (
+      {/* {isLoaded ? (
         <div className="loader-container">
        <Loading/>
       </div>
-      ):(
+      ):( */}
       <Suspense fallback={<div></div>}>
-            <Cursor
+            {/* <Cursor
   showRing={true}
   color="#000000"
   ringSize={50}
   cursorSize={10}
   ringBorder={2}
-/>
+/> */}
         <Header />
         <Routes>
           <Route path="*" element={<Home />}></Route>
           <Route path="/shop" element={<Market />}></Route>
           <Route path="/About" element={<About />}></Route>
           <Route path="/Event" element={<Event />}></Route>
-          <Route path="/EventDetails" element={ <EventDetails/>}></Route>
+          <Route path="/EventDetails/:id" element={ <EventDetails/>}></Route>
 
           {user == null && <Route path="/Login" element={<Login />}></Route>}
           {user == null && (
@@ -108,8 +108,8 @@ useScript("./assets/js/masonry.pkgd.min.js");
 
         <Footer />
       </Suspense>
-      ) 
-      }
+      {/* ) 
+      } */}
       
     </div>
   );

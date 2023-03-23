@@ -20,3 +20,7 @@ export const updateEvent = async (id, event) => {
 export const deleteEvent = async (id) => {
     return await axios.delete(`${url}/delete/${id}`);
     }
+export const addAttendeeById = async (id) =>{
+    await axios.post(`${url}/addAttendees/${id}`);
+    }
+    
