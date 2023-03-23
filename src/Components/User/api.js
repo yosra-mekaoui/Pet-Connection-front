@@ -2,7 +2,7 @@ import axios from "axios";
 const url = "http://localhost:3000/user";
 
 export const login = async (user) => {
-  return axios.post(`${url}/login`, user).then((response) => {
+  return  await axios.post(`${url}/login`, user).then((response) => {
     localStorage.setItem("user", JSON.stringify(response.data));
   });
 };
@@ -10,9 +10,7 @@ export const login = async (user) => {
 export const register = async (user) => {
   return await axios.post(`${url}/register`, user);
 };
-export const forgetPwd = async (email) => {
-  return await axios.post(`${url}/forget-password-token`,email);
-};
+
 export const enable2FA = async (id) => {
     // const userString = localStorage.getItem("user");
     // if (!userString) {
@@ -53,8 +51,30 @@ export const facebook = async() =>
 {
     return await axios.post(`${url}/facebook`);
 }
+
 export const loginGoogle = async (user) => {
   return axios.post(`${url}/loginGoogle`, user).then((response) => {
         localStorage.setItem("user", JSON.stringify(response.data));
   });
+  
+  
+};
+
+export const editProfil = async (id, xx) => {
+
+  //const accessToken = localStorage.getItem("access-token");
+  return await axios.put(`${url}/updateuser/${id}`,xx).then((response) => {
+      localStorage.setItem("user", JSON.stringify(response.data));
+  }) ;
+
+}
+
+export const forgetPwd = async (email) => {
+  return await axios.post(`${url}/forget-password-token`, { email });
+};
+export const resetPassword = async (token, password) => {
+  const endpoint = `${url}/resetpassword`;
+  const data = { token, password };
+  const response = await axios.post(endpoint, data);
+  return response.data;
 };

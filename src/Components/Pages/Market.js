@@ -1,3 +1,5 @@
+import { useNavigate } from "react-router-dom";
+import { NavLink, Routes, Route } from "react-router-dom";
 function Market() {
     return (<>  
     <div className="inner-page-banner">
@@ -192,15 +194,16 @@ function Market() {
                     <div className="plus-icon">
                       <i className="bi bi-plus" />
                     </div>
-                    <a href="shop-details.html">View Details</a>
+                    
+                    <NavLink to="/details">View Details</NavLink>
                   </div>
                   <ul className="cart-icon-list">
-                    <li><a href="cart.html"><img src="assets/images/icon/Icon-cart3.svg" alt="" /></a></li>
+                  <li><NavLink to="/cart"><img src="assets/images/icon/Icon-cart3.svg" alt=""/></NavLink></li>
                     <li><a href="#"><img src="assets/images/icon/Icon-favorites3.svg" alt="" /></a></li>
                   </ul>
                 </div>
                 <div className="collection-content text-center">
-                  <h4><a href="shop-details.html">Whiskas Cat Food Core Tuna</a></h4>
+                  <h4><NavLink to="/details">Whiskas Cat Food Core Tuna</NavLink></h4>
                   <div className="price">
                     <h6>$25.00</h6>
                     <del>$30.00</del>
@@ -226,15 +229,15 @@ function Market() {
                     <div className="plus-icon">
                       <i className="bi bi-plus" />
                     </div>
-                    <a href="shop-details.html">View Details</a>
+                    <NavLink to="/details">View Details</NavLink>
                   </div>
                   <ul className="cart-icon-list">
-                    <li><a href="cart.html"><img src="assets/images/icon/Icon-cart3.svg" alt="" /></a></li>
+                    <li><NavLink to="/cart"><img src="assets/images/icon/Icon-cart3.svg" alt=""/></NavLink></li>
                     <li><a href="#"><img src="assets/images/icon/Icon-favorites3.svg" alt="" /></a></li>
                   </ul>
                 </div>
                 <div className="collection-content text-center">
-                  <h4><a href="shop-details.html">Friskies Kitten Discoveries.</a></h4>
+                  <h4><NavLink to="/details">Friskies Kitten Discoveries.</NavLink></h4>
                   <div className="price">
                     <h6>$39.00</h6>
                     <del>$39.00</del>
@@ -263,15 +266,15 @@ function Market() {
                     <div className="plus-icon">
                       <i className="bi bi-plus" />
                     </div>
-                    <a href="shop-details.html">View Details</a>
+                    <NavLink to="/details">View Details</NavLink>
                   </div>
                   <ul className="cart-icon-list">
-                    <li><a href="cart.html"><img src="assets/images/icon/Icon-cart3.svg" alt="" /></a></li>
+                    <li><NavLink to="/cart"><img src="assets/images/icon/Icon-cart3.svg" alt=""/></NavLink></li>
                     <li><a href="#"><img src="assets/images/icon/Icon-favorites3.svg" alt="" /></a></li>
                   </ul>
                 </div>
                 <div className="collection-content text-center">
-                  <h4><a href="shop-details.html">Joules Cat Cotton House.</a></h4>
+                  <h4><NavLink to="/details">Joules Cat Cotton House.</NavLink></h4>
                   <div className="price">
                     <h6>$150.00</h6>
                     <del>$200.00</del>
@@ -297,15 +300,15 @@ function Market() {
                     <div className="plus-icon">
                       <i className="bi bi-plus" />
                     </div>
-                    <a href="shop-details.html">View Details</a>
+                    <NavLink to="/details">View Details</NavLink>
                   </div>
                   <ul className="cart-icon-list">
-                    <li><a href="cart.html"><img src="assets/images/icon/Icon-cart3.svg" alt="" /></a></li>
+                    <li><NavLink to="/cart"><img src="assets/images/icon/Icon-cart3.svg" alt=""/></NavLink></li>
                     <li><a href="#"><img src="assets/images/icon/Icon-favorites3.svg" alt="" /></a></li>
                   </ul>
                 </div>
                 <div className="collection-content text-center">
-                  <h4><a href="shop-details.html">Natural Dog Fresh Food.</a></h4>
+                  <h4><NavLink to="/details">Natural Dog Fresh Food.</NavLink></h4>
                   <div className="price">
                     <h6>$18.00</h6>
                     <del>$30.00</del>
@@ -334,15 +337,15 @@ function Market() {
                     <div className="plus-icon">
                       <i className="bi bi-plus" />
                     </div>
-                    <a href="shop-details.html">View Details</a>
+                    <NavLink to="/details">View Details</NavLink>
                   </div>
                   <ul className="cart-icon-list">
-                    <li><a href="cart.html"><img src="assets/images/icon/Icon-cart3.svg" alt="" /></a></li>
+                    <li><NavLink to="/cart"><img src="assets/images/icon/Icon-cart3.svg" alt=""/></NavLink></li>
                     <li><a href="#"><img src="assets/images/icon/Icon-favorites3.svg" alt="" /></a></li>
                   </ul>
                 </div>
                 <div className="collection-content text-center">
-                  <h4><a href="shop-details.html">Ferplast Cat Journey Bag.</a></h4>
+                  <h4><NavLink to="/details">Ferplast Cat Journey Bag.</NavLink></h4>
                   <div className="price">
                     <h6>$250.00</h6>
                     <del>$300.00</del>
@@ -368,15 +371,15 @@ function Market() {
                     <div className="plus-icon">
                       <i className="bi bi-plus" />
                     </div>
-                    <a href="shop-details.html">View Details</a>
+                    <NavLink to="/details">View Details</NavLink>
                   </div>
                   <ul className="cart-icon-list">
-                    <li><a href="cart.html"><img src="assets/images/icon/Icon-cart3.svg" alt="" /></a></li>
+                    <li><NavLink to="/cart"><img src="assets/images/icon/Icon-cart3.svg" alt=""/></NavLink></li>
                     <li><a href="#"><img src="assets/images/icon/Icon-favorites3.svg" alt="" /></a></li>
                   </ul>
                 </div>
                 <div className="collection-content text-center">
-                  <h4><a href="shop-details.html">Jungle Excellence Of Nature</a></h4>
+                  <h4><NavLink to="/details">Jungle Excellence Of Nature</NavLink></h4>
                   <div className="price">
                     <h6>$50.00</h6>
                     <del>$80.00</del>
@@ -405,15 +408,15 @@ function Market() {
                     <div className="plus-icon">
                       <i className="bi bi-plus" />
                     </div>
-                    <a href="shop-details.html">View Details</a>
+                    <NavLink to="/details">View Details</NavLink>
                   </div>
                   <ul className="cart-icon-list">
-                    <li><a href="cart.html"><img src="assets/images/icon/Icon-cart3.svg" alt="" /></a></li>
+                    <li><NavLink to="/cart"><img src="assets/images/icon/Icon-cart3.svg" alt=""/></NavLink></li>
                     <li><a href="#"><img src="assets/images/icon/Icon-favorites3.svg" alt="" /></a></li>
                   </ul>
                 </div>
                 <div className="collection-content text-center">
-                  <h4><a href="shop-details.html">Rooibos Pet Food Supple</a></h4>
+                  <h4><NavLink to="/details">Rooibos Pet Food Supple</NavLink></h4>
                   <div className="price">
                     <h6>$75.00</h6>
                     <del>$80.00</del>
@@ -439,15 +442,15 @@ function Market() {
                     <div className="plus-icon">
                       <i className="bi bi-plus" />
                     </div>
-                    <a href="shop-details.html">View Details</a>
+                    <NavLink to="/details">View Details</NavLink>
                   </div>
                   <ul className="cart-icon-list">
-                    <li><a href="cart.html"><img src="assets/images/icon/Icon-cart3.svg" alt="" /></a></li>
+                    <li><NavLink to="/cart"><img src="assets/images/icon/Icon-cart3.svg" alt=""/></NavLink></li>
                     <li><a href="#"><img src="assets/images/icon/Icon-favorites3.svg" alt="" /></a></li>
                   </ul>
                 </div>
                 <div className="collection-content text-center">
-                  <h4><a href="shop-details.html">Pedigree Natuar Dog Food</a></h4>
+                  <h4><NavLink to="/details">Pedigree Natuar Dog Food</NavLink></h4>
                   <div className="price">
                     <h6>$69.00</h6>
                     <del>$89.00</del>
@@ -473,15 +476,15 @@ function Market() {
                     <div className="plus-icon">
                       <i className="bi bi-plus" />
                     </div>
-                    <a href="shop-details.html">View Details</a>
+                    <NavLink to="/details">View Details</NavLink>
                   </div>
                   <ul className="cart-icon-list">
-                    <li><a href="cart.html"><img src="assets/images/icon/Icon-cart3.svg" alt="" /></a></li>
+                    <li><NavLink to="/cart"><img src="assets/images/icon/Icon-cart3.svg" alt=""/></NavLink></li>
                     <li><a href="#"><img src="assets/images/icon/Icon-favorites3.svg" alt="" /></a></li>
                   </ul>
                 </div>
                 <div className="collection-content text-center">
-                  <h4><a href="shop-details.html">Drools Nutrition Ocean Fish</a></h4>
+                  <h4><NavLink to="/details">Drools Nutrition Ocean Fish</NavLink></h4>
                   <div className="price">
                     <h6>$29.00</h6>
                     <del>$39.00</del>
@@ -507,15 +510,15 @@ function Market() {
                     <div className="plus-icon">
                       <i className="bi bi-plus" />
                     </div>
-                    <a href="shop-details.html">View Details</a>
+                    <NavLink to="/details">View Details</NavLink>
                   </div>
                   <ul className="cart-icon-list">
-                    <li><a href="cart.html"><img src="assets/images/icon/Icon-cart3.svg" alt="" /></a></li>
+                    <li><NavLink to="/cart"><img src="assets/images/icon/Icon-cart3.svg" alt=""/></NavLink></li>
                     <li><a href="#"><img src="assets/images/icon/Icon-favorites3.svg" alt="" /></a></li>
                   </ul>
                 </div>
                 <div className="collection-content text-center">
-                  <h4><a href="shop-details.html">Cat Litter Formal Plan Fibre.</a></h4>
+                  <h4><NavLink to="/details">Cat Litter Formal Plan Fibre.</NavLink></h4>
                   <div className="price">
                     <h6>$32.00</h6>
                     <del>$44.00</del>
@@ -541,15 +544,15 @@ function Market() {
                     <div className="plus-icon">
                       <i className="bi bi-plus" />
                     </div>
-                    <a href="shop-details.html">View Details</a>
+                    <NavLink to="/details">View Details</NavLink>
                   </div>
                   <ul className="cart-icon-list">
-                    <li><a href="cart.html"><img src="assets/images/icon/Icon-cart3.svg" alt="" /></a></li>
+                    <li><NavLink to="/cart"><img src="assets/images/icon/Icon-cart3.svg" alt=""/></NavLink></li>
                     <li><a href="#"><img src="assets/images/icon/Icon-favorites3.svg" alt="" /></a></li>
                   </ul>
                 </div>
                 <div className="collection-content text-center">
-                  <h4><a href="shop-details.html">Weruva Pates Slide Fortuni</a></h4>
+                  <h4><NavLink to="/details">Weruva Pates Slide Fortuni</NavLink></h4>
                   <div className="price">
                     <h6>$32.00</h6>
                     <del>$43.00</del>
@@ -575,15 +578,15 @@ function Market() {
                     <div className="plus-icon">
                       <i className="bi bi-plus" />
                     </div>
-                    <a href="shop-details.html">View Details</a>
+                    <NavLink to="/details">View Details</NavLink>
                   </div>
                   <ul className="cart-icon-list">
-                    <li><a href="cart.html"><img src="assets/images/icon/Icon-cart3.svg" alt="" /></a></li>
+                    <li><NavLink to="/cart"><img src="assets/images/icon/Icon-cart3.svg" alt=""/></NavLink></li>
                     <li><a href="#"><img src="assets/images/icon/Icon-favorites3.svg" alt="" /></a></li>
                   </ul>
                 </div>
                 <div className="collection-content text-center">
-                  <h4><a href="shop-details.html">Dog Poops Cotton Bag.</a></h4>
+                  <h4><NavLink to="/details">Dog Poops Cotton Bag.</NavLink></h4>
                   <div className="price">
                     <h6>$69.00</h6>
                     <del>$89.00</del>

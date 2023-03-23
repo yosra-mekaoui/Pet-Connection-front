@@ -1,47 +1,42 @@
 import React, { useState, useEffect } from "react";
 import { Form, Button } from 'react-bootstrap';
-import { useNavigate } from "react-router-dom";
-import { NavLink, Routes, Route } from "react-router-dom";
- 
+import { useNavigate ,useParams} from "react-router-dom";
+import { NavLink, Routes, Route} from "react-router-dom";
+import { resetPassword } from './api.js';
+import axios from "axios";
+
+
+
 
 
 function ResetPwd() {
   
     const [password, setPassword] = useState('');
     const [message, setMessage] = useState("");
+    const {token}= useParams();
+
+
+    const newPwd = async () =>{
+     await axios.put('http://localhost:3000/user/resetpassword', {token,password})
+      // await axios.put('http://localhost:3000/user/resetpassword', {password}, {
+      //         headers: {Authorization: token}
+      //     })
+
+    }
+
     
     const navigate = useNavigate(); 
-   
-        const sendLink = async(e)=>{
-            e.preventDefault();
-    
-         /*   const res = await fetch("/sendpasswordlink", {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json"
-                },
-                body: JSON.stringify({ password })
-            });
-            const data = await res.json();
-    
-            if (data.status == 201) {
-                setPassword("");
-                setMessage(true)
-            } else {
-                toast.error("Invalid User",{
-                    position: "top-center"
-                })
-            }*/
-    
-        }
+    const sendLink = async (e) => {
+      console.log(token)
+      resetPassword();
 
-        
+     
+    };
+    
 
 
     useEffect(() => { 
-        if (localStorage.getItem('user') != null) { 
-            navigate("/home")
-        }
+       
      }, [])
     
     const back = {
@@ -122,7 +117,7 @@ function ResetPwd() {
                       
                     </div>
                     {message ? <p style={{ color: "green", fontWeight: "bold" }}>pasword Succsfully Updated</p> : ""}
-                    <form class="w-100" >
+                    {/* <form class="w-100" > */}
                       <div class="row">
                         <div class="col-12">
                           <div class="form-inner">
@@ -136,12 +131,12 @@ function ResetPwd() {
                           </div>
                         </div>
                       </div>
-                      <button className="account-btn">
+                      <button className="account-btn"onClick={()=> newPwd() }>
                         {" "}
-                        <i className="fa fa-paw" aria-hidden="true" onClick={sendLink}></i>
+                        <i className="fa fa-paw" ></i>
                         &nbsp;Send
                       </button>
-                    </form>
+                    {/* </form> */}
                    
                   
                   </div>

@@ -2,7 +2,7 @@ import { NavLink,Routes ,Route } from "react-router-dom";
 import { Link } from "react-router-dom";
 import React, { useState, useEffect } from "react";
 import {MdOutlineLogout} from "react-icons/md";
-
+import { useLocation } from 'react-router-dom';
 
 
 function Header() {
@@ -15,7 +15,12 @@ function Header() {
     localStorage.removeItem("user");
     window.location.reload();
   };
-
+ const location = useLocation();
+  
+    if (location.pathname === "/Login" || location.pathname === "/Register" || location.pathname=="/2faverify") {
+      return <></>;
+    }
+    else
 
     return (
       <div>
@@ -36,8 +41,13 @@ function Header() {
               <div className="mobile-logo-area d-lg-none d-flex justify-content-between align-items-center">
                 <div className="mobile-logo-wrap">
                   <a href="index.html">
-                    <img alt="image" src="assets/images/header2-logo.svg" />
-                  </a>
+                  <img
+                  alt="image"
+                  className="img-fluid"
+                  src="assets/images/logo-01.png"
+                  height={50}
+                  width={50}
+                />                  </a>
                 </div>
                 <div className="menu-close-btn">
                   <i className="bi bi-x-lg" />
@@ -56,6 +66,9 @@ function Header() {
                 <li>
                   <a href="#">Services</a>
                 </li>
+
+<li><NavLink to='/profile'>profile</NavLink></li>
+
 
                 <li>
                   <NavLink to="/shop">Shop</NavLink>

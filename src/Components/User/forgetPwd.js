@@ -4,44 +4,48 @@ import { useNavigate } from "react-router-dom";
 import { forgetPwd } from "./api";
 import { NavLink, Routes, Route } from "react-router-dom";
 
- 
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 
 function ForgetPwd() {
   
-    const [email, setEmail] = useState(''); 
-    const [message, setMessage] = useState("");
-    
-    const navigate = useNavigate();
+  const [email, setEmail] = useState("");
+  const [message, setMessage] = useState("");
+  const navigate = useNavigate();
+  const [errors, setErrors] = useState({});
+
+  const handleForgetpwd = async (event) => {
+    const errors = {};
+    if (email.trim() === "") {
+        errors.email = "Email is required";
+    } else if (!/\S+@\S+\.\S+/.test(email)) {
+        errors.email = "Email is invalid";
+    }
+    setErrors(errors);
+    console.log(email);
+    event.preventDefault();
+    try {
+        if (Object.keys(errors).length === 0 /*&& token*/) {
+
+     const response = await forgetPwd(email).then(
+      notify()
+     )
+      console.log(response)
+      setMessage(response.msg)
+      console.log("wsel??")
+   
+     }
+
+    } catch (error) {
+      console.log(error.message);
+    }
+
 
    
-    const handleSubmit = async () => {
-     // event.preventDefault(); 
-      
-      try {
-         const response = await forgetPwd(email) ;
-      }catch(error){
-        console.log(error.message)
-      }
-          
-         /* forgetPwd(user).then(data => {
-              
-              console.log(data["data"])
-          })*/
-      
 
-      
-
-  }
-
-        
-
-
-    useEffect(() => { 
-        if (localStorage.getItem('user') != null) { 
-            navigate("/home")
-        }
-     }, [])
+  };
+         
     
     const back = {
         backgroundColor: '#F6DDDD',
@@ -53,9 +57,25 @@ function ForgetPwd() {
         
     }
 
+
+
+    const notify = () => toast.success(' 👤 check your email please !', {
+      position: "bottom-right",
+      autoClose: 3000,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+      theme: "colored",
+    });
+
+
     return (
       <>
+         <ToastContainer />
         <div className="inner-page-banner">
+
           <div className="breadcrumb-vec-btm">
             <img
               className="img-fluid"
@@ -120,8 +140,16 @@ function ForgetPwd() {
                       <h3>Enter Your Email</h3>
                       
                     </div>
-                    {message ? <p style={{ color: "green", fontWeight: "bold" }}>pasword reset link send Succsfully in Your Email</p> : ""}
-                    <form class="w-100" >
+                    {message && (
+                    <p
+                      style={{
+                        color: message.includes("Succ") ? "green" : "red",
+                        fontWeight: "bold",
+                      }}
+                    >
+                      {message}
+                    </p>
+                  )}                    <form class="w-100" >
                       <div class="row">
                         <div class="col-12">
                           <div class="form-inner">
@@ -133,9 +161,20 @@ function ForgetPwd() {
                               onChange={(e) => setEmail(e.target.value)}
                             />
                           </div>
+                          {
+                                          errors.email && <p style={
+                                              {
+                                                  fontSize: 12,
+                                                  color: "red"
+                                              }
+                                          }>
+                                              {
+                                              errors.email
+                                          }</p>
+                                      }
                         </div>
                       </div>
-                      <button className="account-btn">
+                      <button className="account-btn" onClick={handleForgetpwd}>
                         {" "}
                         <i className="fa fa-paw" aria-hidden="true" ></i>
                         &nbsp;Send
