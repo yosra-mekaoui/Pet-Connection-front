@@ -211,9 +211,9 @@ function Cart() {
                   </NavLink>
                 </li>
                 <li>
-                  <a href="check-out.html" class="primary-btn3 btn-lg">
+                  <NavLink to="/checkout" class="primary-btn3 btn-lg">
                     Proceed to Checkout
-                  </a>
+                  </NavLink>
                 </li>
               </ul>
             </div>

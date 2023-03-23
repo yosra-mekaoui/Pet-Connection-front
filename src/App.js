@@ -79,7 +79,6 @@ useScript("./assets/js/masonry.pkgd.min.js");
         <Header />
         <Routes>
           <Route path="*" element={<Home />}></Route>
-          <Route path="/shop" element={<Market />}></Route>
           <Route path="/About" element={<About />}></Route>
           {user == null && <Route path="/Login" element={<Login />}></Route>}
           {user == null && (
