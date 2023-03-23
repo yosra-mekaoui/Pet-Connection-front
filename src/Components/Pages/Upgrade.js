@@ -9,6 +9,8 @@ function Upgrade() {
   
     const [name, setName] = useState("");
     const [image, setImage] = useState("");
+    const [logo, setLogo] = useState("");
+  
     const [type, setType] = useState("");
     const [done, setDone] = useState(false);
   
@@ -29,7 +31,11 @@ function Upgrade() {
     const [file, setFile] = useState(null);
     const handleFileUpload = async (acceptedFiles) => {
       setFile(acceptedFiles[0]);
-     };
+    };
+  
+    const handleFileUpload2 = async (acceptedFiles) => {
+      setLogo(acceptedFiles[0]);
+    };
 
 
    //console.log(file);
@@ -39,6 +45,7 @@ function Upgrade() {
       e.preventDefault();
       const formData = new FormData();
       formData.append("file", file);
+      formData.append("logo", logo);
       formData.append("type", type);
       formData.append("user", user);
       formData.append("longitude", longitude);
@@ -247,58 +254,107 @@ function Upgrade() {
                           />
                         </div>
                       </div>
-                      
 
-
-                      <div className="col-12">
-                      <Dropzone onDrop={handleFileUpload}>
-                        {({ getRootProps, getInputProps }) => (
-                          <div
-                            {...getRootProps()}
-                            style={{
-                              color: "black !important",
-                              height: "100px",
-                              paddingTop: "20px",
-                              marginTop: "20px",
-                              marginBottom: "30px",
-                              boxShadow:
-                                "rgba(99, 99, 99, 0.2) 0px 2px 8px 0px",
-                              border: "1px solid black",
-                              background:
-                                "linear-gradient(217deg, rgba(255,130,130,.8), rgba(255,130,130,0) 70.71%),            linear-gradient(127deg, rgba(230,207,207,.8), rgba(230,207,207,0) 70.71%),            linear-gradient(336deg, rgba(255,225,225,.8), rgba(255,225,225,0) 70.71%)",
-                            }}
-                          >
-                            <input {...getInputProps()} />
-                            <p
+                      <div className="col-6">
+                        <Dropzone onDrop={handleFileUpload}>
+                          {({ getRootProps, getInputProps }) => (
+                            <div
+                              {...getRootProps()}
                               style={{
-                                color: "black",
-                                fontSize: "17px",
+                                color: "black !important",
+                                height: "60px",
+                                paddingTop: "5px",
+                                marginTop: "20px",
+                                marginBottom: "30px",
+                                boxShadow:
+                                  "rgba(99, 99, 99, 0.2) 0px 2px 8px 0px",
+                                border: "1px solid black",
+                                background:
+                                  "linear-gradient(217deg, rgba(255,130,130,.8), rgba(255,130,130,0) 70.71%),            linear-gradient(127deg, rgba(230,207,207,.8), rgba(230,207,207,0) 70.71%),            linear-gradient(336deg, rgba(255,225,225,.8), rgba(255,225,225,0) 70.71%)",
                               }}
                             >
-                              <i
-                                className="fa fa-upload"
+                              <input {...getInputProps()} />
+                              <p
                                 style={{
-                                  fontSize: "20px",
-                                  marginRight: "10px",
+                                  color: "black",
+                                  fontSize: "17px",
                                 }}
-                              ></i>
-                              Drag and drop your image here or click to select a
-                              file
-                              {file != null && (
-                                <p
+                              >
+                                <i
+                                  className="fa fa-upload"
                                   style={{
-                                    color: "darkGreen",
+                                    fontSize: "20px",
+                                    marginRight: "10px",
                                   }}
-                                >
-                                  {" "}
-                                  {file["path"]}{" "}
-                                </p>
-                              )}
-                            </p>
-                          </div>
-                        )}
+                                ></i>
+                                Drop a verification file
+                                {file != null && (
+                                  <p
+                                    style={{
+                                      color: "darkGreen",
+                                    }}
+                                  >
+                                    {" "}
+                                    {file["path"]}{" "}
+                                  </p>
+                                )}
+                              </p>
+                            </div>
+                          )}
                         </Dropzone>
-                        </div>
+                      </div>
+
+                      <div className="col-6">
+                        <Dropzone onDrop={handleFileUpload2}>
+                          {({ getRootProps, getInputProps }) => (
+                            <div
+                              {...getRootProps()}
+                              style={{
+                                color: "black !important",
+                                height: "60px",
+                                paddingTop: "5px",
+                                marginTop: "20px",
+                                marginBottom: "30px",
+                                boxShadow:
+                                  "rgba(99, 99, 99, 0.2) 0px 2px 8px 0px",
+                                border: "1px solid black",
+                                background:
+                                  "linear-gradient(217deg, rgba(255,130,130,.8), rgba(255,130,130,0) 70.71%),            linear-gradient(127deg, rgba(230,207,207,.8), rgba(230,207,207,0) 70.71%),            linear-gradient(336deg, rgba(255,225,225,.8), rgba(255,225,225,0) 70.71%)",
+                              }}
+                            >
+                              <input {...getInputProps()} />
+                              <p
+                                style={{
+                                  color: "black",
+                                  fontSize: "17px",
+                                }}
+                              >
+                                <i
+                                  className="fa fa-upload"
+                                  style={{
+                                    fontSize: "20px",
+                                    marginRight: "10px",
+                                  }}
+                                ></i>
+                                Drop a Logo
+                                {file != null && (
+                                  <p
+                                    style={{
+                                      color: "darkGreen",
+                                    }}
+                                  >
+                                    {" "}
+                                    {logo["path"]}{" "}
+                                  </p>
+                                )}
+                              </p>
+                            </div>
+                          )}
+                        </Dropzone>
+                      </div>
+
+
+
                     </div>
                     <button className="account-btn" disabled={!file}>
                       {" "}
