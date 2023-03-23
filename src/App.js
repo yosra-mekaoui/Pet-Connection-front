@@ -24,6 +24,8 @@ const ForgetPwd = React.lazy(()=> import ('./Components/User/forgetPwd'))
 const ResetPwd = React.lazy(()=> import ('./Components/User/resetPwd'))
 const Profile = React.lazy(()=> import ('./Components/User/Profile'))
 const Upgrade = React.lazy(() => import("./Components/Pages/Upgrade"));
+const AssociationList = React.lazy(() => import("./Components/Pages/AssociationList"));
+
 
 
 function App() {
@@ -115,6 +117,7 @@ useScript("./assets/js/masonry.pkgd.min.js");
             ></Route>
             <Route path="/About" element={<About />}></Route>
             <Route path="/upgrade" element={<Upgrade />}></Route>
+            <Route path="/associations" element={<AssociationList />}></Route>
           </Routes>
 
           <Footer />
