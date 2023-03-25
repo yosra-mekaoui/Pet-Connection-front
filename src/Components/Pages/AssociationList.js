@@ -3,6 +3,8 @@ import { NavLink } from "react-router-dom";
 import axios from "axios";
 function AssociationList() {
     const [data, setData] = useState([]);
+    const [fundings, setFundings] = useState([]);
+  
     const [img, setImg] = useState("http://localhost:3000/uploads/");
 
 
@@ -10,7 +12,6 @@ function AssociationList() {
 
     useEffect(() => {
         //setImg(`http://localhost:3000/uploads/`); 
-        
         axios
           .get("http://localhost:3000/association/allAssociations")
           .then((response) => {
@@ -19,6 +20,16 @@ function AssociationList() {
           .catch((error) => {
             console.log(error);
           });
+      
+      axios
+        .get("http://localhost:3000/funding/allFunding")
+        .then((response) => {
+          setFundings(response.data);
+          console.log(fundings); 
+        })
+        .catch((error) => {
+          console.log(error);
+        });
          
         
     }, [])
@@ -94,12 +105,53 @@ function AssociationList() {
                   padding: "20px",
                   borderRadius: "10px",
                   background:
-                    "linear-gradient(217deg, rgba(255,223,195,.8), rgba(255,223,195,0) 70.71%),            linear-gradient(127deg, rgba(230,207,207,.8), rgba(230,207,207,0) 70.71%),            linear-gradient(336deg, rgba(255,225,225,.8), rgba(255,225,225,0) 70.71%)",
+                    "linear-gradient(217deg, rgba(255,223,195,.8), rgba(255,223,195,0) 70.71%), linear-gradient(127deg, rgba(230,207,207,.8), rgba(230,207,207,0) 70.71%),            linear-gradient(336deg, rgba(255,225,225,.8), rgba(255,225,225,0) 70.71%)",
                 }}
               >
                 <h3 style={{ paddingLeft: "10px", color: "#353535" }}>
                   What's New ?{" "}
                 </h3>
+
+                {fundings.map((item) => (
+                  <>
+                    <div style={{
+                      marginLeft: "10px",
+                      color: "black",
+                      fontSize: "18px",
+                      marginTop: "30px",
+                      fontWeight : "800px"
+                    }}>
+                      {item.title}
+                    </div>
+                    <div style={{ marginLeft: "10px", color: "black" }}>
+                      {item.desc}
+                    </div>
+
+                    <div
+                      style={{
+                        marginLeft: "10px",
+                        color: "black",
+                        marginBottom: "30px",
+                        display: "flex",
+                        justifyContent: "space-between",
+                      }}
+                    >
+                      <div>Total Funds : {item.total}$ </div>
+                      <button
+                        style={{
+                          backgroundColor: "orange",
+                          padding: "3px",
+                          width: "100px",
+                          borderRadius: "6px",
+                          boxShadow:
+                            "rgba(0, 0, 0, 0.16) 0px 3px 6px, rgba(0, 0, 0, 0.15) 0px 2px 2px",
+                        }}
+                      >
+                        Read More
+                      </button>
+                    </div>
+                  </>
+                ))}
               </div>
             </div>
 
