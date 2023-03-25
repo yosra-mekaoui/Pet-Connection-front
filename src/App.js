@@ -9,6 +9,7 @@ import TwoFa from "./Components/User/TwoFa";
 //import TwoFactorVerification from "./Components/User/TwoFactorVerification";
 
 import { Cursor } from 'custom-pointer-react'
+import Association from "./Components/Pages/Association";
 
 const Home = React.lazy(() => import('./Components/Pages/Home.js'))
 const Header = React.lazy(() => import('./Components/Pages/Header'))
@@ -117,6 +118,7 @@ useScript("./assets/js/masonry.pkgd.min.js");
             <Route path="/About" element={<About />}></Route>
             <Route path="/upgrade" element={<Upgrade />}></Route>
             <Route path="/associations" element={<AssociationList />}></Route>
+            <Route path="/associations/:id" element={<Association />}></Route>
             <Route path="*" element={<Home />}></Route>
           </Routes>
 

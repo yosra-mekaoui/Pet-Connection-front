@@ -21,7 +21,7 @@ function Upgrade() {
 
   
   
-    // console.log(user);  
+    console.log(user);  
     // console.log("type : " + type);   
     // console.log("Name : " + name);  
     // console.log("Latitude : " + latitude);   

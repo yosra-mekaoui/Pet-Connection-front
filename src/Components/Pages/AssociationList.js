@@ -95,7 +95,7 @@ function AssociationList() {
           <NavLink to="/upgrade">Partner.</NavLink>
         </h2>
 
-        <div className="container">
+        <div className="container" style={{ marginBottom: "50px" }}>
           <div className="row">
             <div className="col-6" style={{ marginTop: "120px" }}>
               <div
@@ -151,18 +151,20 @@ function AssociationList() {
                         <span style={{ color: "#2F8702" }}>Total Funds : </span>
                         {item.total}${" "}
                       </div>
-                      <button
-                        style={{
-                          backgroundColor: "orange",
-                          padding: "3px",
-                          width: "100px",
-                          borderRadius: "6px",
-                          boxShadow:
-                            "rgba(0, 0, 0, 0.16) 0px 3px 6px, rgba(0, 0, 0, 0.15) 0px 2px 2px",
-                        }}
-                      >
-                        Read More
-                      </button>
+                      <NavLink to={`/associations/${item._id}`} >
+                        <button
+                          style={{
+                            backgroundColor: "orange",
+                            padding: "3px",
+                            width: "100px",
+                            borderRadius: "6px",
+                            boxShadow:
+                              "rgba(0, 0, 0, 0.16) 0px 3px 6px, rgba(0, 0, 0, 0.15) 0px 2px 2px",
+                          }}
+                        >
+                          Read More
+                        </button>
+                      </NavLink>
                     </div>
                   </>
                 ))}
@@ -174,7 +176,7 @@ function AssociationList() {
                 <div className="container">
                   <div className="row g-lg-4 gy-5 justify-content-center mb-70">
                     {data.map((item) => (
-                      <div className="col-lg-12 col-md-6 col-sm-10">
+                      <div className="col-lg-6 col-md-6 col-sm-10">
                         <div className="h1-blog-card">
                           <div className="blog-img">
                             <img
