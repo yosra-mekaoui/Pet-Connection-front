@@ -109,19 +109,21 @@ function AssociationList() {
                 }}
               >
                 <h3 style={{ paddingLeft: "10px", color: "#353535" }}>
-                  What's New ?{" "}
+                  CrowdFundings{" "}
                 </h3>
 
                 {fundings.map((item) => (
                   <>
-                    <div style={{
-                      marginLeft: "10px",
-                      color: "black",
-                      fontSize: "18px",
-                      marginTop: "30px",
-                      fontWeight : "800px"
-                    }}>
-                      {item.title}
+                    <div
+                      style={{
+                        marginLeft: "10px",
+                        color: "black",
+                        fontSize: "18px",
+                        marginTop: "40px",
+                        fontWeight: "700px !important",
+                      }}
+                    >
+                      <b>{item.title}</b>
                     </div>
                     <div style={{ marginLeft: "10px", color: "black" }}>
                       {item.desc}
@@ -134,9 +136,21 @@ function AssociationList() {
                         marginBottom: "30px",
                         display: "flex",
                         justifyContent: "space-between",
+                        marginTop: "10px",
                       }}
                     >
-                      <div>Total Funds : {item.total}$ </div>
+                      <div>
+                        <i
+                          className="fas fa-money-bill-wave"
+                          style={{
+                            fontSize: "18px",
+                            marginRight: "10px",
+                            color: "#2F8702",
+                          }}
+                        ></i>
+                        <span style={{ color: "#2F8702" }}>Total Funds : </span>
+                        {item.total}${" "}
+                      </div>
                       <button
                         style={{
                           backgroundColor: "orange",
@@ -177,7 +191,15 @@ function AssociationList() {
                               <a href="blog-grid.html">{item.role}</a>
                             </div>
                             <h4>
-                              <a href="blog-details.html">{item.bio}</a>
+                              <a
+                                href="blog-details.html"
+                                style={{
+                                  fontFamily:
+                                    "-apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif",
+                                }}
+                              >
+                                {item.bio}
+                              </a>
                             </h4>
                           </div>
                         </div>
