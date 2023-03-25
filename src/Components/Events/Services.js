@@ -16,11 +16,15 @@ export const updateEvent = async (id, event) => {
     return await axios.put(`${url}/update/${id}`, event);
 
 }
-
 export const deleteEvent = async (id) => {
     return await axios.delete(`${url}/delete/${id}`);
     }
-export const addAttendeeById = async (id) =>{
-    await axios.post(`${url}/addAttendees/${id}`);
-    }
+    export const addAttendeeById = async (id, connectedUserId) => {
+      try {
+        await axios.post(`${url}/addAttendees/${id}`, { userId: connectedUserId });
+      } catch (error) {
+        console.error(error);
+        throw error;
+      }
+    };
     

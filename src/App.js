@@ -9,6 +9,7 @@ import TwoFa from "./Components/User/TwoFa";
 //import TwoFactorVerification from "./Components/User/TwoFactorVerification";
 
 import { Cursor } from 'custom-pointer-react'
+import CreateEvent from "./Components/Events/CreateEvent";
 
 const Home = React.lazy(() => import('./Components/Pages/Home.js'))
 const Header = React.lazy(() => import('./Components/Pages/Header'))
@@ -88,6 +89,7 @@ useScript("./assets/js/masonry.pkgd.min.js");
           <Route path="/About" element={<About />}></Route>
           <Route path="/Event" element={<Event />}></Route>
           <Route path="/EventDetails/:id" element={ <EventDetails/>}></Route>
+          <Route path="/addEvent" element={<CreateEvent/>}></Route>
 
           {user == null && <Route path="/Login" element={<Login />}></Route>}
           {user == null && (

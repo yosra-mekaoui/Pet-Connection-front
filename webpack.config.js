@@ -14,4 +14,5 @@ module.exports = {
     hot: true,
     open: true,
   },
+  devtool: 'source-map',
 };
