@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { showAssociations } from "./api";
+import { NavLink } from "react-router-dom"; 
 import axios from "axios";
 function AssociationList() {
     const [data, setData] = useState([]);
@@ -71,6 +71,10 @@ function AssociationList() {
             </div>
           </div>
         </div>
+        
+        <h2 style={{marginTop : "40px", marginLeft : "8%", color:"black", marginBottom : "-20px"  }}>
+          You have an association? Become a <NavLink to="/upgrade">Partner.</NavLink>
+        </h2>
 
         <div className="blog-grid-pages pt-120 mb-120">
           <div className="container">

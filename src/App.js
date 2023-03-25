@@ -84,7 +84,6 @@ useScript("./assets/js/masonry.pkgd.min.js");
           />
           <Header />
           <Routes>
-            <Route path="*" element={<Home />}></Route>
             <Route path="/shop" element={<Market />}></Route>
             <Route path="/About" element={<About />}></Route>
             {user == null && <Route path="/Login" element={<Login />}></Route>}
@@ -118,6 +117,7 @@ useScript("./assets/js/masonry.pkgd.min.js");
             <Route path="/About" element={<About />}></Route>
             <Route path="/upgrade" element={<Upgrade />}></Route>
             <Route path="/associations" element={<AssociationList />}></Route>
+            <Route path="*" element={<Home />}></Route>
           </Routes>
 
           <Footer />
