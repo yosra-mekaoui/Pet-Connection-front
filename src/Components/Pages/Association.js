@@ -10,6 +10,7 @@ function AssociationList() {
   const [img, setImg] = useState("http://localhost:3000/uploads/");
 
   const baseUrl = "http://localhost:3000/associations/";
+    const formattedDate = ""; 
 
   useEffect(() => {
     //setImg(`http://localhost:3000/uploads/`);
@@ -18,12 +19,25 @@ function AssociationList() {
         `http://localhost:3000/association/getOneAssociation/${id}`
       )
       .then((response) => {
-        setData(response.data);
+          setData(response.data);
+          const d = Date(response.data.date); 
+          console.log("date : " + d); 
+          const formattedDate = format(d, "dd-MM-yyyy");
+        //   formattedDate = d.toLocaleDateString("en-US", {
+        //     month: "numeric",
+        //     day: "numeric",
+        //     year: "numeric",
+        //   });
+
+          console.log("Formattttted : " + response.data.date);
+
       })
       .catch((error) => {
         console.log(error);
       });
 
+    
+      //console.log("Formattttted : " + formattedDate);
     axios
       .get("http://localhost:3000/funding/allFunding")
       .then((response) => {
@@ -81,14 +95,12 @@ function AssociationList() {
         </div>
       </div>
 
-      
-
       <div className="container" style={{ marginBottom: "50px" }}>
         <div className="row">
           <div className="col-6" style={{ marginTop: "50px" }}>
             <div
               style={{
-                paddingLeft:"30px",
+                paddingLeft: "30px",
                 boxShadow:
                   "rgba(0, 0, 0, 0.16) 0px 3px 6px, rgba(0, 0, 0, 0.23) 0px 3px 6px",
                 padding: "20px",
@@ -97,16 +109,26 @@ function AssociationList() {
                   "linear-gradient(217deg, rgba(255,223,195,.8), rgba(255,223,195,0) 70.71%), linear-gradient(127deg, rgba(230,207,207,.8), rgba(230,207,207,0) 70.71%),            linear-gradient(336deg, rgba(255,225,225,.8), rgba(255,225,225,0) 70.71%)",
               }}
             >
-              <h3 style={{   color: "black", fontWeight : "700" }}>
-                {data.name}
-              </h3>
-              
-              <p>
-                {data.bio}
-              </p>
-              
-                          
+              <h3 style={{ color: "black", fontWeight: "700" }}>{data.name}</h3>
+                <p style={{
+                        fontStyle: "italic",
+                        fontSize : "19px"
+                    }}> 
+                      Released on {formattedDate}
+                </p>
+              <p style={{ color: "#494949" }}>{data.bio}</p>
 
+              <center>
+                <iframe
+                  src={`https://www.google.com/maps/embed?pb=!1m14!1m12!1m3!1d82077.28159616987!2d${data.longitude}!3d${data.latitude}!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!5e0!3m2!1sfr!2stn!4v1679836721177!5m2!1sfr!2stn`}
+                  width={"90%"}
+                  height={450}
+                  style={{ border: "2px solid gray" }}
+                  allowFullScreen
+                  loading="lazy"
+                  referrerPolicy="no-referrer-when-downgrade"
+                />
+              </center>
               {/* {fundings.map((item) => (
                 <>
                   <div
@@ -167,13 +189,18 @@ function AssociationList() {
           </div>
 
           <div className="col-6">
-            <div className="blog-grid-pages pt-120 mb-120">
-              <div className="container">
-                <div className="row g-lg-4 gy-5 justify-content-center mb-70">
-                  <img src={baseUrl +  data.name} />
-                </div>
-              </div>
-            </div>
+            <img
+              style={{
+                marginTop: "50px",
+                boxShadow:
+                  "rgba(0, 0, 0, 0.16) 0px 3px 6px, rgba(0, 0, 0, 0.23) 0px 3px 6px",
+                borderRadius: "10px",
+                display: "block",
+                maxWidth: "100%",
+                height: "auto",
+              }}
+              src={baseUrl + data.image}
+            />
           </div>
         </div>
       </div>
