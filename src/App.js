@@ -10,6 +10,7 @@ import TwoFa from "./Components/User/TwoFa";
 
 import { Cursor } from 'custom-pointer-react'
 import Association from "./Components/Pages/Association";
+import Crowdfunding from "./Components/Pages/Crowdfunding";
 
 const Home = React.lazy(() => import('./Components/Pages/Home.js'))
 const Header = React.lazy(() => import('./Components/Pages/Header'))
@@ -119,6 +120,7 @@ useScript("./assets/js/masonry.pkgd.min.js");
             <Route path="/upgrade" element={<Upgrade />}></Route>
             <Route path="/associations" element={<AssociationList />}></Route>
             <Route path="/association/:id" element={<Association />}></Route>
+            <Route path="/crowdfunding/:id" element={<Crowdfunding />}></Route>
             <Route path="*" element={<Home />}></Route>
           </Routes>
 

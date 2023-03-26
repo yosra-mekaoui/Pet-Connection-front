@@ -151,7 +151,7 @@ function AssociationList() {
                         <span style={{ color: "#2F8702" }}>Total Funds : </span>
                         {item.total}${" "}
                       </div>
-                      <NavLink to={`/associations/${item._id}`} >
+                      <NavLink to={`/crowdfunding/${item._id}`} >
                         <button
                           style={{
                             backgroundColor: "orange",
