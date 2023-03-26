@@ -2,45 +2,37 @@ import { useState, useEffect } from "react";
 import { NavLink, useParams } from "react-router-dom";
 import axios from "axios";
 import { getOneAssociation } from "./api";
-
-
-function Association() {
-  const {id} = useParams();
-
-  const [data, setData] = useState();
+function AssociationList() {
+    const { id } = useParams(); 
+    const [data, setData] = useState({});
   const [fundings, setFundings] = useState([]);
-  
+
   const [img, setImg] = useState("http://localhost:3000/uploads/");
 
   const baseUrl = "http://localhost:3000/associations/";
 
-    console.log(id); 
-    useEffect(() => { 
-    
-        getOneAssociation(); 
-    // await axios
-    //   .get(
-    //     "http://localhost:3000/association/getOneAssociation/641c71da77dc478d1afdc1c6"
-    //   )
-    //   .then((response) => {
-    //     console.log("first axios : "+response.data);
-    //     setData(response.data);
-    //   })
-    //   .catch((error) => {
-    //     console.log(error);
-    //   });
-
+  useEffect(() => {
+    //setImg(`http://localhost:3000/uploads/`);
+    axios
+      .get(
+        `http://localhost:3000/association/getOneAssociation/${id}`
+      )
+      .then((response) => {
+        setData(response.data);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
 
     axios
       .get("http://localhost:3000/funding/allFunding")
       .then((response) => {
-        setFundings("fundings : " + response.data);
+        setFundings(response.data);
         console.log(fundings);
       })
       .catch((error) => {
         console.log(error);
       });
- 
   }, []);
   return (
     <>
@@ -56,7 +48,7 @@ function Association() {
           <div className="row justify-content-center align-items-center text-center">
             <div className="col-lg-6 align-items-center">
               <div className="banner-content">
-                <h1>Associations</h1>
+                <h1>{data.name}</h1>
                 <nav aria-label="breadcrumb">
                   <ol className="breadcrumb">
                     <li className="breadcrumb-item">
@@ -89,23 +81,14 @@ function Association() {
         </div>
       </div>
 
-      <h2
-        style={{
-          marginTop: "40px",
-          marginLeft: "8%",
-          color: "#353535",
-          marginBottom: "-20px",
-        }}
-      >
-        You have an association? Become a{" "}
-        <NavLink to="/upgrade">Partner.</NavLink>
-      </h2>
+      
 
       <div className="container" style={{ marginBottom: "50px" }}>
         <div className="row">
-          <div className="col-6" style={{ marginTop: "120px" }}>
+          <div className="col-6" style={{ marginTop: "50px" }}>
             <div
               style={{
+                paddingLeft:"30px",
                 boxShadow:
                   "rgba(0, 0, 0, 0.16) 0px 3px 6px, rgba(0, 0, 0, 0.23) 0px 3px 6px",
                 padding: "20px",
@@ -114,11 +97,17 @@ function Association() {
                   "linear-gradient(217deg, rgba(255,223,195,.8), rgba(255,223,195,0) 70.71%), linear-gradient(127deg, rgba(230,207,207,.8), rgba(230,207,207,0) 70.71%),            linear-gradient(336deg, rgba(255,225,225,.8), rgba(255,225,225,0) 70.71%)",
               }}
             >
-              <h3 style={{ paddingLeft: "10px", color: "#353535" }}>
-                CrowdFundings{" "}
+              <h3 style={{   color: "black", fontWeight : "700" }}>
+                {data.name}
               </h3>
+              
+              <p>
+                {data.bio}
+              </p>
+              
+                          
 
-              {fundings.map((item) => (
+              {/* {fundings.map((item) => (
                 <>
                   <div
                     style={{
@@ -157,21 +146,23 @@ function Association() {
                       <span style={{ color: "#2F8702" }}>Total Funds : </span>
                       {item.total}${" "}
                     </div>
-                    <button
-                      style={{
-                        backgroundColor: "orange",
-                        padding: "3px",
-                        width: "100px",
-                        borderRadius: "6px",
-                        boxShadow:
-                          "rgba(0, 0, 0, 0.16) 0px 3px 6px, rgba(0, 0, 0, 0.15) 0px 2px 2px",
-                      }}
-                    >
-                      Read More
-                    </button>
+                    <NavLink to={`/associations/${item._id}`}>
+                      <button
+                        style={{
+                          backgroundColor: "orange",
+                          padding: "3px",
+                          width: "100px",
+                          borderRadius: "6px",
+                          boxShadow:
+                            "rgba(0, 0, 0, 0.16) 0px 3px 6px, rgba(0, 0, 0, 0.15) 0px 2px 2px",
+                        }}
+                      >
+                        Read More
+                      </button>
+                    </NavLink>
                   </div>
                 </>
-              ))}
+              ))} */}
             </div>
           </div>
 
@@ -179,38 +170,7 @@ function Association() {
             <div className="blog-grid-pages pt-120 mb-120">
               <div className="container">
                 <div className="row g-lg-4 gy-5 justify-content-center mb-70">
-                  {data.map((item) => (
-                    <div className="col-lg-6 col-md-6 col-sm-10">
-                      <div className="h1-blog-card">
-                        <div className="blog-img">
-                          <img
-                            className="img-fluid"
-                            src={baseUrl + item.image}
-                            alt=""
-                          />
-                          <div className="category">
-                            <a href="blog-grid.html">{item.name}</a>
-                          </div>
-                        </div>
-                        <div className="blog-content">
-                          <div className="blog-meta">
-                            <a href="blog-grid.html">{item.role}</a>
-                          </div>
-                          <h4>
-                            <a
-                              href="blog-details.html"
-                              style={{
-                                fontFamily:
-                                  "-apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif",
-                              }}
-                            >
-                              {item.bio}
-                            </a>
-                          </h4>
-                        </div>
-                      </div>
-                    </div>
-                  ))}
+                  <img src={baseUrl +  data.name} />
                 </div>
               </div>
             </div>
@@ -221,4 +181,4 @@ function Association() {
   );
 }
 
-export default Association;
+export default AssociationList;

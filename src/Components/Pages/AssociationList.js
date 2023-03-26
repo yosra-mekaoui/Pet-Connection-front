@@ -177,7 +177,7 @@ function AssociationList() {
                   <div className="row g-lg-4 gy-5 justify-content-center mb-70">
                     {data.map((item) => (
                       <div className="col-lg-6 col-md-6 col-sm-10">
-                        <NavLink to={`/associations/${item._id}`} >
+                        <NavLink to={`/association/${item._id}`} >
 
                         <div className="h1-blog-card">
                           <div className="blog-img">
