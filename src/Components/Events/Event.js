@@ -1,9 +1,10 @@
 import { NavLink } from "react-router-dom";
 import React, { useEffect, useState } from "react";
-import { getEvents } from "./Services";
+import { getEvents,deleteEvent } from "./Services";
 
 function EventList() {
   const [events, setEvents] = useState([]);
+  const user = JSON.parse(localStorage.getItem("user"));
 
   useEffect(() => {
     const fetchEvents = async () => {
@@ -16,10 +17,29 @@ function EventList() {
     };
     fetchEvents();
   }, []);
-
+  let connectedUserId;
+  if (user._id) {
+    connectedUserId = user.username;
+  } else if (user.facebookId) {
+    connectedUserId = user.username;
+  } else {
+   alert("User ID not found.");
+    return;
+  }
   const baseUrl = "http://localhost:3000/uploads/"; // Replace with your base URL
-
-
+  const handleDelete = async (id) => {
+ 
+    try {
+      console.log( id, connectedUserId ); // <-- Add this line
+      await deleteEvent(id, connectedUserId);
+      setEvents(events.filter((event) => event._id !== id));
+    } catch (err) {
+      console.error(err);
+    }
+  };
+  
+  
+  
 
   return (
     <div>
@@ -94,6 +114,7 @@ function EventList() {
                         <li>
                           <a href="">By, {event.organizer}</a>
                         </li>
+                        <li> <a href=""> at : {event.location} </a></li>
                       </ul>
                     </div>
                     <h4>
@@ -102,9 +123,18 @@ function EventList() {
                     <p>{event.description}</p>
                     <div className="more-btn">
                     <NavLink to={`/EventDetails/${event._id}`}>
+                    <i className="fa fa-paw" aria-hidden="true"></i>
+
         More
       </NavLink>
+    
                     </div>
+                    {user && event.organizer === user.username && (
+                      <button className="account-btn" onClick={() => handleDelete(event._id)}>
+                                              <i className="fa fa-paw" aria-hidden="true"></i>
+  Delete
+                        </button>
+                      )}
                   </div>
                 </div>
               </div>

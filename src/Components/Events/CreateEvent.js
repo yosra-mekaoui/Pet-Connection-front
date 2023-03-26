@@ -18,8 +18,12 @@ function CreateEvent() {
   const [placeName, setPlaceName] = useState('');
   const [marker, setMarker] = useState(null);
   const [map, setMap] = useState(null);
-  const id = JSON.parse(localStorage.getItem('user'))._id || JSON.parse(localStorage.getItem('user')).facebookId;
-
+  const [user, setUser] = useState(null);
+  
+  useEffect(() => {
+    const userFromLocalStorage = JSON.parse(localStorage.getItem("user"));
+    setUser(userFromLocalStorage);
+  }, []);
   useEffect(() => {
     const mapObj = new mapboxgl.Map({
       container: 'map',
@@ -103,21 +107,30 @@ function CreateEvent() {
       alert('Please select a location for the event');
       return;
     }
+    const userId = JSON.parse(localStorage.getItem("user"));
+    let connectedUserId;
+    if (userId._id) {
+      connectedUserId = userId.username;
+    } else if (userId.facebookId) {
+      connectedUserId = userId.username;
+    } else {
+     alert("User ID not found.");
+      return;
+    }
 
+    
     try {
       const formData = new FormData();
       formData.append('title', title);
       formData.append('description', description);
       formData.append('date', date);
-      formData.append('organizer', id);
-      formData.append('location', JSON.stringify(location));
-      formData.append('placeName', placeName);
-      if (image) {
-        formData.append('image', image);
-      }
+      formData.append('organizer', connectedUserId);
+      formData.append('location',  placeName);
+      formData.append('image', image);
 
-      const response = await addEvent(formData);
-      console.log(response.data);
+
+    await addEvent(formData);
+     
       alert('Event created successfully');
       setLocation(null);
       setTitle('');
