@@ -1,10 +1,13 @@
 import { useState, useEffect } from "react";
 import { NavLink, useParams } from "react-router-dom";
 import axios from "axios";
+import { getOneAssociation } from "./api";
+
+
 function Association() {
   const {id} = useParams();
 
-  const [data, setData] = useState([]);
+  const [data, setData] = useState();
   const [fundings, setFundings] = useState([]);
   
   const [img, setImg] = useState("http://localhost:3000/uploads/");
@@ -12,11 +15,27 @@ function Association() {
   const baseUrl = "http://localhost:3000/associations/";
 
     console.log(id); 
-  useEffect(() => { 
+    useEffect(() => { 
+    
+        getOneAssociation(); 
+    // await axios
+    //   .get(
+    //     "http://localhost:3000/association/getOneAssociation/641c71da77dc478d1afdc1c6"
+    //   )
+    //   .then((response) => {
+    //     console.log("first axios : "+response.data);
+    //     setData(response.data);
+    //   })
+    //   .catch((error) => {
+    //     console.log(error);
+    //   });
+
+
     axios
-      .get(`http://localhost:3000/association/getOneFunding/${id}`)
+      .get("http://localhost:3000/funding/allFunding")
       .then((response) => {
-        setData(response.data);
+        setFundings("fundings : " + response.data);
+        console.log(fundings);
       })
       .catch((error) => {
         console.log(error);
