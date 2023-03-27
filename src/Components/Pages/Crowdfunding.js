@@ -7,8 +7,12 @@ function Crowdfunding() {
   const { id } = useParams();
   const [data, setData] = useState({});
   const [count, setCount] = useState(0);
+  const [total, setTotal] = useState(0);
+
     
   const [fundings, setFundings] = useState([]);
+  const [donations, setDonations] = useState([]);
+
 
   const [img, setImg] = useState("http://localhost:3000/uploads/");
   const baseUrl = "http://localhost:3000/associations/";
@@ -19,7 +23,17 @@ function Crowdfunding() {
       .get(`http://localhost:3000/funding/getOneFunding/${id}`)
       .then((response) => {
         setData(response.data);
-         // setCount(response.data.total); 
+        setTotal(response.data.total);
+        console.log("TOTAL " + response.data.total); 
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+    
+    axios
+      .get(`http://localhost:3000/donation/getDonationsByFunding/${id}`)
+      .then((response) => {
+        setDonations(response.data); 
       })
       .catch((error) => {
         console.log(error);
@@ -28,12 +42,13 @@ function Crowdfunding() {
 
    
     useEffect(() => {
-        if (count < 570) {
+      let time = 4000 / data.total; 
+        if (count < data.total) {
             let interval = setInterval(() => {
-                if (count < 570) {
+                if (count < data.total) {
                     setCount((count) => count + 1);
                 }  
-            }, 10);
+            }, 5);
       return () => clearInterval(interval);
 
         }
@@ -136,12 +151,12 @@ function Crowdfunding() {
               </center>
               <h3 style={{ color: "black " }}>Latest Donations</h3>
 
-              {fundings.length == 0 && (
+              {donations.length == 0 && (
                 <h5 style={{ color: "#494949", marginTop: "20px" }}>
                   {data.name} hasn't done any actions yet.
                 </h5>
               )}
-              {fundings.map((item) => (
+              {donations.map((item) => (
                 <>
                   <div
                     style={{
@@ -177,23 +192,9 @@ function Crowdfunding() {
                           color: "#2F8702",
                         }}
                       ></i>
-                      <span style={{ color: "#2F8702" }}>Total Funds : </span>
-                      {item.total}${" "}
+                      <span>X just donated </span>
+                      <span style={{ color: "#2F8702" }}>{item.total}$ </span>
                     </div>
-                    <NavLink to={`/associations/${item._id}`}>
-                      <button
-                        style={{
-                          backgroundColor: "orange",
-                          padding: "3px",
-                          width: "100px",
-                          borderRadius: "6px",
-                          boxShadow:
-                            "rgba(0, 0, 0, 0.16) 0px 3px 6px, rgba(0, 0, 0, 0.15) 0px 2px 2px",
-                        }}
-                      >
-                        Read More
-                      </button>
-                    </NavLink>
                   </div>
                 </>
               ))}
