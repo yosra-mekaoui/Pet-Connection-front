@@ -4,7 +4,7 @@ import axios from "axios";
 function AssociationList() {
     const [data, setData] = useState([]);
     const [fundings, setFundings] = useState([]);
-  
+    const [color, setColor] = useState("");
     const [img, setImg] = useState("http://localhost:3000/uploads/");
 
 
@@ -52,12 +52,14 @@ function AssociationList() {
 
     if (query.get("success")) {
       setMessage("Order placed! You will receive an email confirmation.");
+      setColor("green"); 
     }
 
     if (query.get("canceled")) {
       setMessage(
         "Order canceled -- continue to shop around and checkout when you're ready."
       );
+      setColor("red"); 
     }
   }, []);
 
@@ -111,8 +113,19 @@ function AssociationList() {
             </div>
           </div>
         </div>
-
-        <h1>{message}</h1> 
+        {message && (
+          <center>
+            <h1 style={{
+              marginTop: "70px",
+              marginBottom: "100px",
+              width: "70%",
+              color : color
+            }}>
+              {message}
+            </h1> 
+          </center>
+        )}
+        
         {!message && (
           <>
             <h2
