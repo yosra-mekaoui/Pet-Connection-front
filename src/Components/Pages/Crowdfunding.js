@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { NavLink, useParams } from "react-router-dom";
+import { NavLink, useParams, useLocation } from "react-router-dom";
 import axios from "axios";
 import { getOneAssociation } from "./api";
 import { format } from "date-fns";  
@@ -26,8 +26,7 @@ function Crowdfunding() {
   const [donations, setDonations] = useState([]);
 
  
-   
-
+  
 
   useEffect(() => {
     axios
@@ -68,24 +67,11 @@ function Crowdfunding() {
     
   
   
-  const [message, setMessage] = useState("");
 
-  useEffect(() => {
-    // Check to see if this is a redirect back from Checkout
-    const query = new URLSearchParams(window.location.search);
-
-    if (query.get("success")) {
-      setMessage("Order placed! You will receive an email confirmation.");
-    }
-
-    if (query.get("canceled")) {
-      setMessage(
-        "Order canceled -- continue to shop around and checkout when you're ready."
-      );
-    }
-  }, []);
+  
   
    
+  
     
   return (
     <>
@@ -134,6 +120,8 @@ function Crowdfunding() {
         </div>
       </div>
 
+      
+      
       <div className="container" style={{ marginBottom: "50px" }}>
         <div className="row">
           <div className="col-6" style={{ marginTop: "50px" }}>
@@ -160,11 +148,9 @@ function Crowdfunding() {
                 Released on {data.date}
               </p>
               <p style={{ color: "#494949" }}>{data.desc}</p>
-              message ? (
-              <Message message={message} />
-              ) : (
-              <StripeDonation />
-              );
+               
+              <StripeDonation id={data._id} />
+               
             </div>
           </div>
 

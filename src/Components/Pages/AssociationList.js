@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { NavLink } from "react-router-dom"; 
+import { NavLink, useLocation } from "react-router-dom"; 
 import axios from "axios";
 function AssociationList() {
     const [data, setData] = useState([]);
@@ -33,6 +33,35 @@ function AssociationList() {
          
         
     }, [])
+  
+  
+  
+  
+  const [message, setMessage] = useState("");
+  const location = useLocation();
+
+  // useEffect(() => {
+  //   const searchParams = new URLSearchParams(location.search);
+  //   const id = searchParams.get("id");
+  //   console.log(id); // or do something else with the id value
+  // }, [location.search]);
+
+  useEffect(() => {
+    // Check to see if this is a redirect back from Checkout
+    const query = new URLSearchParams(window.location.search);
+
+    if (query.get("success")) {
+      setMessage("Order placed! You will receive an email confirmation.");
+    }
+
+    if (query.get("canceled")) {
+      setMessage(
+        "Order canceled -- continue to shop around and checkout when you're ready."
+      );
+    }
+  }, []);
+
+
     return (
       <>
         <div className="inner-page-banner">
@@ -83,140 +112,147 @@ function AssociationList() {
           </div>
         </div>
 
-        <h2
-          style={{
-            marginTop: "40px",
-            marginLeft: "8%",
-            color: "#353535",
-            marginBottom: "-20px",
-          }}
-        >
-          You have an association? Become a{" "}
-          <NavLink to="/upgrade">Partner.</NavLink>
-        </h2>
+        <h1>{message}</h1> 
+        {!message && (
+          <>
+            <h2
+              style={{
+                marginTop: "40px",
+                marginLeft: "8%",
+                color: "#353535",
+                marginBottom: "-20px",
+              }}
+            >
+              You have an association? Become a{" "}
+              <NavLink to="/upgrade">Partner.</NavLink>
+            </h2>
 
-        <div className="container" style={{ marginBottom: "50px" }}>
-          <div className="row">
-            <div className="col-6" style={{ marginTop: "120px" }}>
-              <div
-                style={{
-                  boxShadow:
-                    "rgba(0, 0, 0, 0.16) 0px 3px 6px, rgba(0, 0, 0, 0.23) 0px 3px 6px",
-                  padding: "20px",
-                  borderRadius: "10px",
-                  background:
-                    "linear-gradient(217deg, rgba(255,223,195,.8), rgba(255,223,195,0) 70.71%), linear-gradient(127deg, rgba(230,207,207,.8), rgba(230,207,207,0) 70.71%),            linear-gradient(336deg, rgba(255,225,225,.8), rgba(255,225,225,0) 70.71%)",
-                }}
-              >
-                <h3 style={{ paddingLeft: "10px", color: "#353535" }}>
-                  CrowdFundings{" "}
-                </h3>
+            <h1>{message}</h1>
 
-                {fundings.map((item) => (
-                  <>
-                    <div
-                      style={{
-                        marginLeft: "10px",
-                        color: "black",
-                        fontSize: "18px",
-                        marginTop: "40px",
-                        fontWeight: "700px !important",
-                      }}
-                    >
-                      <b>{item.title}</b>
-                    </div>
-                    <div style={{ marginLeft: "10px", color: "black" }}>
-                      {item.desc}
-                    </div>
+            <div className="container" style={{ marginBottom: "50px" }}>
+              <div className="row">
+                <div className="col-6" style={{ marginTop: "120px" }}>
+                  <div
+                    style={{
+                      boxShadow:
+                        "rgba(0, 0, 0, 0.16) 0px 3px 6px, rgba(0, 0, 0, 0.23) 0px 3px 6px",
+                      padding: "20px",
+                      borderRadius: "10px",
+                      background:
+                        "linear-gradient(217deg, rgba(255,223,195,.8), rgba(255,223,195,0) 70.71%), linear-gradient(127deg, rgba(230,207,207,.8), rgba(230,207,207,0) 70.71%),            linear-gradient(336deg, rgba(255,225,225,.8), rgba(255,225,225,0) 70.71%)",
+                    }}
+                  >
+                    <h3 style={{ paddingLeft: "10px", color: "#353535" }}>
+                      CrowdFundings{" "}
+                    </h3>
 
-                    <div
-                      style={{
-                        marginLeft: "10px",
-                        color: "black",
-                        marginBottom: "30px",
-                        display: "flex",
-                        justifyContent: "space-between",
-                        marginTop: "10px",
-                      }}
-                    >
-                      <div>
-                        <i
-                          className="fas fa-money-bill-wave"
+                    {fundings.map((item) => (
+                      <>
+                        <div
                           style={{
+                            marginLeft: "10px",
+                            color: "black",
                             fontSize: "18px",
-                            marginRight: "10px",
-                            color: "#2F8702",
-                          }}
-                        ></i>
-                        <span style={{ color: "#2F8702" }}>Total Funds : </span>
-                        {item.total}${" "}
-                      </div>
-                      <NavLink to={`/crowdfunding/${item._id}`} >
-                        <button
-                          style={{
-                            backgroundColor: "orange",
-                            padding: "3px",
-                            width: "100px",
-                            borderRadius: "6px",
-                            boxShadow:
-                              "rgba(0, 0, 0, 0.16) 0px 3px 6px, rgba(0, 0, 0, 0.15) 0px 2px 2px",
+                            marginTop: "40px",
+                            fontWeight: "700px !important",
                           }}
                         >
-                          Read More
-                        </button>
-                      </NavLink>
-                    </div>
-                  </>
-                ))}
-              </div>
-            </div>
+                          <b>{item.title}</b>
+                        </div>
+                        <div style={{ marginLeft: "10px", color: "black" }}>
+                          {item.desc}
+                        </div>
 
-            <div className="col-6">
-              <div className="blog-grid-pages pt-120 mb-120">
-                <div className="container">
-                  <div className="row g-lg-4 gy-5 justify-content-center mb-70">
-                    {data.map((item) => (
-                      <div className="col-lg-6 col-md-6 col-sm-10">
-                        <NavLink to={`/association/${item._id}`} >
-
-                        <div className="h1-blog-card">
-                          <div className="blog-img">
-                            <img
-                              className="img-fluid"
-                              src={baseUrl + item.image}
-                              alt=""
-                            />
-                            <div className="category">
-                              <a href="blog-grid.html">{item.name}</a>
-                            </div>
+                        <div
+                          style={{
+                            marginLeft: "10px",
+                            color: "black",
+                            marginBottom: "30px",
+                            display: "flex",
+                            justifyContent: "space-between",
+                            marginTop: "10px",
+                          }}
+                        >
+                          <div>
+                            <i
+                              className="fas fa-money-bill-wave"
+                              style={{
+                                fontSize: "18px",
+                                marginRight: "10px",
+                                color: "#2F8702",
+                              }}
+                            ></i>
+                            <span style={{ color: "#2F8702" }}>
+                              Total Funds :{" "}
+                            </span>
+                            {item.total}${" "}
                           </div>
-                          <div className="blog-content">
-                            <div className="blog-meta">
-                              <a href="blog-grid.html">{item.role}</a>
-                            </div>
-                            <h4>
-                              <a
-                                href="blog-details.html"
-                                style={{
-                                  fontFamily:
-                                    "-apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif",
-                                }}
-                              >
-                                {item.bio}
-                              </a>
-                            </h4>
-                          </div>
-                          </div>
+                          <NavLink to={`/crowdfunding/${item._id}`}>
+                            <button
+                              style={{
+                                backgroundColor: "orange",
+                                padding: "3px",
+                                width: "100px",
+                                borderRadius: "6px",
+                                boxShadow:
+                                  "rgba(0, 0, 0, 0.16) 0px 3px 6px, rgba(0, 0, 0, 0.15) 0px 2px 2px",
+                              }}
+                            >
+                              Read More
+                            </button>
                           </NavLink>
                         </div>
-                       
+                      </>
                     ))}
+                  </div>
+                </div>
+
+                <div className="col-6">
+                  <div className="blog-grid-pages pt-120 mb-120">
+                    <div className="container">
+                      <div className="row g-lg-4 gy-5 justify-content-center mb-70">
+                        {data.map((item) => (
+                          <div className="col-lg-6 col-md-6 col-sm-10">
+                            <NavLink to={`/association/${item._id}`}>
+                              <div className="h1-blog-card">
+                                <div className="blog-img">
+                                  <img
+                                    className="img-fluid"
+                                    src={baseUrl + item.image}
+                                    alt=""
+                                  />
+                                  <div className="category">
+                                    <a href="blog-grid.html">{item.name}</a>
+                                  </div>
+                                </div>
+                                <div className="blog-content">
+                                  <div className="blog-meta">
+                                    <a href="blog-grid.html">{item.role}</a>
+                                  </div>
+                                  <h4>
+                                    <a
+                                      href="blog-details.html"
+                                      style={{
+                                        fontFamily:
+                                          "-apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif",
+                                      }}
+                                    >
+                                      {item.bio}
+                                    </a>
+                                  </h4>
+                                </div>
+                              </div>
+                            </NavLink>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
                   </div>
                 </div>
               </div>
             </div>
-          </div>
-        </div>
+          </>
+        )}
       </>
     );
 }
