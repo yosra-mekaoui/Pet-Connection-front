@@ -120,7 +120,7 @@ useScript("./assets/js/masonry.pkgd.min.js");
             <Route path="/upgrade" element={<Upgrade />}></Route>
             <Route path="/associations" element={<AssociationList />}></Route>
             <Route path="/association/:id" element={<Association />}></Route>
-            <Route path="/crowdfunding/:id" element={<Crowdfunding />}></Route>
+            <Route path="/crowdfunding/:id" element={<Crowdfunding />}></Route> 
             <Route path="*" element={<Home />}></Route>
           </Routes>
 

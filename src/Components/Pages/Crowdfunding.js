@@ -2,7 +2,19 @@ import { useState, useEffect } from "react";
 import { NavLink, useParams } from "react-router-dom";
 import axios from "axios";
 import { getOneAssociation } from "./api";
-import { format } from "date-fns";
+import { format } from "date-fns";  
+import { StripeDonation } from "./StripeDonation"; 
+
+
+const Message = ({ message }) => (
+  <section>
+    <p>{message}</p>
+  </section>
+);
+
+
+
+
 function Crowdfunding() {
   const { id } = useParams();
   const [data, setData] = useState({});
@@ -13,10 +25,9 @@ function Crowdfunding() {
   const [fundings, setFundings] = useState([]);
   const [donations, setDonations] = useState([]);
 
+ 
+   
 
-  const [img, setImg] = useState("http://localhost:3000/uploads/");
-  const baseUrl = "http://localhost:3000/associations/";
-  const formattedDate = "";
 
   useEffect(() => {
     axios
@@ -55,6 +66,26 @@ function Crowdfunding() {
 
     }, [count]);
     
+  
+  
+  const [message, setMessage] = useState("");
+
+  useEffect(() => {
+    // Check to see if this is a redirect back from Checkout
+    const query = new URLSearchParams(window.location.search);
+
+    if (query.get("success")) {
+      setMessage("Order placed! You will receive an email confirmation.");
+    }
+
+    if (query.get("canceled")) {
+      setMessage(
+        "Order canceled -- continue to shop around and checkout when you're ready."
+      );
+    }
+  }, []);
+  
+   
     
   return (
     <>
@@ -129,6 +160,11 @@ function Crowdfunding() {
                 Released on {data.date}
               </p>
               <p style={{ color: "#494949" }}>{data.desc}</p>
+              message ? (
+              <Message message={message} />
+              ) : (
+              <StripeDonation />
+              );
             </div>
           </div>
 
@@ -192,8 +228,16 @@ function Crowdfunding() {
                           color: "#2F8702",
                         }}
                       ></i>
-                      <span>X just donated </span>
-                      <span style={{ color: "#2F8702" }}>{item.total}$ </span>
+                      <span>
+                        <span style={{ fontWeight: "700" }}>
+                          {item.user.username}{" "}
+                        </span>
+                        just donated{" "}
+                      </span>
+                      <span style={{ color: "#2F8702", fontWeight: "700" }}>
+                        {item.total}$
+                      </span>
+                      .
                     </div>
                   </div>
                 </>
