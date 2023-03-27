@@ -1,43 +1,41 @@
 import { useState, useEffect } from "react";
 import { NavLink, useLocation } from "react-router-dom"; 
 import axios from "axios";
+import { addDonation } from "./api";
 function AssociationList() {
-    const [data, setData] = useState([]);
-    const [fundings, setFundings] = useState([]);
-    const [color, setColor] = useState("");
-    const [img, setImg] = useState("http://localhost:3000/uploads/");
-    const [total, setTotal] = useState(0) ;
-    const [funding, setFunding] = useState(""); 
+  const [data, setData] = useState([]);
+  const [fundings, setFundings] = useState([]);
+  const [color, setColor] = useState("");
+  const [img, setImg] = useState("http://localhost:3000/uploads/");
+  const [total, setTotal] = useState(0);
+  const [exec, setExec] = useState(0);
 
-    const baseUrl = "http://localhost:3000/associations/"; 
+  const [funding, setFunding] = useState("");
 
-    useEffect(() => {
-        //setImg(`http://localhost:3000/uploads/`); 
-        axios
-          .get("http://localhost:3000/association/allAssociations")
-          .then((response) => {
-            setData(response.data);
-          })
-          .catch((error) => {
-            console.log(error);
-          });
-      
-      axios
-        .get("http://localhost:3000/funding/allFunding")
-        .then((response) => {
-          setFundings(response.data);
-          console.log(fundings); 
-        })
-        .catch((error) => {
-          console.log(error);
-        });
-         
-        
-    }, [])
-  
-  
-  
-  
+  const baseUrl = "http://localhost:3000/associations/";
+
+  useEffect(() => {
+    //setImg(`http://localhost:3000/uploads/`);
+    axios
+      .get("http://localhost:3000/association/allAssociations")
+      .then((response) => {
+        setData(response.data);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+
+    axios
+      .get("http://localhost:3000/funding/allFunding")
+      .then((response) => {
+        setFundings(response.data);
+        console.log(fundings);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  }, []);
+
   const [message, setMessage] = useState("");
   const location = useLocation();
 
@@ -52,269 +50,277 @@ function AssociationList() {
     const query = new URLSearchParams(window.location.search);
 
     if (query.get("success")) {
-      setTotal(query.get("total")); 
-      setFunding(query.get("funding")); 
+      setTotal(query.get("total"));
+      setFunding(query.get("funding"));
+
+      if (exec != 1) {
+        const donation = {
+          user: JSON.parse(localStorage.getItem("user")),
+          total: query.get("total"),
+          funding: query.get("id"),
+        };
+
+        
+        addDonation(donation);
+        setExec(1);
+      }
       setMessage(
         "Every contribution is highly valued, and we are committed to ensuring that your donation is utilized in the most effective manner. We appreciate your trust in us and thank you once again for your generous support. "
       );
-      setColor("green"); 
+      setColor("green");
     }
 
     if (query.get("canceled")) {
       setMessage(
         "Please check the payment information you entered as an error has occurred with your payment method. Make sure that all the details you have provided are correct."
       );
-      setColor("red"); 
+      setColor("red");
     }
   }, []);
 
-
-    return (
-      <>
-        <div className="inner-page-banner">
-          <div className="breadcrumb-vec-btm">
-            <img
-              className="img-fluid"
-              src="assets/images/bg/inner-banner-btm-vec.png"
-              alt=""
-            />
-          </div>
-          <div className="container">
-            <div className="row justify-content-center align-items-center text-center">
-              <div className="col-lg-6 align-items-center">
-                <div className="banner-content">
-                  <h1>Associations</h1>
-                  <nav aria-label="breadcrumb">
-                    <ol className="breadcrumb">
-                      <li className="breadcrumb-item">
-                        <a href="index.html">Home</a>
-                      </li>
-                      <li
-                        className="breadcrumb-item active"
-                        aria-current="page"
-                      >
-                        Associations
-                      </li>
-                    </ol>
-                  </nav>
-                </div>
+  return (
+    <>
+      <div className="inner-page-banner">
+        <div className="breadcrumb-vec-btm">
+          <img
+            className="img-fluid"
+            src="assets/images/bg/inner-banner-btm-vec.png"
+            alt=""
+          />
+        </div>
+        <div className="container">
+          <div className="row justify-content-center align-items-center text-center">
+            <div className="col-lg-6 align-items-center">
+              <div className="banner-content">
+                <h1>Associations</h1>
+                <nav aria-label="breadcrumb">
+                  <ol className="breadcrumb">
+                    <li className="breadcrumb-item">
+                      <a href="index.html">Home</a>
+                    </li>
+                    <li className="breadcrumb-item active" aria-current="page">
+                      Associations
+                    </li>
+                  </ol>
+                </nav>
               </div>
-              <div className="col-lg-6">
-                <div className="banner-img d-lg-block d-none">
-                  <div className="banner-img-bg">
-                    <img
-                      className="img-fluid"
-                      src="assets/images/bg/inner-banner-vec.png"
-                      alt=""
-                    />
-                  </div>
+            </div>
+            <div className="col-lg-6">
+              <div className="banner-img d-lg-block d-none">
+                <div className="banner-img-bg">
                   <img
                     className="img-fluid"
-                    src="assets/images/bg/inner-banner-img.png"
+                    src="assets/images/bg/inner-banner-vec.png"
                     alt=""
                   />
                 </div>
+                <img
+                  className="img-fluid"
+                  src="assets/images/bg/inner-banner-img.png"
+                  alt=""
+                />
               </div>
             </div>
           </div>
         </div>
-        {message && (
-          <center>
-            <div
-              style={{
-                boxShadow:
-                  "rgba(0, 0, 0, 0.16) 0px 3px 6px, rgba(0, 0, 0, 0.23) 0px 3px 6px",
-                padding: "20px",
-                borderRadius: "10px",
-                width: "80%",
-                marginTop: "50px",
-                marginBottom: "50px",
-                background:
-                  "linear-gradient(217deg, rgba(255,223,195,.8), rgba(255,223,195,0) 70.71%), linear-gradient(127deg, rgba(230,207,207,.8), rgba(230,207,207,0) 70.71%),            linear-gradient(336deg, rgba(255,225,225,.8), rgba(255,225,225,0) 70.71%)",
-              }}
-            >
-              <h5
-                style={{
-                  marginTop: "40px",
-                  marginBottom: "50px",
-                  width: "90%",
-                  color: color,
-                }}
-              >
-                {message}
-              </h5>
-
-              <div
-                style={{
-                  marginBottom: "60px",
-                  color: "black",
-                  fontWeight: "700",
-                  fontSize: "24px",
-                }}
-              >
-                {funding && (
-                  <>
-                    <i className="fa fa-check" style={{ fontSize: 24 }} />
-                    &nbsp;{total}$ successfully sent to {funding}.
-                    <h5
-                      style={{
-                        marginTop: "40px",
-                        marginBottom: "50px",
-                        width: "90%",
-                        color: color,
-                      }}
-                    >
-                      Thank you for your donation.
-                    </h5>
-                  </>
-                )}
-              </div>
-            </div>
-          </center>
-        )}
-
-        {!message && (
-          <>
-            <h2
+      </div>
+      {message && (
+        <center>
+          <div
+            style={{
+              boxShadow:
+                "rgba(0, 0, 0, 0.16) 0px 3px 6px, rgba(0, 0, 0, 0.23) 0px 3px 6px",
+              padding: "20px",
+              borderRadius: "10px",
+              width: "80%",
+              marginTop: "50px",
+              marginBottom: "50px",
+              background:
+                "linear-gradient(217deg, rgba(255,223,195,.8), rgba(255,223,195,0) 70.71%), linear-gradient(127deg, rgba(230,207,207,.8), rgba(230,207,207,0) 70.71%),            linear-gradient(336deg, rgba(255,225,225,.8), rgba(255,225,225,0) 70.71%)",
+            }}
+          >
+            <h5
               style={{
                 marginTop: "40px",
-                marginLeft: "8%",
-                color: "#353535",
-                marginBottom: "-20px",
+                marginBottom: "50px",
+                width: "90%",
+                color: color,
               }}
             >
-              You have an association? Become a{" "}
-              <NavLink to="/upgrade">Partner.</NavLink>
-            </h2>
+              {message}
+            </h5>
 
-            <h1>{message}</h1>
-
-            <div className="container" style={{ marginBottom: "50px" }}>
-              <div className="row">
-                <div className="col-6" style={{ marginTop: "120px" }}>
-                  <div
+            <div
+              style={{
+                marginBottom: "60px",
+                color: "black",
+                fontWeight: "700",
+                fontSize: "24px",
+              }}
+            >
+              {funding && (
+                <>
+                  <i className="fa fa-check" style={{ fontSize: 24 }} />
+                  &nbsp;{total}$ successfully sent to {funding}.
+                  <h5
                     style={{
-                      boxShadow:
-                        "rgba(0, 0, 0, 0.16) 0px 3px 6px, rgba(0, 0, 0, 0.23) 0px 3px 6px",
-                      padding: "20px",
-                      borderRadius: "10px",
-                      background:
-                        "linear-gradient(217deg, rgba(255,223,195,.8), rgba(255,223,195,0) 70.71%), linear-gradient(127deg, rgba(230,207,207,.8), rgba(230,207,207,0) 70.71%),            linear-gradient(336deg, rgba(255,225,225,.8), rgba(255,225,225,0) 70.71%)",
+                      marginTop: "40px",
+                      marginBottom: "50px",
+                      width: "90%",
+                      color: color,
                     }}
                   >
-                    <h3 style={{ paddingLeft: "10px", color: "#353535" }}>
-                      CrowdFundings{" "}
-                    </h3>
+                    Thank you for your donation.
+                  </h5>
+                </>
+              )}
+            </div>
+          </div>
+        </center>
+      )}
 
-                    {fundings.map((item) => (
-                      <>
-                        <div
-                          style={{
-                            marginLeft: "10px",
-                            color: "black",
-                            fontSize: "18px",
-                            marginTop: "40px",
-                            fontWeight: "700px !important",
-                          }}
-                        >
-                          <b>{item.title}</b>
-                        </div>
-                        <div style={{ marginLeft: "10px", color: "black" }}>
-                          {item.desc}
-                        </div>
+      {!message && (
+        <>
+          <h2
+            style={{
+              marginTop: "40px",
+              marginLeft: "8%",
+              color: "#353535",
+              marginBottom: "-20px",
+            }}
+          >
+            You have an association? Become a{" "}
+            <NavLink to="/upgrade">Partner.</NavLink>
+          </h2>
 
-                        <div
-                          style={{
-                            marginLeft: "10px",
-                            color: "black",
-                            marginBottom: "30px",
-                            display: "flex",
-                            justifyContent: "space-between",
-                            marginTop: "10px",
-                          }}
-                        >
-                          <div>
-                            <i
-                              className="fas fa-money-bill-wave"
-                              style={{
-                                fontSize: "18px",
-                                marginRight: "10px",
-                                color: "#2F8702",
-                              }}
-                            ></i>
-                            <span style={{ color: "#2F8702" }}>
-                              Total Funds :{" "}
-                            </span>
-                            {item.total}${" "}
-                          </div>
-                          <NavLink to={`/crowdfunding/${item._id}`}>
-                            <button
-                              style={{
-                                backgroundColor: "orange",
-                                padding: "3px",
-                                width: "100px",
-                                borderRadius: "6px",
-                                boxShadow:
-                                  "rgba(0, 0, 0, 0.16) 0px 3px 6px, rgba(0, 0, 0, 0.15) 0px 2px 2px",
-                              }}
-                            >
-                              Read More
-                            </button>
-                          </NavLink>
+          <h1>{message}</h1>
+
+          <div className="container" style={{ marginBottom: "50px" }}>
+            <div className="row">
+              <div className="col-6" style={{ marginTop: "120px" }}>
+                <div
+                  style={{
+                    boxShadow:
+                      "rgba(0, 0, 0, 0.16) 0px 3px 6px, rgba(0, 0, 0, 0.23) 0px 3px 6px",
+                    padding: "20px",
+                    borderRadius: "10px",
+                    background:
+                      "linear-gradient(217deg, rgba(255,223,195,.8), rgba(255,223,195,0) 70.71%), linear-gradient(127deg, rgba(230,207,207,.8), rgba(230,207,207,0) 70.71%),            linear-gradient(336deg, rgba(255,225,225,.8), rgba(255,225,225,0) 70.71%)",
+                  }}
+                >
+                  <h3 style={{ paddingLeft: "10px", color: "#353535" }}>
+                    CrowdFundings{" "}
+                  </h3>
+
+                  {fundings.map((item) => (
+                    <>
+                      <div
+                        style={{
+                          marginLeft: "10px",
+                          color: "black",
+                          fontSize: "18px",
+                          marginTop: "40px",
+                          fontWeight: "700px !important",
+                        }}
+                      >
+                        <b>{item.title}</b>
+                      </div>
+                      <div style={{ marginLeft: "10px", color: "black" }}>
+                        {item.desc}
+                      </div>
+
+                      <div
+                        style={{
+                          marginLeft: "10px",
+                          color: "black",
+                          marginBottom: "30px",
+                          display: "flex",
+                          justifyContent: "space-between",
+                          marginTop: "10px",
+                        }}
+                      >
+                        <div>
+                          <i
+                            className="fas fa-money-bill-wave"
+                            style={{
+                              fontSize: "18px",
+                              marginRight: "10px",
+                              color: "#2F8702",
+                            }}
+                          ></i>
+                          <span style={{ color: "#2F8702" }}>
+                            Total Funds :{" "}
+                          </span>
+                          {item.total}${" "}
                         </div>
-                      </>
-                    ))}
-                  </div>
+                        <NavLink to={`/crowdfunding/${item._id}`}>
+                          <button
+                            style={{
+                              backgroundColor: "orange",
+                              padding: "3px",
+                              width: "100px",
+                              borderRadius: "6px",
+                              boxShadow:
+                                "rgba(0, 0, 0, 0.16) 0px 3px 6px, rgba(0, 0, 0, 0.15) 0px 2px 2px",
+                            }}
+                          >
+                            Read More
+                          </button>
+                        </NavLink>
+                      </div>
+                    </>
+                  ))}
                 </div>
+              </div>
 
-                <div className="col-6">
-                  <div className="blog-grid-pages pt-120 mb-120">
-                    <div className="container">
-                      <div className="row g-lg-4 gy-5 justify-content-center mb-70">
-                        {data.map((item) => (
-                          <div className="col-lg-6 col-md-6 col-sm-10">
-                            <NavLink to={`/association/${item._id}`}>
-                              <div className="h1-blog-card">
-                                <div className="blog-img">
-                                  <img
-                                    className="img-fluid"
-                                    src={baseUrl + item.image}
-                                    alt=""
-                                  />
-                                  <div className="category">
-                                    <a href="blog-grid.html">{item.name}</a>
-                                  </div>
-                                </div>
-                                <div className="blog-content">
-                                  <div className="blog-meta">
-                                    <a href="blog-grid.html">{item.role}</a>
-                                  </div>
-                                  <h4>
-                                    <a
-                                      href="blog-details.html"
-                                      style={{
-                                        fontFamily:
-                                          "-apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif",
-                                      }}
-                                    >
-                                      {item.bio}
-                                    </a>
-                                  </h4>
+              <div className="col-6">
+                <div className="blog-grid-pages pt-120 mb-120">
+                  <div className="container">
+                    <div className="row g-lg-4 gy-5 justify-content-center mb-70">
+                      {data.map((item) => (
+                        <div className="col-lg-6 col-md-6 col-sm-10">
+                          <NavLink to={`/association/${item._id}`}>
+                            <div className="h1-blog-card">
+                              <div className="blog-img">
+                                <img
+                                  className="img-fluid"
+                                  src={baseUrl + item.image}
+                                  alt=""
+                                />
+                                <div className="category">
+                                  <a href="blog-grid.html">{item.name}</a>
                                 </div>
                               </div>
-                            </NavLink>
-                          </div>
-                        ))}
-                      </div>
+                              <div className="blog-content">
+                                <div className="blog-meta">
+                                  <a href="blog-grid.html">{item.role}</a>
+                                </div>
+                                <h4>
+                                  <a
+                                    href="blog-details.html"
+                                    style={{
+                                      fontFamily:
+                                        "-apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif",
+                                    }}
+                                  >
+                                    {item.bio}
+                                  </a>
+                                </h4>
+                              </div>
+                            </div>
+                          </NavLink>
+                        </div>
+                      ))}
                     </div>
                   </div>
                 </div>
               </div>
             </div>
-          </>
-        )}
-      </>
-    );
+          </div>
+        </>
+      )}
+    </>
+  );
 }
 
 export default AssociationList;

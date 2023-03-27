@@ -35,3 +35,13 @@ export const getOneAssociation = async () => {
         console.log(error);
   } 
 }
+
+
+
+export const addDonation = async (donation) => { 
+  try {
+    await axios.post(`http://localhost:3000/donation/addDonation`, donation);
+  } catch (error) {
+    console.log(error);
+  } 
+};

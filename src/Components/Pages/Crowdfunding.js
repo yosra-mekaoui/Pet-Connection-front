@@ -149,7 +149,7 @@ function Crowdfunding() {
               </p>
               <p style={{ color: "#494949" }}>{data.desc}</p>
                
-              <StripeDonation id={data._id} />
+              <StripeDonation id={data._id} funding={data.title} />
                
             </div>
           </div>

@@ -12,7 +12,7 @@ export function StripeDonation(props) {
           </div>
         </div>
         <form
-          action={url + total+"/" + props.id}
+          action={url + total+"/" + props.id+"/"+props.funding}
           method="POST"
         >
           <input
