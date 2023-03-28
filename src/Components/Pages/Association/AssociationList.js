@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { NavLink, useLocation } from "react-router-dom"; 
 import axios from "axios";
-import { addDonation } from "./api"; 
+import { addDonation } from "../api"; 
 function AssociationList() {
   
   const query = new URLSearchParams(window.location.search);
@@ -289,7 +289,7 @@ function AssociationList() {
                                   alt=""
                                 />
                                 <div className="category">
-                                  <a href="blog-grid.html">{item.name}</a>
+                                  <a href="blog-grid.html">Association</a>
                                 </div>
                               </div>
                               <div className="blog-content">
@@ -304,7 +304,7 @@ function AssociationList() {
                                         "-apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif",
                                     }}
                                   >
-                                    {item.bio}
+                                    {item.name}
                                   </a>
                                 </h4>
                               </div>

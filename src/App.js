@@ -9,9 +9,9 @@ import TwoFa from "./Components/User/TwoFa";
 //import TwoFactorVerification from "./Components/User/TwoFactorVerification";
 
 import { Cursor } from 'custom-pointer-react'
-import Association from "./Components/Pages/Association";
-import Crowdfunding from "./Components/Pages/Crowdfunding";
-import ConfirmDonation from "./Components/Pages/ConfirmDonation";
+import Association from "./Components/Pages/Association/Association";
+import Crowdfunding from "./Components/Pages/Crowdfunding/Crowdfunding";
+import ConfirmDonation from "./Components/Pages/Crowdfunding/ConfirmDonation";
 
 const Home = React.lazy(() => import('./Components/Pages/Home.js'))
 const Header = React.lazy(() => import('./Components/Pages/Header'))
@@ -26,8 +26,8 @@ const DisableTwoFactorAuth = React.lazy(()=> import('./Components/User/DisableTw
 const ForgetPwd = React.lazy(()=> import ('./Components/User/forgetPwd'))
 const ResetPwd = React.lazy(()=> import ('./Components/User/resetPwd'))
 const Profile = React.lazy(()=> import ('./Components/User/Profile'))
-const Upgrade = React.lazy(() => import("./Components/Pages/Upgrade"));
-const AssociationList = React.lazy(() => import("./Components/Pages/AssociationList"));
+const Upgrade = React.lazy(() => import("./Components/Pages/Association/Upgrade"));
+const AssociationList = React.lazy(() => import("./Components/Pages/Association/AssociationList"));
 
 
 

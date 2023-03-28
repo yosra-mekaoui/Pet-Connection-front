@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { NavLink, useLocation } from "react-router-dom";
 import axios from "axios";
-import { addDonation } from "./api";
+import { addDonation } from "../api";
 
 function ConfirmDonation() { 
 const [total, setTotal] = useState(0); 

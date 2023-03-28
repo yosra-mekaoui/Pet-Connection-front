@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { NavLink, useParams } from "react-router-dom";
 import axios from "axios";
-import { getOneAssociation } from "./api";
+import { getOneAssociation } from "../api";
 import { format } from "date-fns";
 function AssociationList() {
     const { id } = useParams(); 
@@ -154,7 +154,7 @@ function AssociationList() {
               <h3 style={{ color: "black " }}>Latest Actions</h3>
 
               {fundings.length == 0 && (
-                <h5 style={{ color: "#494949", marginTop : "20px" }}>
+                <h5 style={{ color: "#494949", marginTop: "20px" }}>
                   {data.name} hasn't done any actions yet.
                 </h5>
               )}
@@ -197,7 +197,7 @@ function AssociationList() {
                       <span style={{ color: "#2F8702" }}>Total Funds : </span>
                       {item.total}${" "}
                     </div>
-                    <NavLink to={`/associations/${item._id}`}>
+                    <NavLink to={`/crowdfunding/${item._id}`}>
                       <button
                         style={{
                           backgroundColor: "orange",

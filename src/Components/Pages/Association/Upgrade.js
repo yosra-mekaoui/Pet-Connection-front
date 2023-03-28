@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react"; 
 import Dropzone from "react-dropzone";
-import { UpgradeUser } from "./api";
+import { UpgradeUser } from "../api";
 
 
 

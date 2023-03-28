@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { NavLink, useParams, useLocation } from "react-router-dom";
 import axios from "axios";
-import { getOneAssociation } from "./api";
+import { getOneAssociation } from "../api";
 import { format } from "date-fns";  
 import { StripeDonation } from "./StripeDonation"; 
 
