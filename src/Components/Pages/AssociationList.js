@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { NavLink, useLocation } from "react-router-dom"; 
 import axios from "axios";
-import { addDonation } from "./api";
+import { addDonation } from "./api"; 
 function AssociationList() {
   const [data, setData] = useState([]);
   const [fundings, setFundings] = useState([]);
@@ -12,8 +12,8 @@ function AssociationList() {
 
   const [funding, setFunding] = useState("");
 
-  const baseUrl = "http://localhost:3000/associations/";
-
+  const baseUrl = "http://localhost:3000/associations/"; 
+  
   useEffect(() => {
     //setImg(`http://localhost:3000/uploads/`);
     axios
@@ -60,9 +60,8 @@ function AssociationList() {
           funding: query.get("id"),
         };
 
-        
-        addDonation(donation);
-        setExec(1);
+        console.log("SENDING FIRSt POST"); 
+        addDonation(donation); 
       }
       setMessage(
         "Every contribution is highly valued, and we are committed to ensuring that your donation is utilized in the most effective manner. We appreciate your trust in us and thank you once again for your generous support. "
