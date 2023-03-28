@@ -21,8 +21,19 @@ export const getEvent = async (id) => {
       }
     };
     
-export const updateEvent = async (id, event) => {
-    return await axios.put(`${url}/update/${id}`, event);
+export const updateEvent = async (id, event,connectedUserId) => {
+  try {
+  const { data } = await axios.put(`${url}/update/${id}`, event,   {
+      data: 
+        { connectedUserId },
+      
+    });
+    return data;
+  } catch (error) {
+    console.error(error);
+    throw error;
+  }
+
 
 }
 export const deleteEvent = async (id, connectedUserId) => {
@@ -63,5 +74,40 @@ export const deleteEvent = async (id, connectedUserId) => {
       }
     };
     
+    export const addComment = async (eventId, userId, text) => {
+      try {
+        const response = await axios.post(`${url}/addComment/${eventId}`, {
+          userId,
+          text,
+        });
+        return response.data;
+      } catch (error) {
+        console.error(error);
+        throw error;
+      }
+    };
+
+  
+    export const addReply = async (eventId, commentId, userId, text) => {
+      try {
+        const response = await axios.post(`${url}/addReply/${eventId}/${commentId}`, {
+          userId,
+          text,
+        });
+        return response.data;
+      } catch (error) {
+        console.error(error);
+        throw error;
+      }
+    };
     
+    export const getCommentById = async (eventId, commentId) => {
+      try {
+        const response = await axios.get(`${url}/getCommentById/${eventId}/${commentId}`);
+        return response.data;
+      } catch (error) {
+        console.error(error);
+        throw error;
+      }
+    };
     

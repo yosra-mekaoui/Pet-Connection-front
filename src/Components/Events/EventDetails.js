@@ -113,12 +113,12 @@ function EventDetails() {
                 <a href="blog-grid.html"> {event.location}</a>
               </li>
               {!isAuthenticated() ? (
-  <button className="account-btn" disabled>
+  <button className="primary-btn3 btn-lg" disabled>
     Please log in to RSVP
   </button>
 ) : (
   <button
-    className="account-btn"
+    className="primary-btn3 btn-lg"
     onClick={handleGoingClick}
     disabled={!event}
   >

@@ -121,20 +121,28 @@ function EventList() {
                       <a href="">{event.title}</a>
                     </h4>
                     <p>{event.description}</p>
-                    <div className="more-btn">
-                    <NavLink to={`/EventDetails/${event._id}`}>
+                    
+                    <NavLink  className="primary-btn3 btn-lg" to={`/EventDetails/${event._id}`}>
                     <i className="fa fa-paw" aria-hidden="true"></i>
 
         More
       </NavLink>
     
-                    </div>
+                    
                     {user && event.organizer === user.username && (
-                      <button className="account-btn" onClick={() => handleDelete(event._id)}>
+                      <button className="primary-btn3 btn-lg" onClick={() => handleDelete(event._id)}>
                                               <i className="fa fa-paw" aria-hidden="true"></i>
   Delete
                         </button>
                       )}
+                       {user && event.organizer === user.username && (
+                       <NavLink  className="primary-btn3 btn-lg" to={`/UpdateEvent/${event._id}`}>
+                                              <i className="fa fa-paw" aria-hidden="true"></i>
+  Modify
+                        </NavLink>
+                      )}
+                      
+
                   </div>
                 </div>
               </div>
