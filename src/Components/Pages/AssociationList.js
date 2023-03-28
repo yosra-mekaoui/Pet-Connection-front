@@ -3,12 +3,15 @@ import { NavLink, useLocation } from "react-router-dom";
 import axios from "axios";
 import { addDonation } from "./api"; 
 function AssociationList() {
+  
+  const query = new URLSearchParams(window.location.search);
+  
   const [data, setData] = useState([]);
   const [fundings, setFundings] = useState([]);
   const [color, setColor] = useState("");
   const [img, setImg] = useState("http://localhost:3000/uploads/");
   const [total, setTotal] = useState(0);
-  const [exec, setExec] = useState(0);
+  const [exec, setExec] = useState(query.get("success"));
 
   const [funding, setFunding] = useState("");
 
@@ -47,7 +50,6 @@ function AssociationList() {
 
   useEffect(() => {
     // Check to see if this is a redirect back from Checkout
-    const query = new URLSearchParams(window.location.search);
 
     if (query.get("success")) {
       setTotal(query.get("total"));
@@ -60,8 +62,8 @@ function AssociationList() {
           funding: query.get("id"),
         };
 
-        console.log("SENDING FIRSt POST"); 
-        addDonation(donation); 
+        console.log("SENDING FIRSt POST");
+        addDonation(donation);
       }
       setMessage(
         "Every contribution is highly valued, and we are committed to ensuring that your donation is utilized in the most effective manner. We appreciate your trust in us and thank you once again for your generous support. "
@@ -75,7 +77,7 @@ function AssociationList() {
       );
       setColor("red");
     }
-  }, []);
+  }, [exec]);
 
   return (
     <>
