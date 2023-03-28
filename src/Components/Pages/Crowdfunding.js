@@ -120,8 +120,6 @@ function Crowdfunding() {
         </div>
       </div>
 
-      
-      
       <div className="container" style={{ marginBottom: "50px" }}>
         <div className="row">
           <div className="col-6" style={{ marginTop: "50px" }}>
@@ -148,9 +146,8 @@ function Crowdfunding() {
                 Released on {data.date}
               </p>
               <p style={{ color: "#494949" }}>{data.desc}</p>
-               
+
               <StripeDonation id={data._id} funding={data.title} />
-               
             </div>
           </div>
 
@@ -169,7 +166,7 @@ function Crowdfunding() {
               }}
             >
               <center>
-                <h1 style={{ margin: "30px" }}>{data.total} $</h1>
+                <h1 style={{ margin: "30px", color : "black" }}>{data.total} $</h1>
               </center>
               <h3 style={{ color: "black " }}>Latest Donations</h3>
 
@@ -178,56 +175,64 @@ function Crowdfunding() {
                   {data.name} hasn't done any actions yet.
                 </h5>
               )}
-              {donations.map((item) => (
-                <>
-                  <div
-                    style={{
-                      marginLeft: "10px",
-                      color: "black",
-                      fontSize: "18px",
-                      marginTop: "30px",
-                      fontWeight: "700px !important",
-                    }}
-                  >
-                    <b>{item.title}</b>
-                  </div>
-                  <div style={{ marginLeft: "10px", color: "black" }}>
-                    {item.desc}
-                  </div>
 
-                  <div
-                    style={{
-                      marginLeft: "10px",
-                      color: "black",
-                      marginBottom: "30px",
-                      display: "flex",
-                      justifyContent: "space-between",
-                      marginTop: "10px",
-                    }}
-                  >
-                    <div>
-                      <i
-                        className="fas fa-money-bill-wave"
-                        style={{
-                          fontSize: "18px",
-                          marginRight: "10px",
-                          color: "#2F8702",
-                        }}
-                      ></i>
-                      <span>
-                        <span style={{ fontWeight: "700" }}>
-                          {item.user.username}{" "}
-                        </span>
-                        just donated{" "}
-                      </span>
-                      <span style={{ color: "#2F8702", fontWeight: "700" }}>
-                        {item.total}$
-                      </span>
-                      .
+              <div
+                style={{
+                  overflowY: "scroll",
+                  height: "300px",
+                }}
+              >
+                {donations.map((item) => (
+                  <>
+                    <div
+                      style={{
+                        marginLeft: "10px",
+                        color: "black",
+                        fontSize: "18px",
+                        marginTop: "30px",
+                        fontWeight: "700px !important",
+                      }}
+                    >
+                      <b>{item.title}</b>
                     </div>
-                  </div>
-                </>
-              ))}
+                    <div style={{ marginLeft: "10px", color: "black" }}>
+                      {item.desc}
+                    </div>
+
+                    <div
+                      style={{
+                        marginLeft: "10px",
+                        color: "black",
+                        marginBottom: "30px",
+                        display: "flex",
+                        justifyContent: "space-between",
+                        marginTop: "10px",
+                      }}
+                    >
+                      <div>
+                        <i
+                          className="fas fa-money-bill-wave"
+                          style={{
+                            fontSize: "18px",
+                            marginRight: "10px",
+                            color: "#2F8702",
+                          }}
+                        ></i>
+                        <span>
+                          <span style={{ fontWeight: "700" }}>
+                            {item.user.username}{" "}
+                          </span>
+                          just donated{" "}
+                        </span>
+                        <span style={{ color: "#2F8702", fontWeight: "700" }}>
+                          {item.total}$
+                        </span>
+                        .<span style={{color : "gray", fontSize:"12px", marginLeft: "20px" ,  fontStyle: "italic" }}>{item.createdAt}</span>
+                      </div>
+                    </div>
+                  </>
+                ))}
+              </div>
             </div>
           </div>
         </div>
