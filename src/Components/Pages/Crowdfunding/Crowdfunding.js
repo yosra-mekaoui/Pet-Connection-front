@@ -170,11 +170,11 @@ function Crowdfunding() {
               </center>
               <h3 style={{ color: "black " }}>Latest Donations</h3>
 
-              {donations.length == 0 && (
+              {donations.length == 0 ? (
                 <h5 style={{ color: "#494949", marginTop: "20px" }}>
                   {data.name} hasn't done any actions yet.
                 </h5>
-              )}
+              ) : (
 
               <div
                 style={{
@@ -233,6 +233,8 @@ function Crowdfunding() {
                   </>
                 ))}
               </div>
+
+              )}
             </div>
           </div>
         </div>

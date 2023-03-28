@@ -296,17 +296,32 @@ function AssociationList() {
                                 <div className="blog-meta">
                                   <a href="blog-grid.html">{item.role}</a>
                                 </div>
-                                <h4>
-                                  <a
+                                <div
+                                  style={{
+                                    display: "flex",
+                                    justifyContent: "space-between",
+                                    color : "black"
+                                  }}
+                                >
+                                  <div
                                     href="blog-details.html"
                                     style={{
+                                      fontSize: "18px",
+                                      fontWeight : "700",
                                       fontFamily:
                                         "-apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif",
                                     }}
                                   >
-                                    {item.name}
-                                  </a>
-                                </h4>
+                                    {item.name}{" "}
+                                  </div>
+                                  <div>
+                                    <i
+                                      className="fas fa-arrow-up"
+                                      style={{ fontSize: "18px" , marginRight : "6px" }}
+                                    />
+                                    <span style={{color : "green", fontSize : "18px"}}>{item.action}</span> actions. 
+                                  </div>
+                                </div>
                               </div>
                             </div>
                           </NavLink>
