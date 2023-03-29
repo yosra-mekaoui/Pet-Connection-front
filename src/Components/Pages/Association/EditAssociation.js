@@ -25,8 +25,8 @@ function EditAssociation() {
     const [latitude, setLatitude] = useState("");
     const [longitude, setLongitude] = useState("");
     const [bio, setBio] = useState("");
-    const [action, setAction] = useState(0);
-
+    const [action, setAction] = useState(0); 
+    
 
     const [file, setFile] = useState(null); 
 
@@ -44,6 +44,7 @@ function EditAssociation() {
               setLongitude(response.data.longitude); 
               setId(response.data._id); 
               setAction(response.data.action); 
+              setImage(response.data.image) ; 
           })
           .catch((error) => {
             console.log(error);
@@ -63,15 +64,16 @@ function EditAssociation() {
   const handleSubmit = (e) => {
     e.preventDefault();
     const formData = new FormData(); 
-    
-      const test = {
-          longitude: longitude,
-          latitude: latitude,
-          bio: bio,
-          name: name,
-          user: user,
-          action : action
-        }
+      console.log("LOGO : " + logo["path"]);
+    //   const test = {
+    //       longitude: longitude,
+    //       latitude: latitude,
+    //       bio: bio,
+    //       name: name,
+    //       user: user,
+    //       action: action,
+    //       file : image
+    //     }
         formData.append("longitude", longitude);
         formData.append("latitude", latitude);
         formData.append("bio", bio);
@@ -79,13 +81,15 @@ function EditAssociation() {
         formData.append("user", user); 
         formData.append("action", action);
     
-    //   if (logo != "") {
-    //     formData.append("logo", logo);
-    //   }  
-        console.log("formData : " + test);
+        if (logo != "") {
+            //formData.append("logo", logo);
+            //test["file"] = logo; 
+            formData.append("file", logo); 
+        }  
+        console.log(formData);
         //console.log(test.entries());
       
-        editAssociation(id, test);
+        editAssociation(id, formData);
     
         setDone(true);
   };
@@ -107,7 +111,10 @@ function EditAssociation() {
   return (
     <>
       <center>
-        <div className="login-section pt-120 pb-120" style={{marginTop : "-50px"}}>
+        <div
+          className="login-section pt-120 pb-120"
+          style={{ marginTop: "-50px", width: "90% !important" }}
+        >
           <div className="container">
             <div className="row d-flex justify-content-center g-4">
               <div className="col-xl-6 col-lg-8 col-md-10">
@@ -117,7 +124,10 @@ function EditAssociation() {
                   data-wow-delay=".2s"
                 >
                   <div className="form-title">
-                    <h3>Edit Association</h3>
+                    <h3>
+                      <i className="fas fa-edit" style={{ marginRight : "15px" }} />
+                      Edit Association
+                    </h3>
 
                     {done && (
                       <h4 style={{ color: "green" }}>
@@ -146,7 +156,6 @@ function EditAssociation() {
                         </div>
                       </div>
 
-                      
                       <div className="col-12">
                         <div className="form-inner">
                           <label style={{ float: "left" }}>
@@ -258,7 +267,7 @@ function EditAssociation() {
                                   }}
                                 ></i>
                                 Drop a new Logo
-                                {file != null && (
+                                {logo != null && (
                                   <p
                                     style={{
                                       color: "darkGreen",
@@ -274,7 +283,7 @@ function EditAssociation() {
                         </Dropzone>
                       </div>
                     </div>
-                    <button className="account-btn" >
+                    <button className="account-btn">
                       {" "}
                       <i className="fa fa-paw" aria-hidden="true"></i>
                       &nbsp;Edit

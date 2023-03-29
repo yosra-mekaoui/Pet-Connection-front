@@ -188,30 +188,32 @@ function AssociationList() {
 
       {!message && (
         <>
-          <h2
-              style={{
-                marginTop: "40px",
-                marginLeft: "8%",
-                color: "#353535",
-                marginBottom: "-20px",
-              }}
-            >
-          {role != "Association" ? (
+          <h3
+            style={{
+              marginTop: "50px",
+              marginLeft: "8%",
+              color: "#353535",
+              marginBottom: "-20px",
+            }}
+          >
+            {role != "Association" ? (
               <>
-              You have an association? Become a{" "}
-              <NavLink to="/upgrade">Partner.</NavLink>
+                <i
+                  className="fas fa-handshake"
+                  style={{
+                    marginRight: "15px",
+                  }}
+                />
+                You have an association? Become a{" "}
+                <NavLink to="/upgrade">Partner.</NavLink>
               </>
-            
-          ) : (
-            <>
-              Check my 
-              <NavLink to={`/editAssociation`}>
-                Association.
-              </NavLink>
-            </>
-          )}
-
-          </h2>
+            ) : (
+              <>
+                <i className="fas fa-edit" style={{ marginRight: "15px" }} />
+                Edit my <NavLink to={`/editAssociation`}>Association.</NavLink>
+              </>
+            )}
+          </h3>
           {/* <h1>{message}</h1> */}
 
           <div className="container" style={{ marginBottom: "50px" }}>

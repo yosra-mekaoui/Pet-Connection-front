@@ -59,7 +59,7 @@ function Upgrade() {
       } else {
         formData.append("name", name)
       }
-
+      console.log(formData); 
       UpgradeUser(formData);
       setDone(true); 
     };
