@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import { getEvent,addAttendeeById, RemoveAttendeeById } from "./Services";
+import { getEvent,addAttendeeById, RemoveAttendeeById,getCommentById,addComment } from "./Services";
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
@@ -14,8 +14,14 @@ function EventDetails() {
   const [event, setEvent] = useState(null);
   const [isGoing, setIsGoing] = useState(false);
   const [error, setError] = useState(null);
+  const [comments, setComments] = useState([]);
+  const [name, setName] = useState("");
+const [comment, setComment] = useState("");
+
+
   const [numParticipants, setNumParticipants] = useState(0);
   const user = JSON.parse(localStorage.getItem('user'))._id || JSON.parse(localStorage.getItem('user')).facebookId;
+  
 
   useEffect(() => {
     const fetchEvent = async () => {
@@ -30,7 +36,43 @@ function EventDetails() {
     };
     fetchEvent();
   }, [id, event]); // Add event as a dependency
+  useEffect(() => {
+    if (event) {
+      const fetchComments = async () => {
+        try {
+          const res = await getCommentById(id);
+          setComments(res.data);
+        } catch (err) {
+          console.error(err);
+          setError("Failed to fetch comments.");
+        }
+      };
+      fetchComments();
+    }
+  }, [id, event]);
 
+  const handleSubmit = async e => {
+    e.preventDefault();
+    try {
+      const userId = JSON.parse(localStorage.getItem("user"));
+      const connectedUserId = userId?._id || userId?.facebookId;
+      if (!connectedUserId) {
+        toast.error("User ID not found.");
+        return;
+      }
+      const res = await addComment(id, connectedUserId, comment);
+      setComments([...comments, res.data]);
+      setName("");
+      setComment("");
+      toast.success("Successfully added comment!");
+    } catch (err) {
+      console.error(err);
+      setError(err.message);
+      toast.error(err.response.data.message);
+    }
+  };
+
+  
   const handleGoingClick = async () => {
     try {
 
@@ -77,7 +119,10 @@ function EventDetails() {
     return Boolean(user);
   };
   
-
+  const handleChange = (event) => {
+    setComment(event.target.value);
+  };
+  
     return ( <>
          
          <ToastContainer />
@@ -133,12 +178,14 @@ function EventDetails() {
                         Participants: {numParticipants}
                       </p>
                       {event.attendees && event.attendees.length > 0 ? (
-  <ul>
-  
-  </ul>
-) : (
-  <p>No attendees yet.</p>
-)}
+                    <ul>
+                      {event.attendees.map((attendeeId) => (
+                        <li key={attendeeId}>{attendeeId}</li>
+                      ))}
+                    </ul>
+                  ) : (
+                    <p>No attendees yet.</p>
+                  )}
 
 
           </div>
@@ -180,139 +227,79 @@ function EventDetails() {
 
 
           <div className="comment-area">
-          <div className="blog-comments mb-120">
-            <div className="comments-title">
-              <h2>Comment</h2>
-            </div>
-            <ul className="comment-list">
-              <li>
-                <div className="single-comment mb-50 d-flex align-items-center justify-content-between flex-md-nowrap flex-wrap">
-                  <div className="comment-content">
-                    <div className="c-header d-flex align-items-center justify-content-between">
-                      <div className="author-area">
-                        <div className="author-img">
-                          <img
-                            src="assets/images/blog/blog-author.png"
-                            alt=""
-                          />
-                        </div>
-                        <div className="author-details">
-                          <h5 className="mb-0">Angilano Cooper</h5>
-                          <div className="c-date">
-                            11 January, 2022 At 01.56 pm
-                          </div>
-                        </div>
+      <div className="blog-comments mb-120">
+        <div className="comments-title">
+          <h2>Comments</h2>
+        </div>
+        <ul className="comment-list">
+          {comments.map((comment) => (
+            <li key={comment.id}>
+              <div className="single-comment mb-50 d-flex align-items-center justify-content-between flex-md-nowrap flex-wrap">
+                <div className="comment-content">
+                  <div className="c-header d-flex align-items-center justify-content-between">
+                    <div className="author-area">
+                      <div className="author-img">
+                        <img
+                          src="assets/images/blog/blog-author.png"
+                          alt=""
+                        />
                       </div>
-                      <div className="replay-btn">
-                        <a href="#">
-                          <img
-                            src="assets/images/icon/replay-icon.svg"
-                            alt=""
-                          />{" "}
-                          Reply
-                        </a>
+                      <div className="author-details">
+                        <h5 className="mb-0">{comment.user}</h5>
+                        <div className="c-date">{comment.date}</div>
                       </div>
                     </div>
-                    <div className="c-body">
-                      <p>
-                        Pellentesque maximus augue orci, quis congue purus
-                        iaculison id. Maecenas eu lorem quisesdoi massal
-                        molestie vulputate in sitagi amet diam. Cras eu odio sit
-                        amet ipsum cursus for that gone pellentesquea. thisaton
-                        Vestibulum ut aliquet risus. In hac habitasse plateajoa
-                        dictumst. Nuncet posuere scelerisque justo in
-                        accumsan.Pellentesque
-                      </p>
+                    <div className="replay-btn">
+                      <a href="#">
+                        <img
+                          src="assets/images/icon/replay-icon.svg"
+                          alt=""
+                        />{" "}
+                        Reply
+                      </a>
                     </div>
                   </div>
-                </div>
-                <ul className="comment-reply">
-                  <li>
-                    <div className="single-comment d-flex align-items-center justify-content-between flex-md-nowrap flex-wrap">
-                      <div className="comment-content">
-                        <div className="c-header d-flex align-items-center justify-content-between">
-                          <div className="author-area">
-                            <div className="author-img">
-                              <img
-                                src="assets/images/blog/blog-author1.png"
-                                alt=""
-                              />
-                            </div>
-                            <div className="author-details">
-                              <h5 className="mb-0">Polard Girdet</h5>
-                              <div className="c-date">
-                                11 January, 2022 At 01.56 pm
-                              </div>
-                            </div>
-                          </div>
-                          <div className="replay-btn">
-                            <a href="#">
-                              <img
-                                src="assets/images/icon/replay-icon.svg"
-                                alt=""
-                              />{" "}
-                              Reply
-                            </a>
-                          </div>
-                        </div>
-                        <div className="c-body">
-                          <p>
-                            Pellentesque maximus augue orci, quis congue purus
-                            iaculison id. Maecenas eu lorem quisesdoi massal
-                            molestie vulputate in sitagi amet diam. Cras eu odio
-                            sit amet ipsum cursus for that gone pellentesquea.
-                            thisaton Vestibulum ut aliquet risus. In hac
-                            habitasse plateajoa dictumst. Nuncet posuere
-                            scelerisque justo in accumsan.Pellentesque
-                          </p>
-                        </div>
-                      </div>
-                    </div>
-                  </li>
-                </ul>
-              </li>
-            </ul>
-          </div>
-          <div className="comment-form">
-            <div className="comments-title">
-              <h2>Leave a Comment</h2>
-            </div>
-            <form>
-              <div className="row">
-                <div className="col-lg-6">
-                  <div className="form-inner name mb-40">
-                    <input
-                      type="text"
-                      placeholder="Enter your name"
-                      required=""
-                    />
-                  </div>
-                </div>
-                <div className="col-lg-6">
-                  <div className="form-inner email mb-40">
-                    <input
-                      type="text"
-                      placeholder="Enter your email"
-                      required=""
-                    />
-                  </div>
-                </div>
-                <div className="col-lg-12">
-                  <div className="form-inner mb-40">
-                    <textarea placeholder="Your message" defaultValue={""} />
-                  </div>
-                </div>
-                <div className="col-lg-12">
-                  <div className="form-inner two">
-                    <button className="primary-btn3 btn-lg" type="submit">
-                      Submit Comment
-                    </button>
+                  <div className="c-body">
+                    <p>{comment.content}</p>
                   </div>
                 </div>
               </div>
-            </form>
-          </div>
+            </li>
+          ))}
+        </ul>
+      </div>
+      <div className="comment-form">
+        <div className="comments-title">
+          <h2>Leave a Comment</h2>
         </div>
+        <form onSubmit={handleSubmit}>
+          <div className="row">
+            <div className="col-lg-12">
+              <div className="form-inner mb-40">
+              <textarea
+  name="comment"
+  value={comment}
+  onChange={handleChange}
+  placeholder="Enter your comment here"
+  required
+/>
+
+
+              </div>
+            </div>
+            <div className="col-lg-12">
+              <div className="form-inner two">
+                <button className="primary-btn3 btn-lg" type="submit">
+                  Submit Comment
+                </button>
+              </div>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+
+
 
         </div>
        

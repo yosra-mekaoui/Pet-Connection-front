@@ -26,48 +26,50 @@ function CreateEvent() {
   }, []);
   useEffect(() => {
     const mapObj = new mapboxgl.Map({
-      container: 'map',
-      style: 'mapbox://styles/mapbox/streets-v11',
-      zoom: 14,
+    container: 'map',
+    style: 'mapbox://styles/mapbox/streets-v11',
+    zoom: 14,
     });
-
+    
+   
+    const nav = new mapboxgl.NavigationControl();
+    mapObj.addControl(nav, 'top-left');
+    
     const geolocateControl = new mapboxgl.GeolocateControl({
       positionOptions: {
         enableHighAccuracy: true,
       },
       trackUserLocation: true,
     });
-
+    
     const geocoder = new MapboxGeocoder({
       accessToken: mapboxgl.accessToken,
       mapboxgl: mapboxgl,
       marker: false,
     });
-
+    
     mapObj.addControl(geolocateControl);
     mapObj.addControl(geocoder);
-
+    
     setMap(mapObj);
-
+    
     geocoder.on('result', (event) => {
       setLocation(event.result.geometry.coordinates);
       setPlaceName(event.result.place_name);
-
+    
       if (marker) {
         marker.remove();
       }
-
-      const newMarker = new mapboxgl.Marker()
-        .setLngLat(event.result.geometry.coordinates)
-        .addTo(mapObj);
-
+    
+      const newMarker = new mapboxgl.Marker().setLngLat(event.result.geometry.coordinates).addTo(mapObj);
+    
       setMarker(newMarker);
     });
-
+    
     geolocateControl.on('geolocate', (event) => {
       handleGeolocation(event.coords.latitude, event.coords.longitude);
     });
-
+    
     navigator.geolocation.getCurrentPosition(
       (position) => {
         handleGeolocation(position);
@@ -77,29 +79,23 @@ function CreateEvent() {
         mapObj.setCenter([-74.5, 40]);
       }
     );
+    }, []);
     
-  }, []);
-
-
-  function handleGeolocation(position) {
+    function handleGeolocation(position) {
     const longitude = position.coords.longitude;
     const latitude = position.coords.latitude;
     setLocation([longitude, latitude]);
     setPlaceName('Your Location');
-  
+    
+ 
     if (marker) {
       marker.remove();
     }
-  
-    const newMarker = new mapboxgl.Marker()
-      .setLngLat([longitude, latitude])
-      .addTo(map);
-  
+    
+    const newMarker = new mapboxgl.Marker().setLngLat([longitude, latitude]).addTo(map);
     setMarker(newMarker);
     map.setCenter([longitude, latitude]);
-  }
-  
-
+    }
   const handleSubmit = async (event) => {
     event.preventDefault();
 
@@ -171,7 +167,7 @@ function CreateEvent() {
         <Form.Group controlId="formImage">
 
           <Form.Label>Image</Form.Label>
-          <Form.Control type="file" placeholder="Enter image" onChange={(event) => setImage(event.target.files[0])} />
+          <Form.Control type="file" placeholder="Enter image" accept =".jpg,.jpeg,.png" onChange={(event) => setImage(event.target.files[0])} />
         </Form.Group>
         <Form.Group controlId="formLocation">
           <Form.Label>Location</Form.Label>
