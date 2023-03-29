@@ -5,7 +5,10 @@ import { addDonation } from "../api";
 function AssociationList() {
   
   const query = new URLSearchParams(window.location.search);
-  
+  const [user, setUser] = useState(
+    JSON.parse(localStorage.getItem("user"))["_id"]
+  ); 
+
   const [data, setData] = useState([]);
   const [fundings, setFundings] = useState([]);
   const [color, setColor] = useState("");
@@ -17,8 +20,7 @@ function AssociationList() {
 
   const baseUrl = "http://localhost:3000/associations/"; 
   
-  useEffect(() => {
-    //setImg(`http://localhost:3000/uploads/`);
+  useEffect(() => { 
     axios
       .get("http://localhost:3000/association/allAssociations")
       .then((response) => {
@@ -192,6 +194,10 @@ function AssociationList() {
           >
             You have an association? Become a{" "}
             <NavLink to="/upgrade">Partner.</NavLink>
+            Check my{" "}
+            <NavLink to={`/editAssociation`}>
+              Association.
+            </NavLink>
           </h2>
 
           <h1>{message}</h1>
@@ -300,14 +306,14 @@ function AssociationList() {
                                   style={{
                                     display: "flex",
                                     justifyContent: "space-between",
-                                    color : "black"
+                                    color: "black",
                                   }}
                                 >
                                   <div
                                     href="blog-details.html"
                                     style={{
                                       fontSize: "18px",
-                                      fontWeight : "700",
+                                      fontWeight: "700",
                                       fontFamily:
                                         "-apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif",
                                     }}
@@ -317,9 +323,20 @@ function AssociationList() {
                                   <div>
                                     <i
                                       className="fas fa-arrow-up"
-                                      style={{ fontSize: "18px" , marginRight : "6px" }}
+                                      style={{
+                                        fontSize: "18px",
+                                        marginRight: "6px",
+                                      }}
                                     />
-                                    <span style={{color : "green", fontSize : "18px"}}>{item.action}</span> actions. 
+                                    <span
+                                      style={{
+                                        color: "green",
+                                        fontSize: "18px",
+                                      }}
+                                    >
+                                      {item.action}
+                                    </span>{" "}
+                                    actions.
                                   </div>
                                 </div>
                               </div>

@@ -12,6 +12,7 @@ import { Cursor } from 'custom-pointer-react'
 import Association from "./Components/Pages/Association/Association";
 import Crowdfunding from "./Components/Pages/Crowdfunding/Crowdfunding";
 import ConfirmDonation from "./Components/Pages/Crowdfunding/ConfirmDonation";
+import EditAssociation from "./Components/Pages/Association/EditAssociation";
 
 const Home = React.lazy(() => import('./Components/Pages/Home.js'))
 const Header = React.lazy(() => import('./Components/Pages/Header'))
@@ -123,6 +124,8 @@ useScript("./assets/js/masonry.pkgd.min.js");
             <Route path="/association/:id" element={<Association />}></Route>
             <Route path="/crowdfunding/:id" element={<Crowdfunding />}></Route>
             <Route path="/confirmDonation" element={<ConfirmDonation />}></Route>
+            <Route path="/editAssociation" element={<EditAssociation />}></Route>
+            
             <Route path="*" element={<Home />}></Route>
           </Routes>
 

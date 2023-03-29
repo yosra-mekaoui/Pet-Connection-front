@@ -45,3 +45,17 @@ export const addDonation = async (donation) => {
     console.log(error);
   } 
 };
+
+
+export const getAssociationByUser = async (id) => {
+  try { 
+    await axios
+      .get(`http://localhost:3000/association/getAssociationByUser/${id}`)
+      .then((res) => {
+        console.log("Response : " + res); 
+        return res;
+      });
+  } catch (error) {
+    console.log(error);
+  }
+};
