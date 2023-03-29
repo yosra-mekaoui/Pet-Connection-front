@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from "react";
-import { NavLink, useParams, useLocation } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import Dropzone from "react-dropzone";
 import { UpgradeUser } from "../api";
-import { getAssociationByUser } from "../api";
+import { editAssociation } from "../api";
 import axios from "axios";
 
 function EditAssociation() {
@@ -11,16 +11,39 @@ function EditAssociation() {
         JSON.parse(localStorage.getItem("user"))["_id"]
     );
     
-    const { id } = useParams();
+        const [id, setId] = useState("");
+
     
-    
+    const [name, setName] = useState("");
+    const [image, setImage] = useState("");
+    const [logo, setLogo] = useState("");
+
+    const [type, setType] = useState("");
+    const [done, setDone] = useState(false);
+
+
+    const [latitude, setLatitude] = useState("");
+    const [longitude, setLongitude] = useState("");
+    const [bio, setBio] = useState("");
+    const [action, setAction] = useState(0);
+
+
+    const [file, setFile] = useState(null); 
+
+
     useEffect(() => {
         console.log(user); 
         axios
           .get(`http://localhost:3000/association/getAssociationByUser/${user}`)
           .then((response) => {
             setAssociation(response.data);
-            console.log(response.data);
+              console.log(response.data);
+              setName(response.data.name);
+              setBio(response.data.bio); 
+              setLatitude(response.data.latitude); 
+              setLongitude(response.data.longitude); 
+              setId(response.data._id); 
+              setAction(response.data.action); 
           })
           .catch((error) => {
             console.log(error);
@@ -29,26 +52,7 @@ function EditAssociation() {
 
     
 
-  const [name, setName] = useState("");
-  const [image, setImage] = useState("");
-  const [logo, setLogo] = useState("");
-
-  const [type, setType] = useState("");
-  const [done, setDone] = useState(false);
-
-  const [latitude, setLatitude] = useState("");
-  const [longitude, setLongitude] = useState("");
-  const [bio, setBio] = useState("");
- 
-  // console.log("type : " + type);
-  // console.log("Name : " + name);
-  // console.log("Latitude : " + latitude);
-  // console.log("Longitude : " + longitude);
-
-  const [file, setFile] = useState(null);
-  const handleFileUpload = async (acceptedFiles) => {
-    setFile(acceptedFiles[0]);
-  };
+  
 
   const handleFileUpload2 = async (acceptedFiles) => {
     setLogo(acceptedFiles[0]);
@@ -58,23 +62,32 @@ function EditAssociation() {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    const formData = new FormData();
-    formData.append("file", file);
-    formData.append("logo", logo);
-    formData.append("type", type);
-    formData.append("user", user);
-    formData.append("longitude", longitude);
-    formData.append("latitude", latitude);
-    formData.append("bio", bio);
-
-    if (type != "Association") {
-      formData.append("name", "none");
-    } else {
-      formData.append("name", name);
-    }
-
-    UpgradeUser(formData);
-    setDone(true);
+    const formData = new FormData(); 
+    
+      const test = {
+          longitude: longitude,
+          latitude: latitude,
+          bio: bio,
+          name: name,
+          user: user,
+          action : action
+        }
+        formData.append("longitude", longitude);
+        formData.append("latitude", latitude);
+        formData.append("bio", bio);
+        formData.append("name", name);
+        formData.append("user", user); 
+        formData.append("action", action);
+    
+    //   if (logo != "") {
+    //     formData.append("logo", logo);
+    //   }  
+        console.log("formData : " + test);
+        //console.log(test.entries());
+      
+        editAssociation(id, test);
+    
+        setDone(true);
   };
 
   const getLocation = (e) => {
@@ -94,7 +107,7 @@ function EditAssociation() {
   return (
     <>
       <center>
-        <div className="login-section pt-120 pb-120">
+        <div className="login-section pt-120 pb-120" style={{marginTop : "-50px"}}>
           <div className="container">
             <div className="row d-flex justify-content-center g-4">
               <div className="col-xl-6 col-lg-8 col-md-10">
@@ -109,14 +122,13 @@ function EditAssociation() {
                     {done && (
                       <h4 style={{ color: "green" }}>
                         {" "}
-                        Thank you for your submit. It may take a few hours to
-                        upgrade your account.
+                        Association edited successfully !
                       </h4>
                     )}
                   </div>
                   <form className="w-100" onSubmit={handleSubmit}>
                     <div className="row">
-                      <div className="col-6">
+                      <div className="col-12">
                         <div className="form-inner">
                           <label style={{ float: "left" }}>
                             <span
@@ -127,29 +139,14 @@ function EditAssociation() {
                           </label>
                           <input
                             type="text"
-                            value={association.name}
+                            value={name}
                             placeholder="Enter Your Association name..."
                             onChange={(e) => setName(e.target.value)}
                           />
                         </div>
                       </div>
 
-                      <div className="col-6">
-                        <div className="form-inner">
-                          <label style={{ float: "left" }}>
-                            <span
-                              style={{ fontWeight: "800", marginTop: "30px" }}
-                            >
-                              Date{" "}
-                            </span>
-                          </label>
-                          <input
-                            type="date" 
-                            placeholder="Enter Your Association name..." 
-                          />
-                        </div>
-                      </div>
-
+                      
                       <div className="col-12">
                         <div className="form-inner">
                           <label style={{ float: "left" }}>
@@ -161,7 +158,7 @@ function EditAssociation() {
                           </label>
                           <input
                             type="text"
-                            value={association.bio}
+                            value={bio}
                             placeholder="Enter description..."
                             onChange={(e) => setBio(e.target.value)}
                           />
@@ -203,7 +200,7 @@ function EditAssociation() {
                             type="text"
                             placeholder="Enter Your Association name..."
                             onChange={(e) => setLongitude(e.target.value)}
-                            value={association.longitude}
+                            value={longitude}
                             disabled="true"
                           />
                         </div>
@@ -222,7 +219,7 @@ function EditAssociation() {
                             type="text"
                             placeholder="Enter Your Association name..."
                             onChange={(e) => setLatitude(e.target.value)}
-                            value={association.latitude}
+                            value={latitude}
                             disabled="true"
                           />
                         </div>
@@ -277,7 +274,7 @@ function EditAssociation() {
                         </Dropzone>
                       </div>
                     </div>
-                    <button className="account-btn" disabled={!file}>
+                    <button className="account-btn" >
                       {" "}
                       <i className="fa fa-paw" aria-hidden="true"></i>
                       &nbsp;Edit

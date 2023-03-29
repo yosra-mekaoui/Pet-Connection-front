@@ -51,8 +51,20 @@ export const getAssociationByUser = async (id) => {
   try { 
     await axios
       .get(`http://localhost:3000/association/getAssociationByUser/${id}`)
-      .then((res) => {
-        console.log("Response : " + res); 
+      .then((res) => { 
+        return res;
+      });
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+
+export const editAssociation = async (id,association) => {
+  try {
+    await axios
+      .put(`http://localhost:3000/association/editAssociation/${id}`, association)
+      .then((res) => { 
         return res;
       });
   } catch (error) {
