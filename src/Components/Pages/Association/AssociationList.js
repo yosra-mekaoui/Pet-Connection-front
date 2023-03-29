@@ -9,6 +9,10 @@ function AssociationList() {
     JSON.parse(localStorage.getItem("user"))["_id"]
   ); 
 
+  const [role, setRole] = useState(
+    JSON.parse(localStorage.getItem("user"))["role"]
+  );
+
   const [data, setData] = useState([]);
   const [fundings, setFundings] = useState([]);
   const [color, setColor] = useState("");
@@ -185,22 +189,30 @@ function AssociationList() {
       {!message && (
         <>
           <h2
-            style={{
-              marginTop: "40px",
-              marginLeft: "8%",
-              color: "#353535",
-              marginBottom: "-20px",
-            }}
-          >
-            You have an association? Become a{" "}
-            <NavLink to="/upgrade">Partner.</NavLink>
-            Check my{" "}
-            <NavLink to={`/editAssociation`}>
-              Association.
-            </NavLink>
-          </h2>
+              style={{
+                marginTop: "40px",
+                marginLeft: "8%",
+                color: "#353535",
+                marginBottom: "-20px",
+              }}
+            >
+          {role != "Association" ? (
+              <>
+              You have an association? Become a{" "}
+              <NavLink to="/upgrade">Partner.</NavLink>
+              </>
+            
+          ) : (
+            <>
+              Check my 
+              <NavLink to={`/editAssociation`}>
+                Association.
+              </NavLink>
+            </>
+          )}
 
-          <h1>{message}</h1>
+          </h2>
+          {/* <h1>{message}</h1> */}
 
           <div className="container" style={{ marginBottom: "50px" }}>
             <div className="row">
