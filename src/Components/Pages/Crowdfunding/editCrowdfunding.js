@@ -1,100 +1,65 @@
 import React, { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
 import Dropzone from "react-dropzone";
-import { UpgradeUser } from "../api";
-import { editAssociation } from "../api";
+import { editFunding } from "../api";
 import axios from "axios";
+import { useParams } from "react-router-dom";
 
-function EditAssociation() {
-    const [association, setAssociation] = useState({}); 
-    const [user, setUser] = useState(
-        JSON.parse(localStorage.getItem("user"))["_id"]
-    );
-    
-    const [id, setId] = useState("");
-    
-    const [name, setName] = useState("");
-    const [image, setImage] = useState("");
-    const [logo, setLogo] = useState("");
+function EditCrowdfunding() {
+  const { id } = useParams();
 
-    const [type, setType] = useState("");
-    const [done, setDone] = useState(false);
+  const [user, setUser] = useState(
+    JSON.parse(localStorage.getItem("user"))["_id"]
+  );
 
-
-    const [latitude, setLatitude] = useState("");
-    const [longitude, setLongitude] = useState("");
-    const [bio, setBio] = useState("");
-    const [action, setAction] = useState(0); 
-    
-
-    const [file, setFile] = useState(null); 
-
-
-    useEffect(() => {
-        console.log(user); 
-        axios
-          .get(`http://localhost:3000/association/getAssociationByUser/${user}`)
-          .then((response) => {
-            setAssociation(response.data);
-              console.log(response.data);
-              setName(response.data.name);
-              setBio(response.data.bio); 
-              setLatitude(response.data.latitude); 
-              setLongitude(response.data.longitude); 
-              setId(response.data._id); 
-              setAction(response.data.action); 
-              setImage(response.data.image) ; 
-          })
-          .catch((error) => {
-            console.log(error);
-          });
-    },[])
+  const [title, setTitle] = useState("");
+  const [association, setAssociation] = useState("");
+  const [logo, setLogo] = useState("");
+  const [done, setDone] = useState(false);
+  const [desc, setDesc] = useState("");
+  const [goal, setGoal] = useState(0);
+  const [total, setTotal] = useState(0);
 
     
-
-  
 
   const handleFileUpload2 = async (acceptedFiles) => {
     setLogo(acceptedFiles[0]);
   };
 
+  useEffect(() => {
+    axios
+      .get(`http://localhost:3000/association/getAssociationByUser/${user}`)
+      .then((response) => {
+        setAssociation(response.data._id);
+      });
+    
+      axios.get(`http://localhost:3000/funding/getOneFunding/${id}`)
+          .then((response) => {
+              console.log(response.data);
+              setTitle(response.data.title); 
+              setAssociation(response.data.association); 
+              setLogo(response.data.logo); 
+              setDesc(response.data.desc); 
+              setGoal(response.data.goal); 
+              //setTotal(response.data.total); 
+
+      })  ;
+    
+    
+  }, []);
   //console.log(file);
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    const formData = new FormData(); 
-      console.log("LOGO : " + logo["path"]);
-   
-        formData.append("longitude", longitude);
-        formData.append("latitude", latitude);
-        formData.append("bio", bio);
-        formData.append("name", name);
-        formData.append("user", user); 
-        formData.append("action", action);
-    
-        if (logo != "") { 
-            formData.append("file", logo); 
-    }  
-    
-        console.log(formData); 
-      
-        editAssociation(id, formData);
-    
-        setDone(true);
-  };
-
-  const getLocation = (e) => {
-    e.preventDefault();
-    if (navigator.geolocation) {
-      navigator.geolocation.getCurrentPosition(showPosition);
-    } else {
-      console.log("Geolocation is not supported by this browser.");
+    const formData = new FormData();
+    formData.append("title", title);
+    formData.append("desc", desc); 
+    formData.append("goal", goal);
+    if (logo != "") {
+      formData.append("file", logo);
     }
-
-    function showPosition(position) {
-      setLatitude(position.coords.latitude);
-      setLongitude(position.coords.longitude);
-    }
+    console.log(formData);
+    editFunding(id,formData);
+    setDone(true);
   };
 
   return (
@@ -102,7 +67,7 @@ function EditAssociation() {
       <center>
         <div
           className="login-section pt-120 pb-120"
-          style={{ marginTop: "-50px", width: "90% !important" }}
+          style={{ marginTop: "-50px" }}
         >
           <div className="container">
             <div className="row d-flex justify-content-center g-4">
@@ -113,15 +78,14 @@ function EditAssociation() {
                   data-wow-delay=".2s"
                 >
                   <div className="form-title">
-                    <h3>
-                      <i className="fas fa-edit" style={{ marginRight : "15px" }} />
-                      Edit Association
-                    </h3>
-
+                    <h3> Edit Crowdfunding</h3>
+                    <p style={{ fontSize: "14px" }}>
+                      Edit your crowdfunding action.
+                    </p>
                     {done && (
                       <h4 style={{ color: "green" }}>
                         {" "}
-                        Association edited successfully !
+                        Your crowdfunding action has been submitted.
                       </h4>
                     )}
                   </div>
@@ -133,14 +97,14 @@ function EditAssociation() {
                             <span
                               style={{ fontWeight: "800", marginTop: "30px" }}
                             >
-                              Association Name{" "}
+                              Title{" "}
                             </span>
                           </label>
                           <input
                             type="text"
-                            value={name}
-                            placeholder="Enter Your Association name..."
-                            onChange={(e) => setName(e.target.value)}
+                            value={title}
+                            placeholder="Enter a title..."
+                            onChange={(e) => setTitle(e.target.value)}
                           />
                         </div>
                       </div>
@@ -151,74 +115,32 @@ function EditAssociation() {
                             <span
                               style={{ fontWeight: "800", marginTop: "30px" }}
                             >
-                              Bio
+                              Description
                             </span>
                           </label>
                           <input
                             type="text"
-                            value={bio}
+                            value={desc}
                             placeholder="Enter description..."
-                            onChange={(e) => setBio(e.target.value)}
+                            onChange={(e) => setDesc(e.target.value)}
                           />
                         </div>
                       </div>
 
                       <div className="col-12">
-                        <button
-                          onClick={getLocation}
-                          style={{
-                            padding: "10px",
-                            float: "left",
-                            boxShadow: "rgba(99, 99, 99, 0.2) 0px 2px 8px 0px",
-                            border: "1px solid black",
-                            marginBottom: "20px",
-                          }}
-                        >
-                          <i
-                            class="fa fa-map-marker"
-                            style={{
-                              fontSize: "20px",
-                              marginRight: "10px",
-                            }}
-                          ></i>
-                          Locate Me
-                        </button>
-                      </div>
-
-                      <div className="col-6">
                         <div className="form-inner">
                           <label style={{ float: "left" }}>
                             <span
                               style={{ fontWeight: "800", marginTop: "30px" }}
                             >
-                              Longitude
+                              Funding Goal ($)
                             </span>
                           </label>
                           <input
-                            type="text"
-                            placeholder="Enter Your Association name..."
-                            onChange={(e) => setLongitude(e.target.value)}
-                            value={longitude}
-                            disabled="true"
-                          />
-                        </div>
-                      </div>
-
-                      <div className="col-6">
-                        <div className="form-inner">
-                          <label style={{ float: "left" }}>
-                            <span
-                              style={{ fontWeight: "800", marginTop: "30px" }}
-                            >
-                              Latitude
-                            </span>
-                          </label>
-                          <input
-                            type="text"
-                            placeholder="Enter Your Association name..."
-                            onChange={(e) => setLatitude(e.target.value)}
-                            value={latitude}
-                            disabled="true"
+                            type="number"
+                            value={goal}
+                            placeholder="insert a goal"
+                            onChange={(e) => setGoal(e.target.value)}
                           />
                         </div>
                       </div>
@@ -255,7 +177,7 @@ function EditAssociation() {
                                     marginRight: "10px",
                                   }}
                                 ></i>
-                                Drop a new Logo
+                                Drop an image
                                 {logo != null && (
                                   <p
                                     style={{
@@ -275,7 +197,7 @@ function EditAssociation() {
                     <button className="account-btn">
                       {" "}
                       <i className="fa fa-paw" aria-hidden="true"></i>
-                      &nbsp;Edit
+                      &nbsp;Submit
                     </button>
                   </form>
                 </div>
@@ -288,4 +210,4 @@ function EditAssociation() {
   );
 }
 
-export default EditAssociation;
+export default EditCrowdfunding;

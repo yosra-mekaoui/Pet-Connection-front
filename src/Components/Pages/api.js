@@ -76,3 +76,11 @@ export const addFunding = async (funding) => {
     console.log(error);
   } 
 };
+
+export const editFunding = async (id, funding) => {
+  try {
+    await axios.put(`http://localhost:3000/funding/editFunding/${id}`, funding);
+  } catch (error) {
+    console.log(error);
+  }
+};

@@ -106,14 +106,7 @@ function AssociationList() {
   }, [exec]);
 
 
-  const butt = {
-      backgroundColor: "orange",
-      padding: "3px",
-      width: "100px",
-      borderRadius: "6px",
-      boxShadow:
-        "rgba(0, 0, 0, 0.16) 0px 3px 6px, rgba(0, 0, 0, 0.15) 0px 2px 2px",
-    }
+  
 
   return (
     <>
@@ -348,24 +341,41 @@ function AssociationList() {
                           </span>
                           {item.total}$ / {item.goal}$
                         </div>
+                        <div>
+                          {association == item.association && (
+                          <NavLink to={`/editCrowdfunding/${item._id}`}>
 
-                        {association == item.association && (
-                          <button class={butt}>Edit</button>
-                        )}
-                        <NavLink to={`/crowdfunding/${item._id}`}>
-                          <button
-                            style={{
-                              backgroundColor: "orange",
-                              padding: "3px",
-                              width: "100px",
-                              borderRadius: "6px",
-                              boxShadow:
-                                "rgba(0, 0, 0, 0.16) 0px 3px 6px, rgba(0, 0, 0, 0.15) 0px 2px 2px",
-                            }}
-                          >
-                            Read More
-                          </button>
-                        </NavLink>
+                            <button
+                              style={{
+                                backgroundColor: "#45DC81",
+                                padding: "3px 7px 3px 9px",
+                                borderRadius: "6px",
+                                marginRight: "15px",
+                                boxShadow:
+                                  "rgba(0, 0, 0, 0.16) 0px 3px 6px, rgba(0, 0, 0, 0.15) 0px 2px 2px",
+                              }}
+                            >
+                              <i
+                                className="fas fa-edit" 
+                              />
+                              </button>
+                            </NavLink>
+                          )}
+                          <NavLink to={`/crowdfunding/${item._id}`}>
+                            <button
+                              style={{
+                                backgroundColor: "orange",
+                                padding: "3px",
+                                width: "100px",
+                                borderRadius: "6px",
+                                boxShadow:
+                                  "rgba(0, 0, 0, 0.16) 0px 3px 6px, rgba(0, 0, 0, 0.15) 0px 2px 2px",
+                              }}
+                            >
+                              Read More
+                            </button>
+                          </NavLink>
+                        </div>
                       </div>
                     </>
                   ))}
