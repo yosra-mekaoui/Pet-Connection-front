@@ -5,13 +5,20 @@ import { addDonation } from "../api";
 function AssociationList() {
   
   const query = new URLSearchParams(window.location.search);
-  const [user, setUser] = useState(
-    JSON.parse(localStorage.getItem("user"))["_id"]
-  ); 
+  const [user, setUser] = useState(""); 
+  const [role, setRole] = useState("");
+  const [red, setRed] = useState("/login"); 
+  const [association, setAssociation] = useState(""); 
 
-  const [role, setRole] = useState(
-    JSON.parse(localStorage.getItem("user"))["role"]
-  );
+  useEffect(() => {
+    if (JSON.parse(localStorage.getItem("user")) != null) {
+      setUser(JSON.parse(localStorage.getItem("user"))["_id"]);
+      setRole(JSON.parse(localStorage.getItem("user"))["role"]);
+      setRed("/upgrade");        
+    }
+  },[])
+
+
 
   const [data, setData] = useState([]);
   const [fundings, setFundings] = useState([]);
@@ -23,6 +30,7 @@ function AssociationList() {
   const [funding, setFunding] = useState("");
 
   const baseUrl = "http://localhost:3000/associations/"; 
+  
   
   useEffect(() => { 
     axios
@@ -43,8 +51,20 @@ function AssociationList() {
       .catch((error) => {
         console.log(error);
       });
+    
+    
   }, []);
 
+
+  useEffect(() => {
+     axios
+      .get(`http://localhost:3000/association/getAssociationByUser/${user}`)
+      .then((response) => {
+        console.log("user : " + response);
+        setAssociation(response.data._id);
+        console.log("association : " + response.data_id);
+      });
+  }, [user]); 
   const [message, setMessage] = useState("");
   const location = useLocation();
 
@@ -84,6 +104,16 @@ function AssociationList() {
       setColor("red");
     }
   }, [exec]);
+
+
+  const butt = {
+      backgroundColor: "orange",
+      padding: "3px",
+      width: "100px",
+      borderRadius: "6px",
+      boxShadow:
+        "rgba(0, 0, 0, 0.16) 0px 3px 6px, rgba(0, 0, 0, 0.15) 0px 2px 2px",
+    }
 
   return (
     <>
@@ -198,13 +228,13 @@ function AssociationList() {
           >
             {role != "Association" ? (
               <>
-                <NavLink to={`/upgrade`}>
+                <NavLink to={red}>
                   <button
                     style={{
                       padding: "8px 20px 8px 20px",
                       backgroundColor: "orange",
                       borderRadius: "10px",
-                      boxShadow: "rgba(0, 0, 0, 0.35) 0px 5px 15px",
+                      boxShadow: "rgba(0, 0, 0, 0.25) 0px 3px 5px",
                     }}
                   >
                     <i
@@ -225,7 +255,7 @@ function AssociationList() {
                       padding: "8px 20px 8px 20px",
                       backgroundColor: "orange",
                       borderRadius: "10px",
-                      boxShadow: "rgba(0, 0, 0, 0.35) 0px 5px 15px",
+                      boxShadow: "rgba(0, 0, 0, 0.25) 0px 3px 5px",
                     }}
                   >
                     <i
@@ -243,7 +273,7 @@ function AssociationList() {
                       padding: "8px 20px 8px 20px",
                       backgroundColor: "#45DC81",
                       borderRadius: "10px",
-                      boxShadow: "rgba(0, 0, 0, 0.35) 0px 5px 15px",
+                      boxShadow: "rgba(0, 0, 0, 0.25) 0px 3px 5px",
                     }}
                   >
                     <i
@@ -316,8 +346,12 @@ function AssociationList() {
                           <span style={{ color: "#2F8702" }}>
                             Total Funds :{" "}
                           </span>
-                          {item.total}${" "} / {item.goal}$
+                          {item.total}$ / {item.goal}$
                         </div>
+
+                        {association == item.association && (
+                          <button class={butt}>Edit</button>
+                        )}
                         <NavLink to={`/crowdfunding/${item._id}`}>
                           <button
                             style={{

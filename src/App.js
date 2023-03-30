@@ -120,14 +120,27 @@ useScript("./assets/js/masonry.pkgd.min.js");
               element={<ResetPwd />}
             ></Route>
             <Route path="/About" element={<About />}></Route>
-            <Route path="/upgrade" element={<Upgrade />}></Route>
             <Route path="/associations" element={<AssociationList />}></Route>
             <Route path="/association/:id" element={<Association />}></Route>
             <Route path="/crowdfunding/:id" element={<Crowdfunding />}></Route>
-            <Route path="/confirmDonation" element={<ConfirmDonation />}></Route>
-            <Route path="/editAssociation" element={<EditAssociation />}></Route>
-            <Route path="/addCrowdfunding" element={<AddCrowdfunding />}></Route>
-            
+            {user && (
+              <>
+                <Route path="/upgrade" element={<Upgrade />}></Route>
+
+                <Route
+                  path="/confirmDonation"
+                  element={<ConfirmDonation />}
+                ></Route>
+                <Route
+                  path="/editAssociation"
+                  element={<EditAssociation />}
+                ></Route>
+                <Route
+                  path="/addCrowdfunding"
+                  element={<AddCrowdfunding />}
+                ></Route>
+              </>
+            )}
             <Route path="*" element={<Home />}></Route>
           </Routes>
 
