@@ -68,3 +68,11 @@ export const editAssociation = async (id,association) => {
     console.log(error);
   }
 };
+
+export const addFunding = async (funding) => {
+  try {
+    await axios.post(`http://localhost:3000/funding/addFunding`, funding);
+  } catch (error) {
+    console.log(error);
+  } 
+};

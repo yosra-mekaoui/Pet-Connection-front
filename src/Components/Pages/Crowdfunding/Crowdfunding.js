@@ -166,7 +166,7 @@ function Crowdfunding() {
               }}
             >
               <center>
-                <h1 style={{ margin: "30px", color : "black" }}>{data.total} $</h1>
+                <h1 style={{ margin: "30px", color: "black" }}>{data.total}$ / {data.goal}$</h1>
               </center>
               <h3 style={{ color: "black " }}>Latest Donations</h3>
 
