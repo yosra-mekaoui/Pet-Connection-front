@@ -188,32 +188,76 @@ function AssociationList() {
 
       {!message && (
         <>
-          <h3
+          <h5
             style={{
-              marginTop: "50px",
+              marginTop: "70px",
               marginLeft: "8%",
               color: "#353535",
-              marginBottom: "-20px",
+              marginBottom: "-60px",
             }}
           >
             {role != "Association" ? (
               <>
-                <i
-                  className="fas fa-handshake"
-                  style={{
-                    marginRight: "15px",
-                  }}
-                />
-                You have an association? Become a{" "}
-                <NavLink to="/upgrade">Partner.</NavLink>
+                <NavLink to={`/upgrade`}>
+                  <button
+                    style={{
+                      padding: "8px 20px 8px 20px",
+                      backgroundColor: "orange",
+                      borderRadius: "10px",
+                      boxShadow: "rgba(0, 0, 0, 0.35) 0px 5px 15px",
+                    }}
+                  >
+                    <i
+                      className="fas fa-handshake"
+                      style={{
+                        marginRight: "15px",
+                      }}
+                    />
+                    Become a Partner
+                  </button>
+                </NavLink>
               </>
             ) : (
               <>
-                <i className="fas fa-edit" style={{ marginRight: "15px" }} />
-                Edit my <NavLink to={`/editAssociation`}>Association.</NavLink>
+                <NavLink to={`/editAssociation`}>
+                  <button
+                    style={{
+                      padding: "8px 20px 8px 20px",
+                      backgroundColor: "orange",
+                      borderRadius: "10px",
+                      boxShadow: "rgba(0, 0, 0, 0.35) 0px 5px 15px",
+                    }}
+                  >
+                    <i
+                      className="fas fa-edit"
+                      style={{ marginRight: "15px" }}
+                    />
+                    Edit My Association
+                  </button>
+                </NavLink>
+
+                <NavLink to={`/addCrowdfunding`}>
+                  <button
+                    style={{
+                      marginLeft: "20px",
+                      padding: "8px 20px 8px 20px",
+                      backgroundColor: "#45DC81",
+                      borderRadius: "10px",
+                      boxShadow: "rgba(0, 0, 0, 0.35) 0px 5px 15px",
+                    }}
+                  >
+                    <i
+                      className="fas fa-handshake"
+                      style={{
+                        marginRight: "15px",
+                      }}
+                    />
+                    Add a Crowdfunding
+                  </button>
+                </NavLink>
               </>
             )}
-          </h3>
+          </h5>
           {/* <h1>{message}</h1> */}
 
           <div className="container" style={{ marginBottom: "50px" }}>

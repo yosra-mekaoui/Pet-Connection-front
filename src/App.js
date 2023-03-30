@@ -13,6 +13,7 @@ import Association from "./Components/Pages/Association/Association";
 import Crowdfunding from "./Components/Pages/Crowdfunding/Crowdfunding";
 import ConfirmDonation from "./Components/Pages/Crowdfunding/ConfirmDonation";
 import EditAssociation from "./Components/Pages/Association/EditAssociation";
+import AddCrowdfunding from "./Components/Pages/Crowdfunding/AddCrowdfunding";
 
 const Home = React.lazy(() => import('./Components/Pages/Home.js'))
 const Header = React.lazy(() => import('./Components/Pages/Header'))
@@ -125,6 +126,7 @@ useScript("./assets/js/masonry.pkgd.min.js");
             <Route path="/crowdfunding/:id" element={<Crowdfunding />}></Route>
             <Route path="/confirmDonation" element={<ConfirmDonation />}></Route>
             <Route path="/editAssociation" element={<EditAssociation />}></Route>
+            <Route path="/addCrowdfunding" element={<AddCrowdfunding />}></Route>
             
             <Route path="*" element={<Home />}></Route>
           </Routes>
