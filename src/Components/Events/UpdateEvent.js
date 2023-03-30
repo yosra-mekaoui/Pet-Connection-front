@@ -1,112 +1,142 @@
-import React, { useState, useEffect, useRef } from 'react';
-import { useParams } from 'react-router-dom';
-import mapboxgl from 'mapbox-gl';
-import MapboxGeocoder from '@mapbox/mapbox-gl-geocoder';
-import { getEvent, updateEvent } from './Services';
-import { Container, Form, Button } from 'react-bootstrap';
-import './style.css';
-
-mapboxgl.accessToken = 'pk.eyJ1IjoiYXJpajEiLCJhIjoiY2xmbXIwZjlpMDA1MDNyb2RvZm5hMTVkZiJ9.wl_CAK8ETNt5oTYJFR0c8A';
+import React, { useState, useEffect } from "react";
+import { useParams } from "react-router-dom";
+import { getEvent, updateEvent } from "./Services";
 
 function UpdateEvent() {
   const { id } = useParams();
-  const [eventData, setEventData] = useState(null);
-  const [title, setTitle] = useState('');
-  const [description, setDescription] = useState('');
-  const [date, setDate] = useState('');
-  const [placeName, setPlaceName] = useState('');
-  const [image, setImage] = useState(null);
-  const mapContainer = useRef(null);
-  const map = useRef(null);
+
+  const userId = JSON.parse(localStorage.getItem("user"));
+  let connectedUserId;
+  if (userId._id) {
+    connectedUserId = userId.username;
+  } else if (userId.facebookId) {
+    connectedUserId = userId.username;
+  } else {
+    connectedUserId = null;
+  }
+  console.log(connectedUserId);
+  const [event, setEvent] = useState({
+    title: "",
+    date: "",
+    location: "",
+    description: "",
+    image: "",
+  });
 
   useEffect(() => {
-    async function fetchData() {
-      const event = await getEvent(id);
-      setEventData(event);
-      setTitle(event.title);
-      setDescription(event.description);
-      setDate(event.date);
-      setPlaceName(event.location.placeName);
-    }
-    fetchData();
+    const fetchEvent = async () => {
+      try {
+        const res = await getEvent(id);
+        setEvent(res.data);
+      } catch (err) {
+        console.error(err);
+      }
+    };
+    fetchEvent();
   }, [id]);
 
-  useEffect(() => {
-    if (mapContainer.current && eventData) {
-      map.current = new mapboxgl.Map({
-        container: mapContainer.current,
-        style: 'mapbox://styles/mapbox/streets-v11',
-        center: eventData.location.coordinates,
-        zoom: 15,
-      });
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setEvent({ ...event, [name]: value });
+  };
 
-      const geocoder = new MapboxGeocoder({
-        accessToken: mapboxgl.accessToken,
-        mapboxgl: mapboxgl,
-      });
-
-      map.current.addControl(geocoder);
-
-      const marker = new mapboxgl.Marker().setLngLat(eventData.location.coordinates).addTo(map.current);
-
-      map.current.on('move', () => {
-        marker.setLngLat(map.current.getCenter());
-      });
-    }
-  }, [eventData]);
+  const handleFileChange = (e) => {
+    setEvent({ ...event, image: e.target.files[0] });
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const updatedEvent = {
-      title,
-      description,
-      date,
-      location: {
-        placeName,
-        coordinates: [map.current.getCenter().lng, map.current.getCenter().lat],
-      },
-      image,
-    };
-    await updateEvent(id, updatedEvent);
-    // Redirect to the event page
+    const formData = new FormData();
+    formData.append("title", event.title);
+    formData.append("date", event.date);
+    formData.append("location", event.location);
+    formData.append("description", event.description);
+    formData.append("image", event.image);
+    formData.append('organizer', connectedUserId);
+    try {
+      await updateEvent(id, formData);
+    } catch (err) {
+      console.error(err);
+    }
   };
   
-  
+  const formattedDate = event.date.slice(0, -5); // remove the last 5 characters (including the milliseconds)
+
   return (
-    <Container>
-    <h1>Update Event</h1>
-    {eventData ? (
-    <Form onSubmit={handleSubmit}>
-    <Form.Group controlId="title">
-    <Form.Label>Title</Form.Label>
-    <Form.Control type="text" value={title} onChange={(e) => setTitle(e.target.value)} required />
-    </Form.Group>
-    <Form.Group controlId="description">
-    <Form.Label>Description</Form.Label>
-    <Form.Control as="textarea" rows={3} value={description} onChange={(e) => setDescription(e.target.value)} required />
-    </Form.Group>
-    <Form.Group controlId="date">
-    <Form.Label>Date</Form.Label>
-    <Form.Control type="datetime-local" value={date} onChange={(e) => setDate(e.target.value)} required />
-    </Form.Group>
-    <Form.Group controlId="location">
-    <Form.Label>Location</Form.Label>
-    <div ref={mapContainer} style={{ height: '300px' }} />
-    <Form.Control type="text" placeholder="Enter location" value={placeName} onChange={(event) => setPlaceName(event.target.value)} required />
-    </Form.Group>
-    <Form.Group controlId="image">
-    <Form.Label>Image</Form.Label>
-    <Form.Control type="file" accept=".jpg,.jpeg,.png" onChange={(e) => setImage(e.target.files[0])} />
-    </Form.Group>
-    <Button variant="primary" type="submit">
-    Update
-    </Button>
-    </Form>
-    ) : (
-    <p>Loading...</p>
-    )}
-    </Container>
-    );
-    }
-  
+    <div className="container">
+      <div className="row justify-content-center">
+        <div className="col-md-8">
+          <div className="card">
+            <div className="card-header">Update Event</div>
+            <div className="card-body">
+              <form onSubmit={handleSubmit}>
+                <div className="form-group">
+                  <label htmlFor="title">Title</label>
+                  <input
+                    type="text"
+                    name="title"
+                    id="title"
+                    className="form-control"
+                    value={event.title}
+                    onChange={handleChange}
+                  />
+                </div>
+                <div className="form-group">
+                  <label htmlFor="date">Date</label>
+                  <input
+  type="datetime-local"
+  name="date"
+  id="date"
+  className="form-control"
+  value={formattedDate}
+  onChange={handleChange}
+/>
+
+                </div>
+                <div className="form-group">
+                  <label htmlFor="location">Location</label>
+                  <input
+                    type="text"
+                    name="location"
+                    id="location"
+                    className="form-control"
+                    value={event.location}
+                    onChange={handleChange}
+                  />
+                </div>
+                <div className="form-group">
+                  <label htmlFor="description">Description</label>
+                  <textarea
+                    name="description"
+                    id="description"
+                    className="form-control"
+                    rows="5"
+                    value={event.description}
+                    onChange={handleChange}
+                  ></textarea>
+                </div>
+                <div className="form-group">
+                  <label htmlFor="image">Image</label>
+                
+<input
+    type="file"
+    name="image"
+    id="image"
+    accept=".jpg,.png,.jpeg"
+    className="form-control"
+    onChange={handleFileChange}
+/>
+                </div>
+                <button type="submit" className="btn btn-primary">
+                  Update Event
+                </button>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
 export default UpdateEvent;

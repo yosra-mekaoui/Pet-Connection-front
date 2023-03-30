@@ -9,8 +9,6 @@ import TwoFa from "./Components/User/TwoFa";
 //import TwoFactorVerification from "./Components/User/TwoFactorVerification";
 
 import { Cursor } from 'custom-pointer-react'
-import CreateEvent from "./Components/Events/CreateEvent";
-import UpdateEvent from "./Components/Events/UpdateEvent";
 
 const Home = React.lazy(() => import('./Components/Pages/Home.js'))
 const Header = React.lazy(() => import('./Components/Pages/Header'))
@@ -26,6 +24,8 @@ const ForgetPwd = React.lazy(()=> import ('./Components/User/forgetPwd'))
 const ResetPwd = React.lazy(()=> import ('./Components/User/resetPwd'))
 const Profile = React.lazy(()=> import ('./Components/User/Profile'))
 const EventDetails = React.lazy(()=> import ('./Components/Events/EventDetails'))
+const UpdateEvent = React.lazy(()=> import ('./Components/Events/UpdateEvent'))
+const CreateEvent = React.lazy(()=>import ('./Components/Events/CreateEvent'))
 
 const Upgrade = React.lazy(() => import("./Components/Pages/Upgrade"));
 

@@ -21,14 +21,11 @@ export const getEvent = async (id) => {
       }
     };
     
-export const updateEvent = async (id, event,connectedUserId) => {
+export const updateEvent = async (id, event) => {
   try {
-  const { data } = await axios.put(`${url}/update/${id}`, event,   {
-      data: 
-        { connectedUserId },
-      
-    });
-    return data;
+    
+  return await axios.put(`${url}/update/${id}`, event)
+   
   } catch (error) {
     console.error(error);
     throw error;
@@ -104,6 +101,7 @@ export const deleteEvent = async (id, connectedUserId) => {
     export const getCommentById = async (eventId, commentId) => {
       try {
         const response = await axios.get(`${url}/getCommentById/${eventId}/${commentId}`);
+        console.log(response.data);
         return response.data;
       } catch (error) {
         console.error(error);

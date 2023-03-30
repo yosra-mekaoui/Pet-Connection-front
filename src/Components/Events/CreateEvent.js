@@ -162,7 +162,7 @@ function CreateEvent() {
         </Form.Group>
         <Form.Group controlId="formDate">
           <Form.Label>Date</Form.Label>
-          <Form.Control type="date" placeholder="Enter date" value={date} onChange={(event) => setDate(event.target.value)} />
+          <Form.Control type="datetime-local" placeholder="Enter date" value={date} onChange={(event) => setDate(event.target.value)} />
         </Form.Group>
         <Form.Group controlId="formImage">
 
