@@ -98,11 +98,38 @@ export const deleteEvent = async (id, connectedUserId) => {
     export const getCommentById = async (eventId) => {
       try {
         const response = await axios.get(`${url}/getCommentsEvent/${eventId}`);
-        console.log(response.data);
         return response.data;
       } catch (error) {
         console.error(error);
         throw error;
       }
     };
-    
+     export const deleteComment = async (id,username) =>
+     {
+        try {
+          const { data } = await axios.delete(`${url}/deleteComment/${id}`, {
+            data: 
+              { username },
+            
+          });
+          return data;
+        } catch (error) {
+          console.error(error);
+          throw error;
+        }
+     }
+
+     export const updateComment =async (id,text,username) =>
+      {
+        try {
+          const { data } = await axios.put(`${url}/updateComment/${id}`, {
+            text,
+            username
+          });
+          console.log(data)
+          return data;
+        } catch (error) {
+          console.error(error);
+          throw error;
+        }
+      }

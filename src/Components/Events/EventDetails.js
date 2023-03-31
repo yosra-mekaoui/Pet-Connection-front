@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import { getEvent, addAttendeeById, RemoveAttendeeById, getCommentById, addComment,addReply } from "./Services";
+import { getEvent, addAttendeeById, RemoveAttendeeById, getCommentById, addComment,addReply ,deleteComment,updateComment} from "./Services";
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import axios from "axios";
@@ -9,10 +9,10 @@ import axios from "axios";
 
 
 const baseUrl = "http://localhost:3000/uploads/"; // Replace with your base URL
-const baseUrl1= "http://localhost:3000/public/uploads/"
 
 function EventDetails() {
   const [event, setEvent] = useState(null);
+
   const [isGoing, setIsGoing] = useState(false);
   const [error, setError] = useState(null);
   const [comments, setComments] = useState([]);
@@ -25,8 +25,28 @@ function EventDetails() {
  const [replyingTo, setReplyingTo] = useState(false);
  const [replyText, setReplyText] = useState("");
   const user = JSON.parse(localStorage.getItem('user'));
-
+const [isEditing,setIsEditing] = useState(false);
   const [numParticipants, setNumParticipants] = useState(0);
+  const [text, setText] = useState({ id: "", text: "" });
+
+  const handleEdit = (comment) => {
+    setText({ id: comment._id, text: comment.text });
+    setIsEditing(true);
+  };
+  
+  const handleTextChange = (comment) => {
+    setText({ id: comment._id, text: comment.text });
+    setIsEditing(true);
+  };
+  
+  const handleSaveClick =async () => {
+    const res = await updateComment(id,comment,user.username)
+    setIsEditing(false);
+  };
+    const handleCancelClick = () => {
+    setIsEditing(false);
+    setText(comment.text);
+  };
   useEffect(() => {
   
 
@@ -56,7 +76,7 @@ function EventDetails() {
       }
     };
     fetchEvent();
-  }, [id]); // Remove event as a dependency
+  }, [id,event]); // Remove event as a dependency
   useEffect(() => {
     const user = JSON.parse(localStorage.getItem("user"));
     setUsers(user);
@@ -103,7 +123,6 @@ function EventDetails() {
   };
   const handleGoingClick = async () => {
     try {
-
       const userId = JSON.parse(localStorage.getItem("user"));
       let connectedUserId;
       if (userId._id) {
@@ -114,13 +133,12 @@ function EventDetails() {
         toast.error("User ID not found.");
         return;
       }
-
+  
       if (event.attendees.includes(connectedUserId)) {
         // If user is already in attendees list, remove them
         const attendees = event.attendees.filter((attendeeId) => attendeeId !== connectedUserId);
         const res = await RemoveAttendeeById(id, connectedUserId);
-
-
+        console.log("remove attendee response", res);
         setIsGoing(false);
         setEvent(res.data);
         setNumParticipants(res.data.attendees.length);
@@ -128,19 +146,19 @@ function EventDetails() {
       } else {
         // If user is not in attendees list, add them
         const res = await addAttendeeById(id, connectedUserId);
+        console.log("add attendee response", res);
         setIsGoing(true);
         setEvent(res.data);
         setNumParticipants(res.data.attendees.length);
         toast.success("Successfully RSVP'd to the event!");
       }
-
     } catch (err) {
       console.error(err);
       setError(err.message);
       toast.error(err.response.data.message);
     }
   };
-
+  
 
   const isAuthenticated = () => {
     const user = JSON.parse(localStorage.getItem("user"));
@@ -154,17 +172,45 @@ function EventDetails() {
       console.error(err);
     }
   };
+  const [replyInputsVisible, setReplyInputsVisible] = useState({});
 
-  const handleSubmitReply = async(e) => {
-    e.preventDefault();
+  const handleReplyClick = (commentId) => {
+    setReplyInputsVisible((prevState) => ({
+      ...prevState,
+      [commentId]: true,
+    }));
+  };
+  
+  const handleReplyCancelClick = (commentId) => {
+    setReplyInputsVisible((prevState) => ({
+      ...prevState,
+      [commentId]: false,
+    }));
+  };
+  const handleReplySubmit = async (commentId) => {
     try {
-      const response = await addReply(commentId, comment, user.image, user.username);
+      console.log(commentId)
+      const response = await addReply(commentId, replyText, user.image, user.username);
       console.log(response); // do something with the response, e.g. update the UI
     } catch (error) {
       console.error(error);
       // handle the error, e.g. show an error message to the user
     }
+    setReplyingTo(false);
+    setReplyText("");
   };
+  
+  const handleDelete = async (id) => {
+ 
+    try {
+      console.log( id, user.username ); // <-- Add this line
+      await deleteComment(id, user.username);
+      setComment(comment.filter((comment) => comment._id !== id));
+    } catch (err) {
+      console.error(err);
+    }
+  };
+  
   return (<>
 
     <ToastContainer />
@@ -209,7 +255,10 @@ function EventDetails() {
                         onClick={handleGoingClick}
                         disabled={!event}
                       >
-                        {event && event.attendees.includes(user) ? "Not Going" : "I'm Going"}
+                                            <i className="fa fa-paw" aria-hidden="true">
+
+                        {event && event.attendees.includes(user) ? "Not Going" : "Join"}
+                        </i>
                       </button>
                     )}
 
@@ -221,9 +270,7 @@ function EventDetails() {
                   </p>
                   {event.attendees && event.attendees.length > 0 ? (
                     <ul>
-                      {event.attendees.map((attendeeId) => (
-                        <li key={attendeeId}>{attendeeId}</li>
-                      ))}
+                   
                     </ul>
                   ) : (
                     <p>No attendees yet.</p>
@@ -297,47 +344,77 @@ function EventDetails() {
                 <div className="author-details">
                   <h5 className="mb-0">{comment.username}</h5>
                   <div className="c-date">{comment.createdAt}</div>
+         
+  
+
                 </div>
               </div>
               <div className="replay-btn">
-             
-                        
-                          {!replyingTo && (
-            <a className="reply-btn" onClick={() => setReplyingTo(true)}>
-             
-             <img
-                                src="assets/images/icon/replay-icon.svg"
-                                alt=""
-                              />{" "}
-                              Reply
-            </a> 
+              {!replyingTo && (
+    <a
+      className="reply-btn"
+      onClick={() => handleReplyClick(comment._id)}
+    >
+     
+      <img src="assets/images/icon/replay-icon.svg" alt="" /> Reply
+    </a>
+  )}
+  
 
-          )}
-           </div>
-          {replyingTo && (
-            <form className="comment-reply-form" onSubmit={handleSubmitReply}>
-              <div className="form-group">
-                <textarea
-                  className="form-control"
-                  placeholder={`Replying to ${comment.username}...`}
-                  value={replyText}
-                  onChange={(e) => setReplyText(e.target.value)}
-                />
-              </div>
-              <button className="btn btn-primary" type="submit">
-                Submit
-              </button>
-            </form>
-          )}
+</div>
             </div>
+
             <div className="c-body">
-              <p>{comment.text}</p>
+            {isEditing && text.id === comment._id ? (
+  <div className="comment-edit">
+    <textarea value={text.text} onChange={(e) => setText({ ...text, text: e.target.value })}/>
+    <button className="primary-btn1 btn-sm" onClick={handleSaveClick}>
+      Save
+    </button>
+    <button className="primary-btn1 btn-sm" onClick={handleCancelClick}>
+      Cancel
+    </button>
+  </div>
+) : (
+  <div>{comment.text}</div>
+)}
+
+ 
+      <div className="comment-actions">
+        {user && comment.username === user.username && (
+          <button className="primary-btn1 btn-sm" onClick={() => handleDelete(comment._id)}>
+            <i className="bi bi-trash-fill"></i>
+          </button>
+        )}
+
+        {user && comment.username === user.username && (
+          <button className="primary-btn1 btn-sm" onClick={() => handleEdit(comment)}>
+            <i className="bi bi-pencil-square"></i>
+          </button>
+        )}
+      </div>
+      <div className="form-group">
+      {replyInputsVisible[comment._id] ? (
+        <>
+          <textarea
+            value={replyText}
+            onChange={(e) => setReplyText(e.target.value)}
+          />
+          <button className="primary-btn1 btn-sm" onClick={() => handleReplySubmit(comment._id)}>
+            Submit Reply
+          </button>
+          <button className="primary-btn1 btn-sm" onClick={() => handleReplyCancelClick(comment._id)}>
+            Cancel
+          </button>
+        </>
+      ) : null}
+    </div>
             </div>
-            
+          
           </div>
         </div>
       </li>
-    ))}
+    ))} 
   </ul>
 ) : (
   <p>No comments yet.</p>

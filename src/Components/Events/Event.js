@@ -122,7 +122,7 @@ function EventList() {
                     </h4>
                     <p>{event.description}</p>
                     
-                    <NavLink  className="primary-btn3 btn-lg" to={`/EventDetails/${event._id}`}>
+                    <NavLink  className="primary-btn1 btn-lg" to={`/EventDetails/${event._id}`}>
                     <i className="fa fa-paw" aria-hidden="true"></i>
 
         More
@@ -130,15 +130,13 @@ function EventList() {
     
                     
                     {user && event.organizer === user.username && (
-                      <button className="primary-btn3 btn-lg" onClick={() => handleDelete(event._id)}>
-                                              <i className="fa fa-paw" aria-hidden="true"></i>
-  Delete
-                        </button>
+                      <a className="primary-btn1 btn-sm" onClick={() => handleDelete(event._id)}>
+                                              <i class="bi bi-trash-fill"></i>
+                        </a>
                       )}
                        {user && event.organizer === user.username && (
-                       <NavLink  className="primary-btn3 btn-lg" to={`/UpdateEvent/${event._id}`}>
-                                              <i className="fa fa-paw" aria-hidden="true"></i>
-  Modify
+                       <NavLink  className="primary-btn1 btn-sm" to={`/UpdateEvent/${event._id}`}>
+<i class="bi bi-pencil-square"></i>
                         </NavLink>
                       )}
                       
