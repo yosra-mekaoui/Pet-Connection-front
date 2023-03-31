@@ -1,29 +1,48 @@
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import { getEvent, addAttendeeById, RemoveAttendeeById, getCommentById, addComment } from "./Services";
+import { getEvent, addAttendeeById, RemoveAttendeeById, getCommentById, addComment,addReply } from "./Services";
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import axios from "axios";
 
 
 
 
 const baseUrl = "http://localhost:3000/uploads/"; // Replace with your base URL
+const baseUrl1= "http://localhost:3000/public/uploads/"
 
 function EventDetails() {
-  const { id } = useParams();
   const [event, setEvent] = useState(null);
   const [isGoing, setIsGoing] = useState(false);
   const [error, setError] = useState(null);
-  const [user, setUser] = useState(null);
   const [comments, setComments] = useState([]);
   const [name, setName] = useState("");
   const [comment, setComment] = useState("");
-  const [commentId, setCommentId] = useState("");
-
-  const users = JSON.parse(localStorage.getItem('user'));
+  const { id, commentId } = useParams();
+ const [users,setUsers] = useState('');
+ const [imageSrc, setImageSrc] = useState(''); // importer image user 
+ const [replyToCommentId, setReplyToCommentId] = useState(null);
+ const [replyingTo, setReplyingTo] = useState(false);
+ const [replyText, setReplyText] = useState("");
+  const user = JSON.parse(localStorage.getItem('user'));
 
   const [numParticipants, setNumParticipants] = useState(0);
+  useEffect(() => {
+  
 
+  if (user.image) {
+    axios.get(`http://localhost:3000/user/imageUser/${user._id}/image`, { responseType: 'blob' })
+      .then(res => {
+        const url = URL.createObjectURL(res.data);
+        setImageSrc(url);
+        console.log("url image--->" + url)
+
+      })
+      .catch(error => {
+        console.error(error);
+      });
+  }
+}, []);
 
   useEffect(() => {
     const fetchEvent = async () => {
@@ -38,51 +57,50 @@ function EventDetails() {
     };
     fetchEvent();
   }, [id]); // Remove event as a dependency
-
   useEffect(() => {
-    const user = JSON.parse(localStorage.getItem('user'));
-    setUser(user);
-    if (event && commentId) {
-      const fetchComments = async () => {
-        try {
-          const res = await getCommentById(id, commentId);
-          setComments(res.data);
-          console.log(res.data)
-        } catch (err) {
-          console.error(err);
-          setError('Failed to fetch comments.');
-        }
-      };
-      fetchComments();
-    }
-  }, [id, event, commentId]);
+    const user = JSON.parse(localStorage.getItem("user"));
+    setUsers(user);
+    const fetchComments = async () => {
+      try {
+        const res = await getCommentById(id);
+        setComments(res);
+        console.log(res)
+      } catch (err) {
+        console.error(err);
+        setError("Failed to fetch comments.");
+      }
+    };
+    fetchComments();
+  }, [id]);
   
 
-  const handleSubmit = async e => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const userId = JSON.parse(localStorage.getItem("user"));
-      let connectedUserId;
-      if (userId._id) {
-        connectedUserId = userId._id;
-      } else if (userId.facebookId) {
-        connectedUserId = userId.facebookId;
-      } else {
-        toast.error("User ID not found.");
-        return;
-      }
-console.log(connectedUserId)
-      const res = await addComment(id, connectedUserId, comment);
-      setComments([...comments, res.data]);
-      setComment("");
+      const formData = {
+        text: comment,
+        eventId: id,
+        username: user.username,
+        image : user.image
+      };
+  
+
+      const res = await addComment(formData);
+      console.log(formData)
+      setComments((prevComments) => {
+        if (Array.isArray(prevComments)) {
+          return [...prevComments, res];
+        }
+       
+        return [res];
+      });
+            setComment("");
+
       toast.success("Successfully added comment!");
     } catch (err) {
       setError(err.message);
-      toast.error(err.response.data.message);
     }
   };
-
-
   const handleGoingClick = async () => {
     try {
 
@@ -137,7 +155,16 @@ console.log(connectedUserId)
     }
   };
 
-
+  const handleSubmitReply = async(e) => {
+    e.preventDefault();
+    try {
+      const response = await addReply(commentId, comment, user.image, user.username);
+      console.log(response); // do something with the response, e.g. update the UI
+    } catch (error) {
+      console.error(error);
+      // handle the error, e.g. show an error message to the user
+    }
+  };
   return (<>
 
     <ToastContainer />
@@ -251,93 +278,107 @@ console.log(connectedUserId)
 
 
 
-
-
-
-      </div>
-
-      <div className="comment-area">
-      <div className="blog-comments mb-120">
-        <div className="comment-form">
-          <div className="comments-title">
-            <h2>Leave a Comment</h2>
-          </div>
-          <form onSubmit={handleSubmit}>
-            <div className="row">
-              <div className="col-lg-12">
-                <div className="form-inner mb-40">
-                  <textarea
-                    name="comment"
-                    value={comment.text}
-                    onChange={handleChange}
-                    placeholder="Enter your comment here"
-                    required
-                  />
-                </div>
-              </div>
-              <div className="col-lg-12">
-                <div className="form-inner two">
-                  <button className="primary-btn3 btn-lg" type="submit">
-                    Submit Comment
-                  </button>
-                </div>
-              </div>
-            </div>
-          </form>
-        </div>
-        {comments.length === 0 ? (
-          <h3>No comments yet.</h3>
-        ) : (
-          <>
-            <div className="comments-title">
-              <h3>{comments.length} Comments</h3>
-            </div>
-            <ul className="comment-list">
-              {comments.map((comment) => (
-                <li key={comment.id}>
-                  <div className="single-comment mb-50 d-flex align-items-center justify-content-between flex-md-nowrap flex-wrap">
-                    <div className="comment-content">
-                      <div className="c-header d-flex align-items-center justify-content-between">
-                        <div className="author-area">
-                          <div className="author-img">
-                            <img
-                              className="avatar"
-                              src={
-                                comment.users.image
-                                  ? baseUrl + comment.users.image
-                                  : "https://via.placeholder.com/150x150.png?text=User"
-                              }
-                              alt="User Avatar"
-                            />
-                          </div>
-                          <div className="author-details">
-                            <h5 className="mb-0">{comment.users.username}</h5>
-                            <div className="c-date">{comment.date}</div>
-                          </div>
-                        </div>
-                        <div className="replay-btn">
-                          <a href="#">
-                            <img
-                              src="assets/images/icon/replay-icon.svg"
-                              alt=""
-                            />{" "}
-                            Reply
-                          </a>
-                        </div>
-                      </div>
-                      <div className="c-body">
-                        <p>{comment.text}</p>
-                      </div>
-                    </div>
-                  </div>
-                </li>
-              ))}
-            </ul>
-          </>
-        )}
-      </div>
+<div className="comment-area">
+  <div className="blog-comments mb-120">
+    <div className="comments-title">
+      <h2>Comment</h2>
     </div>
+    {comments && comments.length > 0 ? (
+  <ul className="comment-list">
+    {comments.map((comment) => (
+      <li key={comment._id}>
+        <div className="single-comment mb-50 d-flex align-items-center justify-content-between flex-md-nowrap flex-wrap">
+          <div className="comment-content">
+            <div className="c-header d-flex align-items-center justify-content-between">
+              <div className="author-area">
+                <div className="author-img">
+                <img src={imageSrc} alt="" width="50" height="50" />
+                </div>
+                <div className="author-details">
+                  <h5 className="mb-0">{comment.username}</h5>
+                  <div className="c-date">{comment.createdAt}</div>
+                </div>
+              </div>
+              <div className="replay-btn">
+             
+                        
+                          {!replyingTo && (
+            <a className="reply-btn" onClick={() => setReplyingTo(true)}>
+             
+             <img
+                                src="assets/images/icon/replay-icon.svg"
+                                alt=""
+                              />{" "}
+                              Reply
+            </a> 
+
+          )}
+           </div>
+          {replyingTo && (
+            <form className="comment-reply-form" onSubmit={handleSubmitReply}>
+              <div className="form-group">
+                <textarea
+                  className="form-control"
+                  placeholder={`Replying to ${comment.username}...`}
+                  value={replyText}
+                  onChange={(e) => setReplyText(e.target.value)}
+                />
+              </div>
+              <button className="btn btn-primary" type="submit">
+                Submit
+              </button>
+            </form>
+          )}
+            </div>
+            <div className="c-body">
+              <p>{comment.text}</p>
+            </div>
+            
+          </div>
+        </div>
+      </li>
+    ))}
+  </ul>
+) : (
+  <p>No comments yet.</p>
+)}
+
+
   </div>
+  <div className="comment-form">
+    <div className="comments-title">
+      <h2>Leave a Comment</h2>
+    </div>
+    <form onSubmit={handleSubmit}>
+      <div className="row">
+        <div className="col-lg-12">
+          <div className="form-inner mb-40">
+            <textarea
+              placeholder="Your message"
+              value={comment}
+              onChange={(e) => setComment(e.target.value)}
+            />
+          </div>
+        </div>
+        <div className="col-lg-12">
+          <div className="form-inner two">
+            <button className="primary-btn3 btn-lg" type="submit">
+              Submit Comment
+            </button>
+          </div>
+        </div>
+      </div>
+    </form>
+    {error && <div className="alert alert-danger">{error}</div>}
+  </div>
+</div>
+
+
+      </div>
+
+    
+  </div>
+
 </>
 );
 }

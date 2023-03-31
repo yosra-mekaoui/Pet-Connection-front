@@ -71,25 +71,22 @@ export const deleteEvent = async (id, connectedUserId) => {
       }
     };
     
-    export const addComment = async (eventId, userId, text) => {
+    export const addComment = async (formData) => {
       try {
-        const response = await axios.post(`${url}/addComment/${eventId}`, {
-          userId,
-          text,
-        });
+        const response = await axios.post(`${url}/addComment`, formData);
         return response.data;
       } catch (error) {
         console.error(error);
         throw error;
       }
     };
-
-  
-    export const addReply = async (eventId, commentId, userId, text) => {
+    
+    export const addReply = async (commentId, text, image, username) => {
       try {
-        const response = await axios.post(`${url}/addReply/${eventId}/${commentId}`, {
-          userId,
+        const response = await axios.post(`${url}/addReply/${commentId}`, {
           text,
+          image,
+          username
         });
         return response.data;
       } catch (error) {
@@ -98,9 +95,9 @@ export const deleteEvent = async (id, connectedUserId) => {
       }
     };
     
-    export const getCommentById = async (eventId, commentId) => {
+    export const getCommentById = async (eventId) => {
       try {
-        const response = await axios.get(`${url}/getCommentById/${eventId}/${commentId}`);
+        const response = await axios.get(`${url}/getCommentsEvent/${eventId}`);
         console.log(response.data);
         return response.data;
       } catch (error) {
