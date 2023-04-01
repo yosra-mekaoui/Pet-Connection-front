@@ -88,6 +88,7 @@ export const deleteEvent = async (id, connectedUserId) => {
           image,
           username
         });
+        console.log(response.data)
         return response.data;
       } catch (error) {
         console.error(error);
@@ -119,17 +120,16 @@ export const deleteEvent = async (id, connectedUserId) => {
         }
      }
 
-     export const updateComment =async (id,text,username) =>
-      {
-        try {
-          const { data } = await axios.put(`${url}/updateComment/${id}`, {
-            text,
-            username
-          });
-          console.log(data)
-          return data;
-        } catch (error) {
-          console.error(error);
-          throw error;
-        }
+     export const updateComment = async (id, text, username) => {
+      try {
+        const response = await axios.put(`${url}/updateComment/${id}`, {
+          text,
+          username
+        });
+        return response.data;
+      } catch (error) {
+        console.error(error);
+        throw error;
       }
+    };
+    

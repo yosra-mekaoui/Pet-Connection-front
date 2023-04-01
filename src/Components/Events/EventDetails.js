@@ -27,7 +27,8 @@ function EventDetails() {
   const user = JSON.parse(localStorage.getItem('user'));
 const [isEditing,setIsEditing] = useState(false);
   const [numParticipants, setNumParticipants] = useState(0);
-  const [text, setText] = useState({ id: "", text: "" });
+  const [text, setText] = useState({ text: "" });
+  const [commentsUpdated, setCommentsUpdated] = useState(false);
 
   const handleEdit = (comment) => {
     setText({ id: comment._id, text: comment.text });
@@ -39,10 +40,18 @@ const [isEditing,setIsEditing] = useState(false);
     setIsEditing(true);
   };
   
-  const handleSaveClick =async () => {
-    const res = await updateComment(id,comment,user.username)
-    setIsEditing(false);
-  };
+
+    const handleSaveClick = async () => {
+          console.log("text:", text);
+
+      const res = await updateComment(text.id, text.text, user.username);
+      setIsEditing(false);
+      setCommentsUpdated(!commentsUpdated); // Force a re-render
+
+    };
+  
+  
+  
     const handleCancelClick = () => {
     setIsEditing(false);
     setText(comment.text);
@@ -91,7 +100,7 @@ const [isEditing,setIsEditing] = useState(false);
       }
     };
     fetchComments();
-  }, [id]);
+  }, [commentsUpdated]);
   
 
   const handleSubmit = async (e) => {
@@ -189,9 +198,16 @@ const [isEditing,setIsEditing] = useState(false);
   };
   const handleReplySubmit = async (commentId) => {
     try {
-      console.log(commentId)
       const response = await addReply(commentId, replyText, user.image, user.username);
-      console.log(response); // do something with the response, e.g. update the UI
+      // Add the new reply to the comment's replies array
+      const updatedComments = comments.map((comment) => {
+        if (comment._id === commentId) {
+          return { ...comment, replies: [...comment.replies, response] };
+        } else {
+          return comment;
+        }
+      });
+      setComments(updatedComments);
     } catch (error) {
       console.error(error);
       // handle the error, e.g. show an error message to the user
@@ -201,15 +217,31 @@ const [isEditing,setIsEditing] = useState(false);
   };
   
   const handleDelete = async (id) => {
- 
     try {
-      console.log( id, user.username ); // <-- Add this line
+      console.log(id, user.username);
       await deleteComment(id, user.username);
-      setComment(comment.filter((comment) => comment._id !== id));
+        
+      setComments((prevComments) => {
+        return prevComments.filter((comment) => comment._id !== id);
+      });
     } catch (err) {
       console.error(err);
     }
   };
+  
+  const handleDeleteReply = async (replyId) => {
+    try {
+    const res = await deleteComment(replyId);
+    console.log(res);
+    setCommentsUpdated(!commentsUpdated); // Force a re-render
+    toast.success("Successfully deleted reply!");
+    } catch (err) {
+    console.error(err);
+    setError(err.message);
+    toast.error("Failed to delete reply.");
+    }
+    };
+  
   
   return (<>
 
@@ -367,7 +399,7 @@ const [isEditing,setIsEditing] = useState(false);
             <div className="c-body">
             {isEditing && text.id === comment._id ? (
   <div className="comment-edit">
-    <textarea value={text.text} onChange={(e) => setText({ ...text, text: e.target.value })}/>
+<textarea value={text.text} onChange={(e) => setText({ ...text, text: e.target.value })} />
     <button className="primary-btn1 btn-sm" onClick={handleSaveClick}>
       Save
     </button>
@@ -393,6 +425,32 @@ const [isEditing,setIsEditing] = useState(false);
           </button>
         )}
       </div>
+      {comment.replies && (
+          <ul className="comment-reply">
+            {comment.replies.map((reply) => (
+              <li key={reply.id}>
+                <div className="single-comment d-flex align-items-center justify-content-between flex-md-nowrap flex-wrap">
+                  <div className="comment-content">
+                    <div className="c-header d-flex align-items-center justify-content-between">
+                      <div className="author-area">
+                        <div className="author-img">
+                          <img src={imageSrc} alt="" width="50" height="50" />
+                        </div>
+                        <div className="author-details">
+                          <h5 className="mb-0">{reply.username}</h5>
+                          <div className="c-date">{reply.createdAt}</div>
+                        </div>
+                      </div>
+                    </div>
+                    <div className="c-body">
+                      <p>{reply.text}</p>
+                    </div>
+                  </div>
+                </div>
+              </li>
+            ))}
+          </ul>
+        )}
       <div className="form-group">
       {replyInputsVisible[comment._id] ? (
         <>
@@ -421,6 +479,8 @@ const [isEditing,setIsEditing] = useState(false);
 )}
 
 
+
+           
   </div>
   <div className="comment-form">
     <div className="comments-title">
