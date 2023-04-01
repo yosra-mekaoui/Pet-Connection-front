@@ -63,4 +63,18 @@
   .Form .form-group:last-child {
     margin-bottom: 0;
   }
-  
+ 
+.comment-button {
+  border: none;
+  background-color: #ffffff;
+  padding: 10px 15px;
+  color: #333333;
+  font-size: 1rem;
+  border-radius: 5px;
+  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
+  transition: background-color 0.2s ease-in-out;
+}
+
+.comment-button:hover {
+  background-color: #f2f2f2;
+}

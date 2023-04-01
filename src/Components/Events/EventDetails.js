@@ -3,15 +3,21 @@ import { useParams } from "react-router-dom";
 import { getEvent, addAttendeeById, RemoveAttendeeById, getCommentById, addComment,addReply ,deleteComment,updateComment} from "./Services";
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import { BiChevronDown, BiChevronUp } from "react-icons/bi";
+import "./style.css";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faPaperPlane } from "@fortawesome/free-solid-svg-icons";
+
 import axios from "axios";
 
 
 
 
 const baseUrl = "http://localhost:3000/uploads/"; // Replace with your base URL
+const url ="http://localhost:3000/public/uploads/"
 
 function EventDetails() {
-  const [event, setEvent] = useState(null);
+  const [event, setEvent] = useState({});
 
   const [isGoing, setIsGoing] = useState(false);
   const [error, setError] = useState(null);
@@ -29,6 +35,12 @@ const [isEditing,setIsEditing] = useState(false);
   const [numParticipants, setNumParticipants] = useState(0);
   const [text, setText] = useState({ text: "" });
   const [commentsUpdated, setCommentsUpdated] = useState(false);
+ const [isCommentSectionHidden, setIsCommentSectionHidden] = useState(false);
+ const [buttonLabel, setButtonLabel] = useState("Join");
+
+  const toggleCommentSection = () => {
+    setIsCommentSectionHidden(!isCommentSectionHidden);
+  };
 
   const handleEdit = (comment) => {
     setText({ id: comment._id, text: comment.text });
@@ -56,23 +68,8 @@ const [isEditing,setIsEditing] = useState(false);
     setIsEditing(false);
     setText(comment.text);
   };
-  useEffect(() => {
+
   
-
-  if (user.image) {
-    axios.get(`http://localhost:3000/user/imageUser/${user._id}/image`, { responseType: 'blob' })
-      .then(res => {
-        const url = URL.createObjectURL(res.data);
-        setImageSrc(url);
-        console.log("url image--->" + url)
-
-      })
-      .catch(error => {
-        console.error(error);
-      });
-  }
-}, []);
-
   useEffect(() => {
     const fetchEvent = async () => {
       try {
@@ -148,25 +145,26 @@ const [isEditing,setIsEditing] = useState(false);
         const attendees = event.attendees.filter((attendeeId) => attendeeId !== connectedUserId);
         const res = await RemoveAttendeeById(id, connectedUserId);
         console.log("remove attendee response", res);
-        setIsGoing(false);
-        setEvent(res.data);
-        setNumParticipants(res.data.attendees.length);
+        setButtonLabel("Join");
+        setEvent(res);
+        setNumParticipants(res.attendeesCount);
         toast.success("Successfully removed RSVP from the event!");
       } else {
         // If user is not in attendees list, add them
         const res = await addAttendeeById(id, connectedUserId);
         console.log("add attendee response", res);
-        setIsGoing(true);
-        setEvent(res.data);
-        setNumParticipants(res.data.attendees.length);
+        setButtonLabel("Not Going");
+        setEvent(res);
+        setNumParticipants(res.attendeesCount);
         toast.success("Successfully RSVP'd to the event!");
       }
     } catch (err) {
       console.error(err);
       setError(err.message);
-      toast.error(err.response.data.message);
+      toast.error(err.response);
     }
   };
+  
   
 
   const isAuthenticated = () => {
@@ -229,27 +227,59 @@ const [isEditing,setIsEditing] = useState(false);
     }
   };
   
-  const handleDeleteReply = async (replyId) => {
-    try {
-    const res = await deleteComment(replyId);
-    console.log(res);
-    setCommentsUpdated(!commentsUpdated); // Force a re-render
-    toast.success("Successfully deleted reply!");
-    } catch (err) {
-    console.error(err);
-    setError(err.message);
-    toast.error("Failed to delete reply.");
-    }
+
+    const handleReport = async (commentId) => {
+      try {
+        const userId = JSON.parse(localStorage.getItem("user"))._id;
+        await axios.post(`http://localhost:3000/event/reportComment/${commentId}`,{userId});
+        toast.success("Comment reported successfully.");
+      } catch (err) {
+        toast.error(err.response.data.message);
+      }
     };
-  
-  
+    
+    const handleEditReply = async (reply) => {
+      try {
+        const response = await fetch(`http://localhost:3000/event/editReply/${commentId}/${reply.id}`, {
+          method: 'PUT',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({
+            text: reply.text,
+            username: reply.username
+          })
+        });
+        const updatedReply = await response.json();
+        setCommentsUpdated(!commentsUpdated); // Force a re-render
+
+        console.log('Updated reply:', updatedReply);
+      } catch (error) {
+        console.error(error);
+      }
+    };
+    
+    const handleDeleteReply = async (replyId) => {
+      try {
+        const response = await fetch(`http://localhost:3000/event/deleteReply/${commentId}/${replyId}`, {
+          method: 'DELETE'
+        });
+        const deletedReply = await response.json();
+        setCommentsUpdated(!commentsUpdated); // Force a re-render
+
+        console.log('Deleted reply:', deletedReply);
+      } catch (error) {
+        console.error(error);
+      }
+    };
+    
   return (<>
 
     <ToastContainer />
 
     <div className="blog-details-pages pt-120 mb-120">
       <div className="container">
-        {event && (
+        {event &&  event.attendees&&(
 
           <div className="row g-lg-4 gy-5 justify-content-center mb-70">
             <div className="col-lg-8">
@@ -283,24 +313,26 @@ const [isEditing,setIsEditing] = useState(false);
                       </button>
                     ) : (
                       <button
-                        className="primary-btn3 btn-lg"
-                        onClick={handleGoingClick}
-                        disabled={!event}
-                      >
-                                            <i className="fa fa-paw" aria-hidden="true">
+  className="primary-btn3 btn-lg"
+  onClick={handleGoingClick}
+  disabled={!event}
+>
+  <i className="fa fa-paw" aria-hidden="true">
+    {buttonLabel}
+  </i>
+</button>
 
-                        {event && event.attendees.includes(user) ? "Not Going" : "Join"}
-                        </i>
-                      </button>
                     )}
 
 
 
                   </ul>
-                  <p>
-                    Participants: {numParticipants}
-                  </p>
-                  {event.attendees && event.attendees.length > 0 ? (
+                
+                  <p className="m-0">
+  {event.attendeesCount} participant{event.attendeesCount === 1 ? "" : "s"}
+</p>
+                  
+                  {event.attendees && event.attendeesCount > 0 ? (
                     <ul>
                    
                     </ul>
@@ -356,9 +388,16 @@ const [isEditing,setIsEditing] = useState(false);
         )}
 
 
-
+<button onClick={toggleCommentSection}
+className="comment-button"
+>
+          {isCommentSectionHidden ? <BiChevronDown /> : <BiChevronUp />}
+        </button>
+       
 <div className="comment-area">
+  
   <div className="blog-comments mb-120">
+   
     <div className="comments-title">
       <h2>Comment</h2>
     </div>
@@ -366,12 +405,14 @@ const [isEditing,setIsEditing] = useState(false);
   <ul className="comment-list">
     {comments.map((comment) => (
       <li key={comment._id}>
+              {!isCommentSectionHidden && (
+
         <div className="single-comment mb-50 d-flex align-items-center justify-content-between flex-md-nowrap flex-wrap">
           <div className="comment-content">
             <div className="c-header d-flex align-items-center justify-content-between">
               <div className="author-area">
                 <div className="author-img">
-                <img src={imageSrc} alt="" width="50" height="50" />
+                <img src={url + comment.image} alt="" width="50" height="50" />
                 </div>
                 <div className="author-details">
                   <h5 className="mb-0">{comment.username}</h5>
@@ -388,10 +429,33 @@ const [isEditing,setIsEditing] = useState(false);
       onClick={() => handleReplyClick(comment._id)}
     >
      
-      <img src="assets/images/icon/replay-icon.svg" alt="" /> Reply
+      <img src="assets/images/icon/replay-icon.svg" alt="" />
+      <i className="bi bi-reply"></i> Reply
     </a>
   )}
   
+  <div className="comment-actions">
+  {user && comment.username === user.username && (
+    <div className="dropdown">
+      <button className="primary-btn1 btn-sm dropdown-toggle" data-bs-toggle="dropdown">
+        <i className="bi bi-three-dots"></i>
+      </button>
+      <ul className="dropdown-menu">
+        <li><button className="dropdown-item" onClick={() => handleEdit(comment)}>Edit</button></li>
+        <li><button className="dropdown-item" onClick={() => handleDelete(comment._id)}>Delete</button></li>
+        {comment.username !== user.username && (
+          <li><button className="dropdown-item" onClick={() => handleReport(comment._id)}>Report</button></li>
+        )}
+      </ul>
+    </div>
+  )}
+  {comment.username !== user.username && (
+    <button className="primary-btn3 btn-sm" onClick={() => handleReport(comment._id)}>
+      <i className="bi bi-flag"></i>
+    </button>
+  )}
+</div>
+
 
 </div>
             </div>
@@ -412,45 +476,48 @@ const [isEditing,setIsEditing] = useState(false);
 )}
 
  
-      <div className="comment-actions">
-        {user && comment.username === user.username && (
-          <button className="primary-btn1 btn-sm" onClick={() => handleDelete(comment._id)}>
-            <i className="bi bi-trash-fill"></i>
-          </button>
-        )}
 
-        {user && comment.username === user.username && (
-          <button className="primary-btn1 btn-sm" onClick={() => handleEdit(comment)}>
-            <i className="bi bi-pencil-square"></i>
-          </button>
-        )}
-      </div>
-      {comment.replies && (
-          <ul className="comment-reply">
-            {comment.replies.map((reply) => (
-              <li key={reply.id}>
-                <div className="single-comment d-flex align-items-center justify-content-between flex-md-nowrap flex-wrap">
-                  <div className="comment-content">
-                    <div className="c-header d-flex align-items-center justify-content-between">
-                      <div className="author-area">
-                        <div className="author-img">
-                          <img src={imageSrc} alt="" width="50" height="50" />
-                        </div>
-                        <div className="author-details">
-                          <h5 className="mb-0">{reply.username}</h5>
-                          <div className="c-date">{reply.createdAt}</div>
-                        </div>
-                      </div>
-                    </div>
-                    <div className="c-body">
-                      <p>{reply.text}</p>
-                    </div>
-                  </div>
+
+
+
+
+{comment.replies && (
+  <ul className="comment-reply">
+    {comment.replies.map((reply) => (
+      <li key={reply.id}>
+        <div className="single-comment d-flex align-items-center justify-content-between flex-md-nowrap flex-wrap">
+          <div className="comment-content">
+            <div className="c-header d-flex align-items-center justify-content-between">
+              <div className="author-area">
+                <div className="author-img">
+                  <img src={url+ reply.image} alt="" width="50" height="50" />
                 </div>
-              </li>
-            ))}
-          </ul>
-        )}
+                <div className="author-details">
+                  <h5 className="mb-0">{reply.username}</h5>
+                  <div className="c-date">{reply.createdAt}</div>
+                </div>
+              </div>
+              {user && reply.username === user.username && (
+                <div className="comment-actions">
+                  <button className="primary-btn1 btn-sm" onClick={() => handleDeleteReply(reply._id)}>
+                    <i className="bi bi-trash-fill"></i>
+                  </button>
+                  <button className="primary-btn1 btn-sm" onClick={() => handleEditReply(reply)}>
+                    <i className="bi bi-pencil-square"></i>
+                  </button>
+                </div>
+              )}
+            </div>
+            <div className="c-body">
+              <p>{reply.text}</p>
+            </div>
+          </div>
+        </div>
+      </li>
+    ))}
+  </ul>
+)}
+
       <div className="form-group">
       {replyInputsVisible[comment._id] ? (
         <>
@@ -459,7 +526,7 @@ const [isEditing,setIsEditing] = useState(false);
             onChange={(e) => setReplyText(e.target.value)}
           />
           <button className="primary-btn1 btn-sm" onClick={() => handleReplySubmit(comment._id)}>
-            Submit Reply
+            Save
           </button>
           <button className="primary-btn1 btn-sm" onClick={() => handleReplyCancelClick(comment._id)}>
             Cancel
@@ -471,6 +538,7 @@ const [isEditing,setIsEditing] = useState(false);
           
           </div>
         </div>
+        )}
       </li>
     ))} 
   </ul>
@@ -480,41 +548,41 @@ const [isEditing,setIsEditing] = useState(false);
 
 
 
-           
+         
   </div>
   <div className="comment-form">
-    <div className="comments-title">
-      <h2>Leave a Comment</h2>
+      <h2 className="mb-3">Leave a Comment</h2>
+      <form onSubmit={handleSubmit}>
+        <div className="mb-3">
+          <label htmlFor="comment" className="form-label visually-hidden">
+            Your comment
+          </label>
+          <textarea
+            className="form-control"
+            id="comment"
+            placeholder="Your comment"
+            value={comment}
+            onChange={(e) => setComment(e.target.value)}
+          ></textarea>
+         
+        </div>
+        <button type="submit" className="btn btn-secondary">
+          <FontAwesomeIcon icon={faPaperPlane} className="me-2" />
+          Send
+        </button>
+      </form>
     </div>
-    <form onSubmit={handleSubmit}>
-      <div className="row">
-        <div className="col-lg-12">
-          <div className="form-inner mb-40">
-            <textarea
-              placeholder="Your message"
-              value={comment}
-              onChange={(e) => setComment(e.target.value)}
-            />
-          </div>
-        </div>
-        <div className="col-lg-12">
-          <div className="form-inner two">
-            <button className="primary-btn3 btn-lg" type="submit">
-              Submit Comment
-            </button>
-          </div>
-        </div>
-      </div>
-    </form>
-    {error && <div className="alert alert-danger">{error}</div>}
-  </div>
+
 </div>
+      
 
 
       </div>
+        
 
     
   </div>
+
 
 </>
 );
