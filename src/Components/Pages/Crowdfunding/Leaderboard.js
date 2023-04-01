@@ -95,11 +95,16 @@ function Leaderboard() {
             marginTop: "50px",
             marginBottom: "100px",
             background:
-              "linear-gradient(217deg, rgba(255,223,195,.8), rgba(255,223,195,0) 70.71%), linear-gradient(127deg, rgba(230,207,207,.8), rgba(230,207,207,0) 70.71%),            linear-gradient(336deg, rgba(255,225,225,.8), rgba(255,225,225,0) 70.71%)",
+              "linear-gradient(217deg, rgba(44,44,44,1), rgba(44,44,44,0) 90.71%), linear-gradient(127deg, rgba(44,44,44,.8), rgba(44,44,44,0) 90.71%),            linear-gradient(336deg, rgba(44,44,44,.8), rgba(44,44,44,0) 90.71%)",
           }}
         >
           <h1
-            style={{ marginTop: "50px", color: "black", marginBottom: "20px" }}
+            className="neonText"
+            style={{
+              marginTop: "50px",
+            //   color: "#D4D4D4",
+              marginBottom: "30px",
+            }}
           >
             <i
               className="fa fa-trophy"
@@ -111,9 +116,10 @@ function Leaderboard() {
           </h1>
           <div
             style={{
-              marginBottom: "50px",
+              marginBottom: "30px",
               letterSpacing: "3px",
               fontSize: "18px",
+              color: "#AFAFAF",
             }}
           >
             Every contribution can save a pet's live.<br></br>
@@ -122,7 +128,7 @@ function Leaderboard() {
 
           <br></br>
 
-          <div className="container">
+          <div className="container" style={{ padding: "0px 4% 30px 4%" }}>
             {/* =============== title ============= */}
             <div className="row">
               <div className="col-2">
@@ -166,18 +172,14 @@ function Leaderboard() {
                     <div
                       className="row rankBar"
                       style={{
-                        color: "black", 
+                        color: "black",
                         marginBottom: "10px",
                         background:
                           "linear-gradient(217deg, rgba(137,137,137,.8), rgba(137,137,137,0) 70.71%), linear-gradient(127deg, rgba(95,95,95,.8), rgba(95,95,95,0) 70.71%),            linear-gradient(336deg, rgba(135,135,135,.8), rgba(135,135,135,0) 70.71%)",
                       }}
                     >
                       <div className="col-2">
-                        <span
-                          className="rankNumb" 
-                        >
-                          {index + 1}
-                        </span>
+                        <span className="rankNumb">{index + 1}</span>
                       </div>
 
                       <div className="col-6">{item.username}</div>
@@ -199,18 +201,14 @@ function Leaderboard() {
                       className="row rankBar"
                       style={{
                         color: "black",
-                        
+
                         marginBottom: "10px",
                         background:
                           "linear-gradient(217deg, rgba(223,178,155,.8), rgba(178,137,117,0) 70.71%), linear-gradient(127deg, rgba(172,83,38,.8), rgba(172,83,38,0) 70.71%),            linear-gradient(336deg, rgba(201,127,90,.8), rgba(201,127,90,0) 70.71%)",
                       }}
                     >
                       <div className="col-2 ">
-                        <span
-                          className="rankNumb" 
-                        >
-                          {index + 1}
-                        </span>
+                        <span className="rankNumb">{index + 1}</span>
                       </div>
 
                       <div className="col-6">{item.username}</div>
@@ -228,14 +226,17 @@ function Leaderboard() {
 
                 {index != 0 && index != 1 && index != 2 && (
                   <div
-                    className="row"
+                    className="row rankBar"
                     style={{
                       color: "black",
                       marginBottom: "10px",
                       fontSize: "18px",
+                      backgroundColor: "#F3E8F5",
                     }}
                   >
-                    <div className="col-2">{index + 1}</div>
+                    <div className="col-2">
+                      <span className="rankNumb">{index + 1}</span>
+                    </div>
 
                     <div className="col-6">{item.username}</div>
 
