@@ -9,7 +9,8 @@
 }
 
 .rankNumb {
-    background-color: #3D3D3D;
+    background-color: #06b16f;
+    border : 1px solid black;
     color: white ;
     padding: 1px 9px 1px 9px ; 
     border-radius: 50% ; 
@@ -39,6 +40,9 @@
     padding: 10px;
 }
 
+.username {
+    font-weight: 700;
+}
 
 .neonText {
     color : black ; 
