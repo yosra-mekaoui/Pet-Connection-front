@@ -128,7 +128,7 @@ function Leaderboard() {
 
           <br></br>
 
-          <div className="container" style={{ padding: "0px 4% 30px 4%" }}>
+          <div className="container" style={{ padding: "0px 4% 30px 4%" , fontWeight:"600"}}>
             {/* =============== title ============= */}
             <div className="row">
               <div className="col-2">
@@ -157,7 +157,10 @@ function Leaderboard() {
                         <span className="rankNumb"> {index + 1} </span>
                       </div>
 
-                      <div className="col-6 username">{item.username}</div>
+                      <div className="col-6 username">
+                        <i className="fas fa-user-alt" />
+                        {" " + item.username}
+                      </div>
 
                       <div className="col-2">
                         <div>{item.xp}</div>
@@ -182,7 +185,10 @@ function Leaderboard() {
                         <span className="rankNumb">{index + 1}</span>
                       </div>
 
-                      <div className="col-6 username">{item.username}</div>
+                      <div className="col-6 username">
+                        <i className="fas fa-user-alt" />
+                        {" " + item.username}
+                      </div>
 
                       <div className="col-2">
                         <div>{item.xp}</div>
@@ -211,7 +217,10 @@ function Leaderboard() {
                         <span className="rankNumb">{index + 1}</span>
                       </div>
 
-                      <div className="col-6 username">{item.username}</div>
+                      <div className="col-6 username">
+                        <i className="fas fa-user-alt" />
+                        {" " + item.username}
+                      </div>
 
                       <div className="col-2">
                         <div>{item.xp}</div>
@@ -238,7 +247,10 @@ function Leaderboard() {
                       <span className="rankNumb">{index + 1}</span>
                     </div>
 
-                    <div className="col-6 username">{item.username}</div>
+                    <div className="col-6 username">
+                      <i className="fas fa-user-alt" />
+                      {" " + item.username}
+                    </div>
 
                     <div className="col-2">
                       <div>{item.xp}</div>
