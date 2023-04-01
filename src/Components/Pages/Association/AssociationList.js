@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { NavLink, useLocation } from "react-router-dom"; 
 import axios from "axios";
 import { addDonation } from "../api"; 
+import "../Crowdfunding/crowd.css"; 
 function AssociationList() {
   
   const query = new URLSearchParams(window.location.search);
@@ -431,7 +432,7 @@ function AssociationList() {
                                   <div
                                     href="blog-details.html"
                                     style={{
-                                      fontSize: "18px",
+                                      fontSize: "16px",
                                       fontWeight: "700",
                                       fontFamily:
                                         "-apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif",
@@ -439,23 +440,24 @@ function AssociationList() {
                                   >
                                     {item.name}{" "}
                                   </div>
-                                  <div>
-                                    <i
-                                      className="fas fa-arrow-up"
-                                      style={{
-                                        fontSize: "18px",
-                                        marginRight: "6px",
-                                      }}
-                                    />
+                                  <div className="actions">
                                     <span
                                       style={{
-                                        color: "green",
+                                        color: "black",
                                         fontSize: "18px",
+                                        fontWeight: "600",
                                       }}
                                     >
                                       {item.action}
                                     </span>{" "}
                                     actions.
+                                    {/* <i
+                                      className="fas fa-arrow-up"
+                                      style={{
+                                        fontSize: "18px",
+                                        marginRight: "6px",
+                                      }}
+                                    /> */}
                                   </div>
                                 </div>
                               </div>

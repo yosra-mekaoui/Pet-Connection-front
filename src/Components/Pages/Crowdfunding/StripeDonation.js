@@ -6,11 +6,14 @@ export function StripeDonation(props) {
     return (
       <section>
         <div className="product">
-          <div style={{ color: "black", marginTop : "100px" }} className="description">
+          <div
+            style={{ color: "black", marginTop: "100px" }}
+            className="description"
+          >
             <h3>Contribute to this Crowdfunding : {total}$</h3>
           </div>
         </div>
-      
+
         <form
           action={url + total + "/" + props.id + "/" + props.funding}
           method="POST"
@@ -21,8 +24,10 @@ export function StripeDonation(props) {
               border: "1px solid black",
               color: "black",
               marginTop: "10px",
-              width : "170px"
+              width: "170px",
             }}
+            type="number"
+            min="0"
             onChange={(e) => setTotal(e.target.value)}
             value={total}
           />

@@ -4,7 +4,10 @@ import axios from "axios";
 import { getOneAssociation } from "../api";
 import { format } from "date-fns";  
 import { StripeDonation } from "./StripeDonation"; 
-import './crowd.css'; 
+import './crowd.css';
+import { Web3 } from "web3"; 
+import CryptoDonation from "./CryptoDonation";
+
 
 const ProgressBar = ({ progress }) => (
   <div className="progressbar">
@@ -66,28 +69,8 @@ function Crowdfunding() {
     
   }, []);
 
-   
-    useEffect(() => {
-      let time = 4000 / data.total; 
-        if (count < data.total) {
-            let interval = setInterval(() => {
-                if (count < data.total) {
-                    setCount((count) => count + 1);
-                }  
-            }, 5);
-      return () => clearInterval(interval);
-
-        }
-
-    }, [count]);
     
-  
-  
-
-  
-  
-   
-  
+     
     
   return (
     <>
@@ -164,6 +147,7 @@ function Crowdfunding() {
               <p style={{ color: "#494949" }}>{data.desc}</p>
 
               <StripeDonation id={data._id} funding={data.title} />
+              <CryptoDonation  />
             </div>
           </div>
 
@@ -194,14 +178,15 @@ function Crowdfunding() {
 
               {donations.length == 0 ? (
                 <h5 style={{ color: "#494949", marginTop: "20px" }}>
-                  {data.name} hasn't done any actions yet.
+                  {data.title} hasn't receive any donation yet.
                 </h5>
               ) : (
                 <div
-                  style={{
-                    overflowY: "scroll",
-                    height: "300px",
-                  }}
+                  // style={{
+                  //   overflowY: "scroll",
+                  //   height: "300px",
+                  // }}
+                    className="scrollableDiv"
                 >
                   {donations.map((item) => (
                     <>
