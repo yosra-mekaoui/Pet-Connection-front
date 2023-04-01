@@ -84,3 +84,18 @@ export const editFunding = async (id, funding) => {
     console.log(error);
   }
 };
+
+
+export const getRanking = async () => {
+  try {
+    await axios
+      .get(`http://localhost:3000/donation/getRanking`)
+      .then((res) => {
+        console.log(res.data);
+        return res.data ;
+
+      });
+  } catch (error) {
+    console.log(error);
+  }
+};

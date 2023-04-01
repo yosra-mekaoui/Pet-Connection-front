@@ -280,6 +280,26 @@ function AssociationList() {
                 </NavLink>
               </>
             )}
+
+            <NavLink to={`/leaderboard`}>
+              <button
+                style={{
+                  marginLeft: "20px",
+                  padding: "8px 20px 8px 20px",
+                  backgroundColor: "#DBBAFF",
+                  borderRadius: "10px",
+                  boxShadow: "rgba(0, 0, 0, 0.25) 0px 3px 5px",
+                }}
+              >
+                <i
+                  className="fa fa-trophy"
+                  style={{
+                    marginRight: "15px",
+                  }}
+                />
+                Leaderboard
+              </button>
+            </NavLink>
           </h5>
           {/* <h1>{message}</h1> */}
 
@@ -343,21 +363,18 @@ function AssociationList() {
                         </div>
                         <div>
                           {association == item.association && (
-                          <NavLink to={`/editCrowdfunding/${item._id}`}>
-
-                            <button
-                              style={{
-                                backgroundColor: "#45DC81",
-                                padding: "3px 7px 3px 9px",
-                                borderRadius: "6px",
-                                marginRight: "15px",
-                                boxShadow:
-                                  "rgba(0, 0, 0, 0.16) 0px 3px 6px, rgba(0, 0, 0, 0.15) 0px 2px 2px",
-                              }}
-                            >
-                              <i
-                                className="fas fa-edit" 
-                              />
+                            <NavLink to={`/editCrowdfunding/${item._id}`}>
+                              <button
+                                style={{
+                                  backgroundColor: "#45DC81",
+                                  padding: "3px 7px 3px 9px",
+                                  borderRadius: "6px",
+                                  marginRight: "15px",
+                                  boxShadow:
+                                    "rgba(0, 0, 0, 0.16) 0px 3px 6px, rgba(0, 0, 0, 0.15) 0px 2px 2px",
+                                }}
+                              >
+                                <i className="fas fa-edit" />
                               </button>
                             </NavLink>
                           )}
