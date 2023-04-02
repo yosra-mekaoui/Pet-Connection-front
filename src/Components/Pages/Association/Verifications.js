@@ -1,40 +1,51 @@
 import { useState, useEffect } from "react";
 import { NavLink, useLocation } from "react-router-dom";
 import axios from "axios";
-import { getRanking } from "../api";
+import { getUpgrades, addAssociation } from "../api";
+import "../Crowdfunding/crowd.css"; 
+ 
+ 
 
-const ProgressBar = ({ progress }) => (
-  <div className="progressbar">
-    <div className="progress" style={{ width: `${progress}%` }}></div>
-  </div>
-);
-
-const styles = {
-  rankBar: {},
-};
-
-function Verifications() {
-  const [total, setTotal] = useState(0);
-  const [color, setColor] = useState("");
-  const [message, setMessage] = useState("");
+function Verifications() { 
   const [done, setDone] = useState(0);
   const [upgrades, setUpgrades] = useState([]);
 
 
   const [up, setUp] = useState({}); 
 
-  const query = new URLSearchParams(window.location.search);
+  const urlUp = "http://localhost:3000/upgrades/"; 
 
-  useEffect( () => {
+  useEffect(() => {
+    try {
+      axios.get(`http://localhost:3000/user/AllUpgrades`).then((response) => {
+        setUpgrades(response.data);
+        setUp(response.data[7]);
+      });
+    } catch (err) {
+      console.log(err); 
+    }
+  }, []); 
 
-    axios.get(`http://localhost:3000/user/AllUpgrades`).then((response) => {
-      console.log("user : " + response);
-      setUpgrades(response.data);
-      setUp(response.data[0]); 
-    });
-  }, []);
+  // const changeUpgrade = (item) => {
+    // setUp(item);
+    // console.log("IMAGE : " + item.logo );
+  // } ; 
 
-  const [funding, setFunding] = useState("");
+  const upgradeUser = (e) => {
+    var association = {
+      name: up.name,
+      user: up.user,
+      latitude: up.latitude,
+      longitude: up.longitude,
+      bio: up.bio,
+      file: up.logo,
+      action : 0
+    }
+
+    addAssociation(association); 
+
+  }
+  
 
   return (
     <>
@@ -105,7 +116,7 @@ function Verifications() {
             }}
           >
             <i
-              className="fa fa-trophy"
+              className="fa fa-file"
               style={{
                 marginRight: "10px",
               }}
@@ -143,7 +154,7 @@ function Verifications() {
                           color: "black",
                           marginBottom: "10px",
                           fontSize: "18px",
-                          backgroundColor: "#F3E8F5",  
+                          backgroundColor: "#F3E8F5",
                         }}
                       >
                         <div className="col-4">
@@ -154,7 +165,21 @@ function Verifications() {
 
                         <div className="col-4">
                           <div>
-                            <button onClick={()=>{setUp(item)}}>edit</button>
+                            <button
+                              style={{
+                                backgroundColor: "transparent",
+                                color: "green",
+                              }}
+                              onClick={() => {
+                                setUp(item);
+                                console.log("IMAGE : " + item.logo);
+                              }}
+                            >
+                              <i
+                                className="fas fa-edit"
+                                style={{ marginRight: "15px" }}
+                              />
+                            </button>
                           </div>
                         </div>
                       </div>
@@ -165,11 +190,55 @@ function Verifications() {
 
               {/* ======== edit part =============== */}
               <div className="col-6">
-                  {up.name}
+                <img
+                  className="img-fluid"
+                  src={urlUp + up.file}
+                  style={{
+                    width: "300px",
+                    boxShadow:
+                      "rgba(0, 0, 0, 0.16) 0px 3px 6px, rgba(0, 0, 0, 0.15) 0px 2px 2px",
+                  }}
+                />
+                <div className="textSubmissions" style={{ marginTop: "40px" }}>
+                  <span>
+                    <img
+                      src={urlUp + up.logo}
+                      style={{
+                        width: "50px",
+                        marginRight: "10px",
 
+                        boxShadow:
+                          "rgba(0, 0, 0, 0.16) 0px 3px 6px, rgba(0, 0, 0, 0.15) 0px 2px 2px",
+                      }}
+                    />
+                    {up.name}
+                  </span>
+                </div>
+                <div className="textSubmissions">
+                  <div>Bio : {up.bio}</div>
+                  <div>Type : {up.type}</div>
 
+                  <div>
+                    <a
+                      href={`https://www.google.com/maps/@${up.longitude},${up.latitude},16z`}
+                      target="_blank"
+                    >
+                      Find on google Maps
+                    </a>
+                  </div>
+                </div>
 
-
+                <button
+                  style={{
+                    padding: "8px 20px 8px 20px",
+                    backgroundColor: "orange",
+                    borderRadius: "10px",
+                    boxShadow: "rgba(0, 0, 0, 0.25) 0px 3px 5px",
+                    marginTop : "30px"
+                  }}
+                >
+                  Upgrade User
+                </button>
               </div>
             </div>
           </div>

@@ -29,6 +29,8 @@ function EditAssociation() {
 
     const [file, setFile] = useState(null); 
 
+    
+
 
     useEffect(() => {
         console.log(user); 
@@ -112,7 +114,7 @@ function EditAssociation() {
                   data-wow-duration="1.5s"
                   data-wow-delay=".2s"
                 >
-                  <div className="form-title">
+                  <div className="form-title editButtons" >
                     <h3>
                       <i className="fas fa-edit" style={{ marginRight : "15px" }} />
                       Edit Association

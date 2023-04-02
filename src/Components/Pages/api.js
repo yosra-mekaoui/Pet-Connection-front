@@ -99,3 +99,27 @@ export const getRanking = async () => {
     console.log(error);
   }
 };
+
+
+export const getUpgrades = async () => {
+  try {
+    await axios.get(`http://localhost:3000/user/AllUpgrades`).then((res) => {
+      console.log(res.data);
+      return res.data;
+    });
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+
+export const addAssociation = async (association) => {
+  try {
+    await axios.post(
+      `http://localhost:3000/association/addAssociation`,
+      association
+    );
+  } catch (error) {
+    console.log(error);
+  }
+};
