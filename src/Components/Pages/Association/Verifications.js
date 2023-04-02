@@ -18,17 +18,19 @@ function Verifications() {
   const [color, setColor] = useState("");
   const [message, setMessage] = useState("");
   const [done, setDone] = useState(0);
-  const [ranking, setRanking] = useState([]);
+  const [upgrades, setUpgrades] = useState([]);
+
+
+  const [up, setUp] = useState({}); 
 
   const query = new URLSearchParams(window.location.search);
 
-  useEffect(() => {
-    setTotal(query.get("total"));
-    setFunding(query.get("funding"));
+  useEffect( () => {
 
-    axios.get(`http://localhost:3000/donation/getRanking`).then((response) => {
-      console.log("user : " + response.data);
-      setRanking(response.data);
+    axios.get(`http://localhost:3000/user/AllUpgrades`).then((response) => {
+      console.log("user : " + response);
+      setUpgrades(response.data);
+      setUp(response.data[0]); 
     });
   }, []);
 
@@ -48,14 +50,14 @@ function Verifications() {
           <div className="row justify-content-center align-items-center text-center">
             <div className="col-lg-6 align-items-center">
               <div className="banner-content">
-                <h1>Leaderboard</h1>
+                <h1>Account Upgrades Verifications</h1>
                 <nav aria-label="breadcrumb">
                   <ol className="breadcrumb">
                     <li className="breadcrumb-item">
                       <a href="index.html">Home</a>
                     </li>
                     <li className="breadcrumb-item active" aria-current="page">
-                      Crowdfundings
+                      Associations
                     </li>
                   </ol>
                 </nav>
@@ -81,11 +83,6 @@ function Verifications() {
         </div>
       </div>
 
-          
-
-
-
-          
       <center>
         <div
           style={{
@@ -97,14 +94,13 @@ function Verifications() {
             marginTop: "50px",
             marginBottom: "100px",
             background:
-              "linear-gradient(217deg, rgba(44,44,44,1), rgba(44,44,44,0) 90.71%), linear-gradient(127deg, rgba(44,44,44,.8), rgba(44,44,44,0) 90.71%),            linear-gradient(336deg, rgba(44,44,44,.8), rgba(44,44,44,0) 90.71%)",
+              "linear-gradient(217deg, rgba(255,223,195,.8), rgba(255,223,195,0) 70.71%), linear-gradient(127deg, rgba(230,207,207,.8), rgba(230,207,207,0) 70.71%),            linear-gradient(336deg, rgba(255,225,225,.8), rgba(255,225,225,0) 70.71%)",
           }}
         >
           <h1
-            className="neonText"
             style={{
               marginTop: "50px",
-              //   color: "#D4D4D4",
+              color: "black",
               marginBottom: "30px",
             }}
           >
@@ -114,19 +110,8 @@ function Verifications() {
                 marginRight: "10px",
               }}
             />
-            Leaderboard
+            Users Submissions
           </h1>
-          <div
-            style={{
-              marginBottom: "30px",
-              letterSpacing: "5px",
-              fontSize: "18px",
-              color: "#AFAFAF",
-            }}
-          >
-            Every contribution can save a pet's live.<br></br>
-            Kudos to our top donators.
-          </div>
 
           <br></br>
 
@@ -136,138 +121,57 @@ function Verifications() {
           >
             {/* =============== title ============= */}
             <div className="row">
-              <div className="col-2">
-                <span className="rankHeads"> Rank</span>
+              {/* =========== tables =================== */}
+              <div className="col-6">
+                <div className="container">
+                  <div className="row">
+                    <div className="col-4">
+                      <span className="rankHeads">Name</span>
+                    </div>
+
+                    <div className="col-4 rankHeads">Type</div>
+
+                    <div className="col-4 rankHeads">Action</div>
+                  </div>
+
+                  {/* ==================== rows ====================== */}
+                  {upgrades.map((item, index) => (
+                    <>
+                      <div
+                        className="row rankBar"
+                        style={{
+                          color: "black",
+                          marginBottom: "10px",
+                          fontSize: "18px",
+                          backgroundColor: "#F3E8F5",  
+                        }}
+                      >
+                        <div className="col-4">
+                          <span>{item.name}</span>
+                        </div>
+
+                        <div className="col-4 username">{item.type}</div>
+
+                        <div className="col-4">
+                          <div>
+                            <button onClick={()=>{setUp(item)}}>edit</button>
+                          </div>
+                        </div>
+                      </div>
+                    </>
+                  ))}
+                </div>
               </div>
 
-              <div className="col-6 rankHeads">Username</div>
+              {/* ======== edit part =============== */}
+              <div className="col-6">
+                  {up.name}
 
-              <div className="col-2 rankHeads">XP</div>
-              <div className="col-2 rankHeads">Level</div>
+
+
+
+              </div>
             </div>
-
-            {/* ==================== rows ====================== */}
-            {ranking.map((item, index) => (
-              <>
-                {index == 0 && (
-                  <>
-                    <div
-                      className="row rankBar"
-                      style={{
-                        background:
-                          "linear-gradient(217deg, rgba(250,181,42,.8), rgba(250,181,42,0) 70.71%), linear-gradient(127deg, rgba(236,198,121,.8), rgba(236,198,121,0) 90.71%),            linear-gradient(336deg, rgba(207,223,217,.8), rgba(207,223,217,0) 70.71%)",
-                      }}
-                    >
-                      <div className="col-2">
-                        <span className="rankNumb"> {index + 1} </span>
-                      </div>
-
-                      <div className="col-6 username">
-                        <i className="fas fa-user-alt" />
-                        {" " + item.username}
-                      </div>
-
-                      <div className="col-2">
-                        <div>{item.xp}</div>
-                      </div>
-                      <div className="col-2">{item.level}</div>
-                    </div>
-                  </>
-                )}
-
-                {index == 1 && (
-                  <>
-                    <div
-                      className="row rankBar"
-                      style={{
-                        color: "black",
-                        marginBottom: "10px",
-                        background:
-                          "linear-gradient(217deg, rgba(216,216,216,.8), rgba(216,216,216,0) 70.71%), linear-gradient(127deg, rgba(233,233,233,.8), rgba(233,233,233,0) 90.71%),            linear-gradient(336deg, rgba(135,135,135,.8), rgba(135,135,135,0) 90.71%)",
-                      }}
-                    >
-                      <div className="col-2">
-                        <span className="rankNumb">{index + 1}</span>
-                      </div>
-
-                      <div className="col-6 username">
-                        <i className="fas fa-user-alt" />
-                        {" " + item.username}
-                      </div>
-
-                      <div className="col-2">
-                        <div>{item.xp}</div>
-                      </div>
-
-                      <div className="col-2">
-                        <div>{item.level}</div>
-                      </div>
-                    </div>
-                  </>
-                )}
-
-                {index == 2 && (
-                  <>
-                    <div
-                      className="row rankBar"
-                      style={{
-                        color: "black",
-
-                        marginBottom: "10px",
-                        background:
-                          "linear-gradient(217deg, rgba(201,127,90,.8), rgba(201,127,90,0) 90.71%), linear-gradient(127deg, rgba(201,127,90,.8), rgba(172,83,38,0) 90.71%),            linear-gradient(336deg, rgba(201,127,90,.8), rgba(201,127,90,0) 70.71%)",
-                      }}
-                    >
-                      <div className="col-2 ">
-                        <span className="rankNumb">{index + 1}</span>
-                      </div>
-
-                      <div className="col-6 username">
-                        <i className="fas fa-user-alt" />
-                        {" " + item.username}
-                      </div>
-
-                      <div className="col-2">
-                        <div>{item.xp}</div>
-                      </div>
-
-                      <div className="col-2">
-                        <div>{item.level}</div>
-                      </div>
-                    </div>
-                  </>
-                )}
-
-                {index != 0 && index != 1 && index != 2 && (
-                  <div
-                    className="row rankBar"
-                    style={{
-                      color: "black",
-                      marginBottom: "10px",
-                      fontSize: "18px",
-                      backgroundColor: "#F3E8F5",
-                    }}
-                  >
-                    <div className="col-2">
-                      <span className="rankNumb">{index + 1}</span>
-                    </div>
-
-                    <div className="col-6 username">
-                      <i className="fas fa-user-alt" />
-                      {" " + item.username}
-                    </div>
-
-                    <div className="col-2">
-                      <div>{item.xp}</div>
-                    </div>
-
-                    <div className="col-2">
-                      <div>{item.level}</div>
-                    </div>
-                  </div>
-                )}
-              </>
-            ))}
           </div>
         </div>
       </center>

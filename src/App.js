@@ -64,9 +64,10 @@ useScript("./assets/js/masonry.pkgd.min.js");
     const[role, setRole] = useState(""); 
     
   useEffect(() => {
-    if (localStorage.getItem("user") != null)
+    if (localStorage.getItem("user") != null) {
       setUser(localStorage.getItem("user"));
-    setRole(JSON.parse(localStorage.getItem("user"))["role"]); 
+      setRole(JSON.parse(localStorage.getItem("user"))["role"]);
+    }
       setIsLoaded(true);
       setTimeout(() => {
         setIsLoaded(false);
@@ -151,13 +152,16 @@ useScript("./assets/js/masonry.pkgd.min.js");
                   path="/addCrowdfunding"
                   element={<AddCrowdfunding />}
                 ></Route>
+
+                {role == "admin" && (
+                  <Route
+                    path="/verifications"
+                    element={<Verifications />}
+                  ></Route>
+                )}
               </>
             )}
             <Route path="/leaderboard" element={<Leaderboard />}></Route>
-            
-            {role == "admin" && (
-              <Route path="/verifications" element={<Verifications />}></Route>
-            )}
             <Route path="*" element={<Home />}></Route>
           </Routes>
 

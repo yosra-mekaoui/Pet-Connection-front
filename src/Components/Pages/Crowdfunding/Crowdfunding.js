@@ -182,10 +182,6 @@ function Crowdfunding() {
                 </h5>
               ) : (
                 <div
-                  // style={{
-                  //   overflowY: "scroll",
-                  //   height: "300px",
-                  // }}
                     className="scrollableDiv"
                 >
                   {donations.map((item) => (
