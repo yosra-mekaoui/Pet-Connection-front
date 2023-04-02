@@ -16,6 +16,7 @@ function AssociationList() {
       setUser(JSON.parse(localStorage.getItem("user"))["_id"]);
       setRole(JSON.parse(localStorage.getItem("user"))["role"]);
       setRed("/upgrade");        
+      console.log("role : " +JSON.parse(localStorage.getItem("user"))["role"]);
     }
   },[])
 
@@ -222,24 +223,43 @@ function AssociationList() {
           >
             {role != "Association" ? (
               <>
-                <NavLink to={red}>
-                  <button
-                    style={{
-                      padding: "8px 20px 8px 20px",
-                      backgroundColor: "orange",
-                      borderRadius: "10px",
-                      boxShadow: "rgba(0, 0, 0, 0.25) 0px 3px 5px",
-                    }}
-                  >
-                    <i
-                      className="fas fa-handshake"
+                {role == "admin" ? (
+                  <NavLink to={`/verifications`}>
+                    <button
                       style={{
-                        marginRight: "15px",
+                        padding: "8px 20px 8px 20px",
+                        backgroundColor: "orange",
+                        borderRadius: "10px",
+                        boxShadow: "rgba(0, 0, 0, 0.25) 0px 3px 5px",
                       }}
-                    />
-                    Become a Partner
-                  </button>
-                </NavLink>
+                    >
+                      <i
+                        className="fas fa-edit"
+                        style={{ marginRight: "15px" }}
+                      />
+                      Associations Verifications
+                    </button>
+                  </NavLink>
+                ) : (
+                  <NavLink to={red}>
+                    <button
+                      style={{
+                        padding: "8px 20px 8px 20px",
+                        backgroundColor: "orange",
+                        borderRadius: "10px",
+                        boxShadow: "rgba(0, 0, 0, 0.25) 0px 3px 5px",
+                      }}
+                    >
+                      <i
+                        className="fas fa-handshake"
+                        style={{
+                          marginRight: "15px",
+                        }}
+                      />
+                      Become a Partner
+                    </button>
+                  </NavLink>
+                )}
               </>
             ) : (
               <>

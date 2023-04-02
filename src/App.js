@@ -16,6 +16,7 @@ import EditAssociation from "./Components/Pages/Association/EditAssociation";
 import AddCrowdfunding from "./Components/Pages/Crowdfunding/AddCrowdfunding";
 import EditCrowdfunding from "./Components/Pages/Crowdfunding/editCrowdfunding";
 import Leaderboard from "./Components/Pages/Crowdfunding/Leaderboard";
+import Verifications from "./Components/Pages/Association/Verifications";
 
 const Home = React.lazy(() => import('./Components/Pages/Home.js'))
 const Header = React.lazy(() => import('./Components/Pages/Header'))
@@ -59,15 +60,19 @@ useScript("./assets/js/masonry.pkgd.min.js");
   
   const [isLoaded, setIsLoaded] = useState(false);
 
-  const [user, setUser] = useState(null)
+  const [user, setUser] = useState(null); 
+    const[role, setRole] = useState(""); 
+    
   useEffect(() => {
     if (localStorage.getItem("user") != null)
       setUser(localStorage.getItem("user"));
+    setRole(JSON.parse(localStorage.getItem("user"))["role"]); 
       setIsLoaded(true);
       setTimeout(() => {
         setIsLoaded(false);
       }, 1000);
-   
+      
+    
 
     console.log(user)
   },[])
@@ -148,10 +153,11 @@ useScript("./assets/js/masonry.pkgd.min.js");
                 ></Route>
               </>
             )}
-            <Route
-              path="/leaderboard"
-              element={<Leaderboard />}
-            ></Route>
+            <Route path="/leaderboard" element={<Leaderboard />}></Route>
+            
+            {role == "admin" && (
+              <Route path="/verifications" element={<Verifications />}></Route>
+            )}
             <Route path="*" element={<Home />}></Route>
           </Routes>
 

@@ -116,6 +116,7 @@ function AddCrowdfunding() {
                           </label>
                           <input
                             type="number"
+                            min="0"
                             placeholder="insert a goal"
                             onChange={(e) => setGoal(e.target.value)}
                           />
