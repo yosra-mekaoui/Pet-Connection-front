@@ -31,7 +31,8 @@ function Verifications() {
     // console.log("IMAGE : " + item.logo );
   // } ; 
 
-  const upgradeUser = (e) => {
+  const upgradeUser = () => {
+    console.log("USER : " + up.user); 
     var association = {
       name: up.name,
       user: up.user,
@@ -234,8 +235,9 @@ function Verifications() {
                     backgroundColor: "orange",
                     borderRadius: "10px",
                     boxShadow: "rgba(0, 0, 0, 0.25) 0px 3px 5px",
-                    marginTop : "30px"
+                    marginTop: "30px",
                   }}
+                  onClick={upgradeUser}
                 >
                   Upgrade User
                 </button>

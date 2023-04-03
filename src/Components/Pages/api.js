@@ -116,7 +116,7 @@ export const getUpgrades = async () => {
 export const addAssociation = async (association) => {
   try {
     await axios.post(
-      `http://localhost:3000/association/addAssociation`,
+      `http://localhost:3000/association/upgradeToAssociation`,
       association
     );
   } catch (error) {
