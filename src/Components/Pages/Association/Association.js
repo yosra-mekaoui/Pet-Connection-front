@@ -155,7 +155,7 @@ function AssociationList() {
 
               {fundings.length == 0 && (
                 <h5 style={{ color: "#494949", marginTop: "20px" }}>
-                  {data.name} hasn't done any actions yet.
+                  {data.name} hasn't received any donations yet.
                 </h5>
               )}
               {fundings.map((item) => (

@@ -133,7 +133,7 @@ function EditAssociation() {
                         <div className="form-inner">
                           <label style={{ float: "left" }}>
                             <span
-                              style={{ fontWeight: "800", marginTop: "30px" }}
+                              style={{ fontWeight: "800", marginTop: "30px"   }}
                             >
                               Association Name{" "}
                             </span>
