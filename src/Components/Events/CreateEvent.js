@@ -2,28 +2,53 @@ import React, { useState, useEffect } from 'react';
 import mapboxgl from 'mapbox-gl';
 import MapboxGeocoder from '@mapbox/mapbox-gl-geocoder';
 import { addEvent } from './Services';
-import { Container, Form, Button } from 'react-bootstrap';
+import { Container, Form} from 'react-bootstrap';
 import "./style.css"
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faCalendarAlt, faMapMarkerAlt, faCamera } from '@fortawesome/free-solid-svg-icons';
+import {  TextField, Button } from '@material-ui/core';
+import { makeStyles } from "@material-ui/core/styles";
+import Input from "@material-ui/core/Input";
+import InputLabel from "@material-ui/core/InputLabel";
+import InputAdornment from "@material-ui/core/InputAdornment";
+import FormControl from "@material-ui/core/FormControl";
+import IconButton from "@material-ui/core/IconButton";
+import PhotoCamera from '@material-ui/icons/PhotoCamera';
 
 import '@mapbox/mapbox-gl-geocoder/dist/mapbox-gl-geocoder.css';
 import 'mapbox-gl/dist/mapbox-gl.css';
-mapboxgl.accessToken = 'pk.eyJ1IjoiYXJpajEiLCJhIjoiY2xmbXIwZjlpMDA1MDNyb2RvZm5hMTVkZiJ9.wl_CAK8ETNt5oTYJFR0c8A';
 
+mapboxgl.accessToken = 'pk.eyJ1IjoiYXJpajEiLCJhIjoiY2xmbXIwZjlpMDA1MDNyb2RvZm5hMTVkZiJ9.wl_CAK8ETNt5oTYJFR0c8A';
+const useStyles = makeStyles((theme) => ({
+  root: {
+    "& > *": {
+      margin: theme.spacing(1),
+    },
+  },
+  input: {
+    display: "none",
+  },
+}));
 function CreateEvent() {
   const [location, setLocation] = useState(null);
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
   const [date, setDate] = useState('');
   const [image, setImage] = useState(null);
+  const [organizerPic, setOrganizerPic] = useState(null);
   const [placeName, setPlaceName] = useState('');
   const [marker, setMarker] = useState(null);
   const [map, setMap] = useState(null);
   const [user, setUser] = useState(null);
-  
+  const classes = useStyles();
+  const [imageUrl, setImageUrl] = useState(null);
+  const [selectedImage, setSelectedImage] = useState(null);
+
   useEffect(() => {
     const userFromLocalStorage = JSON.parse(localStorage.getItem("user"));
     setUser(userFromLocalStorage);
   }, []);
+
   useEffect(() => {
     const mapObj = new mapboxgl.Map({
     container: 'map',
@@ -105,10 +130,13 @@ function CreateEvent() {
     }
     const userId = JSON.parse(localStorage.getItem("user"));
     let connectedUserId;
+    let connectedUserPic;
     if (userId._id) {
       connectedUserId = userId.username;
+      connectedUserPic= userId.image;
     } else if (userId.facebookId) {
       connectedUserId = userId.username;
+      connectedUserPic= userId.image;
     } else {
      alert("User ID not found.");
       return;
@@ -123,6 +151,7 @@ function CreateEvent() {
       formData.append('organizer', connectedUserId);
       formData.append('location',  placeName);
       formData.append('image', image);
+      formData.append('organizerPic', connectedUserPic);
 
 
     await addEvent(formData);
@@ -143,43 +172,96 @@ function CreateEvent() {
     }
   };
 
+  const handleImageChange = (event) => {
+    const selectedFile = event.target.files[0];
+    setSelectedImage(selectedFile);
+    const ALLOWED_TYPES = ["image/png", "image/jpeg", "image/jpg"];
+  
+    const reader = new FileReader();
+    reader.onload = () => {
+      if (reader.readyState === 2 && ALLOWED_TYPES.includes(selectedFile.type)) {
+        setImageUrl(reader.result);
+        setImage(selectedFile);
+      } else {
+        setImage(null);
+        setImageUrl("");
+        alert("Please upload a valid image file");
+      }
+    };
+    reader.readAsDataURL(selectedFile);
+  };
+  
+  
+  
+  
 
-
-  return (
-    <Container className="form-container">
-      <h1 className="form-title">Create Event</h1>
-      <Form onSubmit={handleSubmit}>
-        <Form.Group controlId="formTitle">
-          <Form.Label>Title</Form.Label>
-          <Form.Control className="form-input" type="text" placeholder="Enter title" value={title} onChange={(event) => setTitle(event.target.value)} />
-        </Form.Group>
-        <Form.Group controlId="formDescription">
-          <Form.Label>Description</Form.Label>
-          <Form.Control as="textarea" rows={
-            3
-          }
-            placeholder="Enter description" value={description} onChange={(event) => setDescription(event.target.value)} />
-        </Form.Group>
-        <Form.Group controlId="formDate">
-          <Form.Label>Date</Form.Label>
-          <Form.Control type="datetime-local" placeholder="Enter date" value={date} onChange={(event) => setDate(event.target.value)} />
-        </Form.Group>
-        <Form.Group controlId="formImage">
-
-          <Form.Label>Image</Form.Label>
-          <Form.Control type="file" placeholder="Enter image" accept =".jpg,.jpeg,.png" onChange={(event) => setImage(event.target.files[0])} />
-        </Form.Group>
-        <Form.Group controlId="formLocation">
-          <Form.Label>Location</Form.Label>
-          <Form.Control type="text" placeholder="Enter location" value={placeName} onChange={(event) => setPlaceName(event.target.value)} />
-        </Form.Group>
-        <div id="map" style={{ height: '400px' }}></div>
-        <Button variant="primary" type="submit">
-          Submit
-        </Button>
-      </Form>
-    </Container>
-
+  
+    return (
+      <Container className="form-container">
+        <h1 className="form-title">Create Event</h1>
+        <Form onSubmit={handleSubmit} id="create-event-form">
+          <Form.Group controlId="formImage">
+            <Form.Label className="form-label">Event Photo</Form.Label>
+            <div className="banner-image-upload">
+              <label htmlFor="file">
+                {imageUrl ? (
+                  <img src={imageUrl} alt="Event Banner" className="banner-image-preview" />
+                ) : (
+                  <>
+                    <FontAwesomeIcon icon={faCamera} />
+                    <span className="file-label">Choose a photo</span>
+                  </>
+                )}
+              </label>
+              <input type="file" id="file" className="form-input" accept=".jpg,.jpeg,.png" onChange={(event) => handleImageChange(event)} style={{ display: "none" }} />
+            </div>
+          </Form.Group>
+    
+          <Form.Group controlId="formTitle" className="mb-3">
+            <FormControl fullWidth>
+              <InputLabel htmlFor="event-name">Enter event name</InputLabel>
+              <Input id="event-name" onChange={(event) => setTitle(event.target.value)} />
+            </FormControl>
+          </Form.Group>
+    
+          <Form.Group controlId="formDescription" className="mb-3">
+            <FormControl fullWidth>
+              <InputLabel htmlFor="event-description">Tell people more about your event</InputLabel>
+              <Input id="event-description" multiline rows={3} onChange={(event) => setDescription(event.target.value)} />
+            </FormControl>
+          </Form.Group>
+    
+          <Form.Group controlId="formDate" className="mb-3">
+            <div className="form-icon">
+              <FontAwesomeIcon icon={faCalendarAlt} />
+            </div>
+            <FormControl fullWidth>
+              <Input id="event-date" type="datetime-local" onChange={(event) => setDate(event.target.value)} />
+            </FormControl>
+          </Form.Group>
+    
+          <Form.Group controlId="formLocation" className="mb-3">
+            <div className="form-icon">
+              <FontAwesomeIcon icon={faMapMarkerAlt} />
+            </div>
+            <Form.Label className="form-label">Location</Form.Label>
+            <FormControl fullWidth>
+              <InputLabel htmlFor="event-location">Where is your event taking place?</InputLabel>
+              <Input id="event-location" value={placeName} onChange={(event) => setPlaceName(event.target.value)} />
+            </FormControl>
+            <div id="map" style={{ height: "400px" }}></div>
+          </Form.Group>
+    
+          <div className="d-grid gap-2">
+            <Button variant="contained" color="primary" type="submit">
+              Create Event
+            </Button>
+          </div>
+    
+        </Form>
+      </Container>
+  
+    
   );
-}
+};
 export default CreateEvent;

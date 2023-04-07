@@ -100,6 +100,7 @@ const [isEditing,setIsEditing] = useState(false);
   }, [commentsUpdated]);
   
 
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
@@ -110,7 +111,7 @@ const [isEditing,setIsEditing] = useState(false);
         image : user.image
       };
   
-
+ 
       const res = await addComment(formData);
       console.log(formData)
       setComments((prevComments) => {
@@ -121,6 +122,7 @@ const [isEditing,setIsEditing] = useState(false);
         return [res];
       });
             setComment("");
+
 
       toast.success("Successfully added comment!");
     } catch (err) {

@@ -15,4 +15,5 @@ module.exports = {
     open: true,
   },
   devtool: 'source-map',
+ 
 };

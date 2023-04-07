@@ -1,10 +1,32 @@
-import { NavLink } from "react-router-dom";
+import { NavLink ,Link} from "react-router-dom";
 import React, { useEffect, useState } from "react";
 import { getEvents,deleteEvent } from "./Services";
+import Card from '@mui/material/Card';
+import CardActions from '@mui/material/CardActions';
+import CardContent from '@mui/material/CardContent';
+import CardMedia from '@mui/material/CardMedia';
+import Button from '@mui/material/Button';
+import Typography from '@mui/material/Typography';
+import MoreVertIcon from '@mui/icons-material/MoreVert';
+import Avatar from '@mui/material/Avatar';
+import IconButton, { IconButtonProps } from '@mui/material/IconButton';
+import { red } from '@mui/material/colors';
+import CardHeader from '@mui/material/CardHeader';
+import DeleteIcon from '@mui/icons-material/Delete';
+import EditIcon from '@mui/icons-material/Edit';
+import { format } from "date-fns";
+import {
 
+  Menu,
+  MenuItem,
+} from '@material-ui/core';
+import Modal from "react-modal";
+import CreateEvent from "./CreateEvent";
 function EventList() {
   const [events, setEvents] = useState([]);
   const user = JSON.parse(localStorage.getItem("user"));
+  const [anchorEl, setAnchorEl] = useState(null);
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   useEffect(() => {
     const fetchEvents = async () => {
@@ -26,6 +48,22 @@ function EventList() {
    alert("User ID not found.");
     return;
   }
+  
+  const handleOpenMenu = (event) => {
+    setAnchorEl(event.currentTarget);
+  };
+  
+  const handleCloseMenu = () => {
+    setAnchorEl(null);
+  };
+
+  const handleModalOpen = () => {
+    setIsModalOpen(true);
+  };
+
+  const handleModalClose = () => {
+    setIsModalOpen(false);
+  };
   const baseUrl = "http://localhost:3000/uploads/"; // Replace with your base URL
   const handleDelete = async (id) => {
  
@@ -38,12 +76,12 @@ function EventList() {
     }
   };
   
-  
+
   
 
   return (
     <div>
-      <div className="inner-page-banner">
+      {/* <div className="inner-page-banner">
         <div className="breadcrumb-vec-btm">
           <img
             className="img-fluid"
@@ -89,65 +127,110 @@ function EventList() {
             </div>
           </div>
         </div>
-      </div>
-      <div className="blog-grid-pages pt-120 mb-120">
-        <div className="container">
-          <div className="row g-lg-4 gy-5 justify-content-center mb-70">
-            {events.map((event) => (
-              <div className="col-lg-8" key={event._id}>
-                <div className="blog-st-card mb-60">
-                  <div className="blog-img">
-                  <img
-              className="img-fluid"
-              width="400"
-              height="300"
-              src={`${baseUrl}${event.image}`}
-              alt={event.title}
+      </div> */}
+     
+     <div className="blog-grid-pages pt-120 mb-120"><div>
+     <button className="create-event-btn" onClick={handleModalOpen}>
+  Create Event
+</button>
+<Modal
+  isOpen={isModalOpen}
+  onRequestClose={handleModalClose}
+  contentLabel="Create Event Modal"
+  style={{
+    overlay: {
+      backgroundColor: 'rgba(0, 0, 0, 0.5)',
+    },
+    content: {
+      top: '50%',
+      left: '50%',
+      transform: 'translate(-50%, -50%)',
+      width: '70%',
+      height: '70%',
+      padding: '40px',
+    },
+  }}
+>
+  <button onClick={handleModalClose} className="close-btn">X</button>
+  <CreateEvent onClose={handleModalClose} />
+</Modal>
+
+
+    </div>
+
+  <div className="container">
+    <div className="row">
+      {events.map((event) => (
+        <div className="col-lg-4 mb-4" key={event._id}>
+          <Card sx={{ maxWidth: 345 }}>
+          <CardHeader
+        avatar={
+<Avatar
+  aria-label="avatar"
+  image={`${baseUrl}${event.organizerPic}`}
+  sx={{ bgcolor: red[500] }}
+  title={event.organizer}
+/>
+
+
+        }
+        action={<div>
+           {user && event.organizer === user.username && (
+      <IconButton aria-label="settings" onClick={handleOpenMenu}>
+        <MoreVertIcon />
+      </IconButton>
+    )}
+      <Menu
+        anchorEl={anchorEl}
+        keepMounted
+        open={Boolean(anchorEl)}
+        onClose={handleCloseMenu}
+      >
+        {user && event.organizer === user.username && (
+        <MenuItem onClick={() => handleDelete(event._id)}>Delete</MenuItem>
+        )}
+        {user && event.organizer === user.username && (
+        <MenuItem component={Link} to={`/UpdateEvent/${event._id}`}>
+        Modify
+      </MenuItem>
+        )}
+      </Menu>
+    </div>
+
+        }
+        title={event.organizer}
+        subheader={format(new Date(event.createdAt), "dd/MM/yyyy,HH:MM")}
+      />
+          <div className="blog-img">
+            <CardMedia
+            className="img-fluid"
+              sx={{ height: 194 }}
+              image={`${baseUrl}${event.image}`}
+              title={event.title}
             />
-                  </div>
-                  <div className="blog-content">
-                    <div className="blog-meta">
-                      <ul>
-                        <li>
-                          <a href="">{event.date}</a>
-                        </li>
-                        <li>
-                          <a href="">By, {event.organizer}</a>
-                        </li>
-                        <li> <a href=""> at : {event.location} </a></li>
-                      </ul>
-                    </div>
-                    <h4>
-                      <a href="">{event.title}</a>
-                    </h4>
-                    <p>{event.description}</p>
-                    
-                    <NavLink  className="primary-btn1 btn-lg" to={`/EventDetails/${event._id}`}>
-                    <i className="fa fa-paw" aria-hidden="true"></i>
-
-        More
-      </NavLink>
-    
-                    
-                    {user && event.organizer === user.username && (
-                      <a className="primary-btn1 btn-sm" onClick={() => handleDelete(event._id)}>
-                                              <i class="bi bi-trash-fill"></i>
-                        </a>
-                      )}
-                       {user && event.organizer === user.username && (
-                       <NavLink  className="primary-btn1 btn-sm" to={`/UpdateEvent/${event._id}`}>
-<i class="bi bi-pencil-square"></i>
-                        </NavLink>
-                      )}
-                      
-
-                  </div>
-                </div>
-              </div>
-            ))}
-          </div>
+            </div>
+            <CardContent>
+              <Typography gutterBottom variant="h5" component="div">
+                {event.title}
+              </Typography>
+              <Typography variant="body2" color="text.secondary">
+                {event.description}
+              </Typography>
+            </CardContent>
+            <CardActions>
+            <Button component={NavLink} to={`/EventDetails/${event._id}`} variant="extended" color="secondary" size="small">
+  Learn More
+</Button>
+             
+            </CardActions>
+          </Card>
         </div>
-      </div>
+      ))}
+    </div>
+  </div>
+</div>
+
+  
     </div>
   );
 }
