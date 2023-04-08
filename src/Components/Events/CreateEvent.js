@@ -253,8 +253,8 @@ function CreateEvent() {
           </Form.Group>
     
           <div className="d-grid gap-2">
-            <Button variant="contained" color="primary" type="submit">
-              Create Event
+            <Button variant="contained" color="primary" type="submit" class="custom-btn btn-2">
+             Save
             </Button>
           </div>
     

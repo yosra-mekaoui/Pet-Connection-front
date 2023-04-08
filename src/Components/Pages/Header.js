@@ -31,7 +31,7 @@ function Header() {
                 <img
                   alt="image"
                   className="img-fluid"
-                  src="assets/images/logo-01.png"
+                  src="/assets/images/logo-01.png"
                   height={50}
                   width={50}
                 />
@@ -44,7 +44,7 @@ function Header() {
                   <img
                   alt="image"
                   className="img-fluid"
-                  src="assets/images/logo-01.png"
+                  src="/assets/images/logo-01.png"
                   height={50}
                   width={50}
                 />                  </a>

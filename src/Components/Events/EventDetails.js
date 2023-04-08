@@ -5,6 +5,7 @@ import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { BiChevronDown, BiChevronUp } from "react-icons/bi";
 import "./style.css";
+import "./comment.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPaperPlane } from "@fortawesome/free-solid-svg-icons";
 
@@ -37,6 +38,15 @@ const [isEditing,setIsEditing] = useState(false);
   const [commentsUpdated, setCommentsUpdated] = useState(false);
  const [isCommentSectionHidden, setIsCommentSectionHidden] = useState(false);
  const [buttonLabel, setButtonLabel] = useState("Join");
+ const [showFullImage, setShowFullImage] = useState(false);
+
+  const handleClick = () => {
+    setShowFullImage(true);
+  };
+
+  const handleClose = () => {
+    setShowFullImage(false);
+  };
 
   const toggleCommentSection = () => {
     setIsCommentSectionHidden(!isCommentSectionHidden);
@@ -286,17 +296,53 @@ const [isEditing,setIsEditing] = useState(false);
           <div className="row g-lg-4 gy-5 justify-content-center mb-70">
             <div className="col-lg-8">
               <div className="blog-details-wrap mb-120">
-                <div className="post-thum">
-
-                  <img
-                    className="img-fluid"
-                    src={baseUrl + event.image}
-                    alt={event.title}
-                  />
-
-
-
-                </div>
+              <div className="post-thum">
+        <div style={{margin: 0, padding: 0}}>
+          <img
+            className="img-fluid"
+            src={baseUrl + event.image}
+            alt={event.title}
+            style={{
+              width: '400vw',
+              height: '300px', // Change this to adjust the height of the banner
+              objectFit: 'cover',
+              borderRadius: '10px',
+              boxShadow: '0px 0px 10px rgba(0, 0, 0, 0.5)',
+            }}
+          />
+        </div>
+      </div>
+      {showFullImage && (
+        <div
+          style={{
+            position: 'fixed',
+            top: 0,
+            left: 0,
+            bottom: 0,
+            right: 0,
+            display: 'flex',
+            justifyContent: 'center',
+            alignItems: 'center',
+            backgroundColor: 'rgba(0, 0, 0, 0.5)',
+            zIndex: 999,
+          }}
+          onClick={handleClose}
+        >
+          <img
+            src={baseUrl + event.image}
+            alt={event.title}
+            style={{
+              maxWidth: '90%',
+              maxHeight: '90%',
+              objectFit: 'contain',
+              borderRadius: '10px',
+              boxShadow: '0px 0px 10px rgba(0, 0, 0, 0.5)',
+            }}
+          />
+        </div>
+      )}
+      <button onClick={handleClick}>Show Full Image</button>
+  
 
                 <div className="blog-meta">
                   <ul>
@@ -314,15 +360,59 @@ const [isEditing,setIsEditing] = useState(false);
                         Please log in to RSVP
                       </button>
                     ) : (
-                      <button
-  className="primary-btn3 btn-lg"
+                      
+<button
   onClick={handleGoingClick}
   disabled={!event}
+  style={{
+    width: '170px',
+    height: '60px',
+    color: '#fff',
+    background: '#000',
+    fontSize: '17px',
+    textDecoration: 'none',
+    margin: '50px',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    boxShadow: '0px 0px 0 #000',
+    transition: '0.5s',
+    position: 'relative',
+    border: 'none',
+  }}
+  onMouseEnter={(e) => {
+    e.target.style.boxShadow = '8px 10px 0 #000';
+    e.target.style.background = 'transparent';
+    e.target.style.border = '2px solid #000';
+    e.target.style.color = '#000';
+    e.target.style.marginTop = '5px';
+    e.target.children[0].style.width = '30px';
+  }}
+  onMouseLeave={(e) => {
+    e.target.style.boxShadow = '0px 0px 0 #000';
+    e.target.style.background = '#000';
+    e.target.style.border = 'none';
+    e.target.style.color = '#fff';
+    e.target.style.marginTop = '50px';
+    e.target.children[0].style.width = '0';
+  }}
 >
-  <i className="fa fa-paw" aria-hidden="true">
-    {buttonLabel}
-  </i>
+{buttonLabel}
+  <span
+    style={{
+      marginLeft: '10px',
+      width: '0',
+      overflow: 'hidden',
+      transition: '0.4s',
+      display: 'inline-block',
+    }}
+  >
+    ⟶
+  </span>
 </button>
+
+
+
 
                     )}
 
@@ -568,22 +658,121 @@ className="comment-button"
           ></textarea>
          
         </div>
-        <button type="submit" className="btn btn-secondary">
-          <FontAwesomeIcon icon={faPaperPlane} className="me-2" />
-          Send
-        </button>
+        <button>
+  <div class="svg-wrapper-1">
+    <div class="svg-wrapper">
+      <svg height="24" width="24" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+        <path d="M0 0h24v24H0z" fill="none"></path>
+        <path d="M1.946 9.315c-.522-.174-.527-.455.01-.634l19.087-6.362c.529-.176.832.12.684.638l-5.454 19.086c-.15.529-.455.547-.679.045L12 14l6-8-8 6-8.054-2.685z" fill="currentColor"></path>
+      </svg>
+    </div>
+  </div>
+  <span>Send</span>
+</button>
       </form>
     </div>
 
 </div>
-      
+       {/* {comments && comments.length > 0 ? (
+  <ul className="comment-list">
+  {comments.map((comment) => (
+      <li key={comment._id}>
+              {!isCommentSectionHidden && (
+      <div className="card">
+  <span className="title">Comments</span>
+ 
+  <div className="comments">
+    <div className="comment-react">
+      <button>
+        <svg
+          fill="none"
+          viewBox="0 0 24 24"
+          height={16}
+          width={16}
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            fill="#707277"
+            strokeLinecap="round"
+            strokeWidth={2}
+            stroke="#707277"
+            d="M19.4626 3.99415C16.7809 2.34923 14.4404 3.01211 13.0344 4.06801C12.4578 4.50096 12.1696 4.71743 12 4.71743C11.8304 4.71743 11.5422 4.50096 10.9656 4.06801C9.55962 3.01211 7.21909 2.34923 4.53744 3.99415C1.01807 6.15294 0.221721 13.2749 8.33953 19.2834C9.88572 20.4278 10.6588 21 12 21C13.3412 21 14.1143 20.4278 15.6605 19.2834C23.7783 13.2749 22.9819 6.15294 19.4626 3.99415Z"
+          />
+        </svg>
+      </button>
+      <hr />
+      <span>14</span>
+    </div>
+    <div className="comment-container">
+      <div className="user">
+        <div className="user-pic">
+        <img src={url + comment.image} alt="" width="50" height="50" />
 
-
+        </div>
+        <div className="user-info">
+          <span>{comment.username}</span>
+          <p>{comment.date}</p>
+        </div>
       </div>
+      <p className="comment-content">
+        {comment.text}
+      </p>
+    </div>
+  </div>
+  <div className="text-box">
+    <div className="box-container">
+      <textarea placeholder="Reply" defaultValue={""} />
+      <div>
+        <div className="formatting">
+       
+       
+          
+      
         
+          <button type="submit" className="send" title="Send">
+            <svg
+              fill="none"
+              viewBox="0 0 24 24"
+              height={18}
+              width={18}
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                strokeLinejoin="round"
+                strokeLinecap="round"
+                strokeWidth="2.5"
+                stroke="#ffffff"
+                d="M12 5L12 20"
+              />
+              <path
+                strokeLinejoin="round"
+                strokeLinecap="round"
+                strokeWidth="2.5"
+                stroke="#ffffff"
+                d="M7 9L11.2929 4.70711C11.6262 4.37377 11.7929 4.20711 12 4.20711C12.2071 4.20711 12.3738 4.37377 12.7071 4.70711L17 9"
+              />
+            </svg>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+      )}
+      </li>
+  ))}
+  </ul>
+) : (
+  <div className="text-center">
+    <p className="text-muted">No comments yet</p>
+    </div>
+)}
+  */}      
 
     
-  </div>
+  </div> 
+</div>
 
 
 </>

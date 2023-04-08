@@ -15,6 +15,9 @@ import CardHeader from '@mui/material/CardHeader';
 import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
 import { format } from "date-fns";
+import FullCalendar from '@fullcalendar/react';
+import dayGridPlugin from '@fullcalendar/daygrid';
+
 import {
 
   Menu,
@@ -22,6 +25,7 @@ import {
 } from '@material-ui/core';
 import Modal from "react-modal";
 import CreateEvent from "./CreateEvent";
+import "./style.css";
 function EventList() {
   const [events, setEvents] = useState([]);
   const user = JSON.parse(localStorage.getItem("user"));
@@ -81,58 +85,36 @@ function EventList() {
 
   return (
     <div>
-      {/* <div className="inner-page-banner">
-        <div className="breadcrumb-vec-btm">
-          <img
-            className="img-fluid"
-            src="assets/images/bg/inner-banner-btm-vec.png"
-            alt=""
-          />
-        </div>
-        <div className="container">
-          <div className="row justify-content-center align-items-center text-center">
-            <div className="col-lg-6 align-items-center">
-              <div className="banner-content">
-                <h1>Events</h1>
-                <nav aria-label="breadcrumb">
-                  <ol className="breadcrumb">
-                    <li className="breadcrumb-item">
-                      <a href="index.html">Home</a>
-                    </li>
-                    <li
-                      className="breadcrumb-item active"
-                      aria-current="page"
-                    >
-                      Events
-                    </li>
-                  </ol>
-                </nav>
-              </div>
-            </div>
-            <div className="col-lg-6">
-              <div className="banner-img d-lg-block d-none">
-                <div className="banner-img-bg">
-                  <img
-                    className="img-fluid"
-                    src="assets/images/bg/inner-banner-vec.png"
-                    alt=""
-                  />
-                </div>
-                <img
-                  className="img-fluid"
-                  src="assets/images/bg/inner-banner-img.png"
-                  alt=""
-                />
-              </div>
-            </div>
-          </div>
-        </div>
-      </div> */}
-     
-     <div className="blog-grid-pages pt-120 mb-120"><div>
-     <button className="create-event-btn" onClick={handleModalOpen}>
+     <div className="inner-page-banner">
+  
+       <FullCalendar
+      plugins={[dayGridPlugin]}
+      initialView="dayGridMonth"
+      headerToolbar={{
+        left: 'prev,next today',
+        center: 'title',
+        right: 'dayGridMonth,timeGridWeek,timeGridDay',
+      }}
+      events={events.map((event) => ({
+        title: event.title,
+        start: event.date,
+      }))}
+      height="auto"
+      width="700px"
+    />
+    </div>
+   
+
+
+     <div className="blog-grid-pages pt-120 mb-120">
+     <button className="create-event-btn" onClick={handleModalOpen} style={{ marginBottom: '20px'}}>
   Create Event
 </button>
+
+<div>
+
+
+
 <Modal
   isOpen={isModalOpen}
   onRequestClose={handleModalClose}
@@ -218,10 +200,16 @@ function EventList() {
               </Typography>
             </CardContent>
             <CardActions>
-            <Button component={NavLink} to={`/EventDetails/${event._id}`} variant="extended" color="secondary" size="small">
-  Learn More
-</Button>
-             
+         
+            <Link to={`/EventDetails/${event._id}`}>
+  <button className="learn-more btn">
+    <span className="circle" aria-hidden="true">
+      <span className="icon arrow"></span>
+    </span>
+    <span className="button-text">Learn More</span>
+  </button>
+</Link>
+
             </CardActions>
           </Card>
         </div>
