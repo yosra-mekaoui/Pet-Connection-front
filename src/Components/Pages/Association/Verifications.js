@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { NavLink, useLocation } from "react-router-dom";
 import axios from "axios";
-import { getUpgrades, addAssociation } from "../api";
+import { getUpgrades, addAssociation, deleteUpg } from "../api";
 import "../Crowdfunding/crowd.css"; 
  
  
@@ -13,27 +13,30 @@ function Verifications() {
 
   const [up, setUp] = useState({}); 
 
-  const urlUp = "http://localhost:3000/upgrades/"; 
-
-  useEffect(() => {
+  const urlUp = "http://localhost:3000/upgrades/";
+  const urlAss = "http://localhost:3000/associations/"; 
+  
+  const getAllUpgrades = () => {
     try {
       axios.get(`http://localhost:3000/user/AllUpgrades`).then((response) => {
         setUpgrades(response.data);
-        setUp(response.data[7]);
+        setUp(response.data[0]);
       });
     } catch (err) {
-      console.log(err); 
+      console.log(err);
     }
+  }
+
+  useEffect(() => {
+    getAllUpgrades(); 
   }, []); 
 
-  // const changeUpgrade = (item) => {
-    // setUp(item);
-    // console.log("IMAGE : " + item.logo );
-  // } ; 
+  
 
   const upgradeUser = () => {
     console.log("USER : " + up.user); 
     var association = {
+      upgrade : up._id,
       name: up.name,
       user: up.user,
       latitude: up.latitude,
@@ -43,8 +46,21 @@ function Verifications() {
       action : 0
     }
 
+    console.log("LOGOOOOOOOOOO : " + up.logo); 
+    setDone(1); 
     addAssociation(association); 
+    getAllUpgrades(); 
+  }
 
+  const deleteUp = () => {
+    console.log("UPGRADE : " + up._id); 
+    try {
+     axios.delete("http://localhost:3000/user/deleteUpgrade/" + up._id);
+    } catch (error) {
+      console.log(error);
+    }
+
+    getAllUpgrades(); 
   }
   
 
@@ -203,7 +219,7 @@ function Verifications() {
                 <div className="textSubmissions" style={{ marginTop: "40px" }}>
                   <span>
                     <img
-                      src={urlUp + up.logo}
+                      src={urlAss + up.logo}
                       style={{
                         width: "50px",
                         marginRight: "10px",
@@ -236,11 +252,31 @@ function Verifications() {
                     borderRadius: "10px",
                     boxShadow: "rgba(0, 0, 0, 0.25) 0px 3px 5px",
                     marginTop: "30px",
+                    marginRight : "10px"
                   }}
                   onClick={upgradeUser}
                 >
                   Upgrade User
                 </button>
+
+                <button
+                  style={{
+                    padding: "8px 20px 8px 20px",
+                    backgroundColor: "red",
+                    borderRadius: "10px",
+                    boxShadow: "rgba(0, 0, 0, 0.25) 0px 3px 5px",
+                    marginTop: "30px",
+                  }}
+                  onClick={deleteUp}
+                >
+                  Delete Submission
+                </button>
+
+                {done == 1 && (
+                  <h3 style={{ color: "green", marginTop: "20px" }}>
+                    An association has been added.
+                  </h3>
+                )}
               </div>
             </div>
           </div>

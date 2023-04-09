@@ -123,3 +123,11 @@ export const addAssociation = async (association) => {
     console.log(error);
   }
 };
+
+export const deleteUpg = async (id) => {
+  try {
+    await axios.delete(`http://localhost:3000/user/deleteUpgrade/${id}`);
+  } catch (error) {
+    console.log(error);
+  }
+};
