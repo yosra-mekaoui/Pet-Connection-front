@@ -593,7 +593,7 @@ const [isEditing,setIsEditing] = useState(false);
                   </ul>
                 
                   <p className="m-0">
-  {event.attendeesCount} participant{event.attendeesCount === 1 ? "" : "s"}
+  {event.attendeesCount} Participant{event.attendeesCount === 1 ? "" : "s"}
 </p>
                   
                   {event.attendees && event.attendeesCount > 0 ? (
@@ -617,28 +617,7 @@ const [isEditing,setIsEditing] = useState(false);
                   </p>
 
 
-                  <div className="row g-4 align-items-center mb-10 pt-10">
-                    <div className="col-lg-6">
-
-                      <p>
-
-
-                      </p>
-                    </div>
-                    <div className="col-lg-6">
-                      <img
-                        className="img-fluid"
-                        src="assets/images/blog/blog-dt-img2.png"
-                        alt=""
-                      />
-                    </div>
-                  </div>
-                  <h2>
-
-                  </h2>
-                  <p>
-
-                  </p>
+               
                 </div>
 
               </div>

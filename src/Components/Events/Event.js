@@ -85,33 +85,57 @@ function EventList() {
 
   return (
     <div>
-     <div className="inner-page-banner">
-  
-       <FullCalendar
-      plugins={[dayGridPlugin]}
-      initialView="dayGridMonth"
-      headerToolbar={{
-        left: 'prev,next today',
-        center: 'title',
-        right: 'dayGridMonth,timeGridWeek,timeGridDay',
-      }}
-      events={events.map((event) => ({
-        title: event.title,
-        start: event.date,
-      }))}
-      height="auto"
-      width="700px"
-    />
-    </div>
-   
+ <FullCalendar
+  plugins={[dayGridPlugin]}
+  initialView="dayGridMonth"
+  headerToolbar={{
+    left: 'prev,next today',
+    center: 'title',
+    right: 'dayGridMonth,timeGridWeek,timeGridDay',
+  }}
+  events={events.map((event) => ({
+    title: event.title,
+    start: event.date,
+  }))}
+  height="500px"
+  className="my-calendar"
+/>
 
 
-     <div className="blog-grid-pages pt-120 mb-120">
-     <button className="create-event-btn" onClick={handleModalOpen} style={{ marginBottom: '20px'}}>
-  Create Event
-</button>
+<div className="blog-grid-pages pt-120 mb-120">
+<div style={{ display: 'flex', justifyContent: 'center' }}>
 
-<div>
+  <button 
+    className="create-event-btn" 
+    onClick={handleModalOpen} 
+    style={{ 
+      marginBottom: '20px',
+      backgroundColor: '#F5F5F5',
+      color: '#222',
+      border: 'none',
+      borderRadius: '5px',
+      padding: '10px 20px',
+      boxShadow: '0px 3px 6px rgba(0,0,0,0.16)',
+      transition: 'background-color 0.3s ease-in-out',
+      cursor: 'pointer',
+    }}
+    onMouseOver={(e) => {
+      e.target.style.backgroundColor = '#222';
+      e.target.style.color = '#F5F5F5';
+    }}
+    onMouseLeave={(e) => {
+      e.target.style.backgroundColor = '#F5F5F5';
+      e.target.style.color = '#222';
+    }}
+  >
+    Create Event
+  </button>
+  </div>
+</div>
+
+
+
+
 
 
 
@@ -138,7 +162,7 @@ function EventList() {
 </Modal>
 
 
-    </div>
+   
 
   <div className="container">
     <div className="row">
@@ -219,7 +243,7 @@ function EventList() {
 </div>
 
   
-    </div>
+  
   );
 }
 

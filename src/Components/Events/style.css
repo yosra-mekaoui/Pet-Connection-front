@@ -447,3 +447,26 @@ textarea.form-input {
   right: 0;
   opacity: 1;
 }
+.my-calendar {
+  font-family: Arial, sans-serif;
+}
+
+.fc-day-header {
+  background-color: #f2f2f2;
+  font-weight: bold;
+}
+
+.fc-day {
+  background-color: #fff;
+  border: 1px solid #ddd;
+}
+
+.fc-today {
+  background-color: #e6f2ff;
+}
+
+.fc-event {
+  background-color: #007bff;
+  color: #fff;
+  border-color: #007bff;
+}
