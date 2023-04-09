@@ -17,6 +17,7 @@ import AddCrowdfunding from "./Components/Pages/Crowdfunding/AddCrowdfunding";
 import EditCrowdfunding from "./Components/Pages/Crowdfunding/editCrowdfunding";
 import Leaderboard from "./Components/Pages/Crowdfunding/Leaderboard";
 import Verifications from "./Components/Pages/Association/Verifications";
+import RewardsList from "./Components/Pages/Rewards/RewardsList";
 
 const Home = React.lazy(() => import('./Components/Pages/Home.js'))
 const Header = React.lazy(() => import('./Components/Pages/Header'))
@@ -162,8 +163,10 @@ useScript("./assets/js/masonry.pkgd.min.js");
               </>
             )}
             <Route path="/leaderboard" element={<Leaderboard />}></Route>
+            <Route path="/RewardsList" element={<RewardsList />}></Route>
             <Route path="*" element={<Home />}></Route>
           </Routes>
+          
 
           <Footer />
         </Suspense>

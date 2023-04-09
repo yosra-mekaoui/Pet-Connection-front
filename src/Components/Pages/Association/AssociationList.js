@@ -237,7 +237,7 @@ function AssociationList() {
                         className="fas fa-edit"
                         style={{ marginRight: "15px" }}
                       />
-                      Associations Verifications
+                      Verifications
                     </button>
                   </NavLink>
                 ) : (
@@ -276,7 +276,7 @@ function AssociationList() {
                       className="fas fa-edit"
                       style={{ marginRight: "15px" }}
                     />
-                    Edit My Association
+                    Association
                   </button>
                 </NavLink>
 
@@ -296,7 +296,7 @@ function AssociationList() {
                         marginRight: "15px",
                       }}
                     />
-                    Add a Crowdfunding
+                    Crowdfunding
                   </button>
                 </NavLink>
               </>
@@ -319,6 +319,21 @@ function AssociationList() {
                   }}
                 />
                 Leaderboard
+              </button>
+            </NavLink>
+
+            <NavLink to={`/rewardsList`}>
+              <button
+                style={{
+                  marginLeft: "20px",
+                  padding: "8px 20px 8px 20px",
+                  backgroundColor: "#77A4FF",
+                  borderRadius: "10px",
+                  boxShadow: "rgba(0, 0, 0, 0.25) 0px 3px 5px",
+                }}
+              >
+                <i className="fa fa-gift" style={{ marginRight: "15px" }} />
+                Rewards
               </button>
             </NavLink>
           </h5>
