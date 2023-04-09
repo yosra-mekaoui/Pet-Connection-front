@@ -19,7 +19,9 @@ function PetAvatar() {
   const [message, setMessage] = useState(""); 
 
   const [file, setFile] = useState(null);
-  const [imageUrl, setImageUrl] = useState('');
+  const [imageUrl, setImageUrl] = useState(
+    "https://images.unsplash.com/photo-1611003228941-98852ba62227?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8Mnx8YmFieSUyMGRvZ3xlbnwwfHwwfHw%3D&w=1000&q=80"
+  );
   const [output, setOutput] = useState("");
 
   const handleFileUpload = async (acceptedFiles) => {
@@ -28,10 +30,10 @@ function PetAvatar() {
   
   const avatCreation = async () => { 
     console.log("1"); 
-    setMessage("Uploading Image tothe server...");
-    const formData = new FormData();
-    formData.append('file', file);
-    formData.append("upload_preset", "dyg5jrqn");
+    setMessage("Uploading Image to the server...");
+    // const formData = new FormData();
+    // formData.append('file', file);
+    // formData.append("upload_preset", "dyg5jrqn");
 
     // const response = await fetch(
     //   'https://api.cloudinary.com/v1_1/dszmvlrpt/image/upload',
@@ -43,35 +45,23 @@ function PetAvatar() {
 
     // const data = await response.json();
     // setImageUrl(data.secure_url);
-
+    // console.log("URL " + imageUrl);
     // image uploaded to server : done !
     setMessage("Your avatar is being created. Please wait...");
-    const response2 = await fetch(
-      "https://stablediffusionapi.com/api/v3/img2img",
-      {
-        method: "POST",
-        body: {
-          key: "spT4sLoWPHCzhbByl3ttp69ZYQQXya4jj7y37ocANGfiSyNGb6fdLYhXqbdM",
-          prompt: "Make an avatar of my pet.",
-          negative_prompt: null,
-          init_image:
-            "https://raw.githubusercontent.com/CompVis/stable-diffusion/main/data/inpainting_examples/overture-creations-5sI6fQgYIuo.png",
-          width: "512",
-          height: "512",
-          samples: "1",
-          num_inference_steps: "30",
-          guidance_scale: 7.5,
-          safety_checker: "yes",
-          strength: 0.7,
-          seed: null,
-          webhook: null,
-          track_id: null,
-        },
-      }
-    );
+    await axios
+      .post(`http://localhost:3000/funding/avatar`, {
+        img: imageUrl,
+      })
+      .then((res) => {
+        //console.log("RES : "+JSON.parse(res) );
+        setOutput(res.data.output);
+      })
+      .catch((err) => {
+        console.log(err);
+      }); 
 
-      const data2 = await response2.json();
-      setOutput(data2.output[0]);
+
+ 
       console.log("OUTPUT : "+ output);
       setMessage("Done !");
       
@@ -207,7 +197,7 @@ function PetAvatar() {
                       <p
                         style={{
                           color: "darkGreen",
-                          marginBottom : "20px"
+                          marginBottom: "20px",
                         }}
                       >
                         {" "}
@@ -250,6 +240,20 @@ function PetAvatar() {
               }}
               src={output}
             />
+          </div>
+
+          <div className="container">
+            <div className="row">
+              <div className="offset-2 col-md-4 ">
+                <div className="input">Input</div>
+                <img src={imageUrl} style={{ width: "200px" }} />
+              </div>
+
+              <div className="col-md-4">
+                <div className="input">Output</div>
+                <img src={output} style={{ width: "200px" }} />
+              </div>
+            </div>
           </div>
         </div>
       </center>
