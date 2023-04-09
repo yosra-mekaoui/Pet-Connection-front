@@ -48,14 +48,16 @@ export const deleteEvent = async (id, connectedUserId) => {
 }
 
 
-    export const addAttendeeById = async (id, connectedUserId) => {
-      try {
-        await axios.post(`${url}/addAttendees/${id}`, { userId: connectedUserId });
-      } catch (error) {
-        console.error(error);
-        throw error;
-      }
-    };
+export const addAttendeeById = async (id, connectedUserId) => {
+  try {
+    const { data } = await axios.post(`${url}/addAttendees/${id}`, { userId: connectedUserId });
+    return data;
+  } catch (error) {
+    console.error(error);
+    throw error;
+  }
+};
+
 
     export const RemoveAttendeeById = async (id, connectedUserId) => {
       try {

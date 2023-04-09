@@ -307,3 +307,143 @@ textarea.form-input {
 .btn:hover .button-text {
   color: #fff;
 }
+
+.like-btn {
+  display: flex;
+  align-items: right;
+  justify-content: right;
+  width: 50px;
+  height: 50px;
+  border-radius: 10px;
+  border: none;
+  background-color: transparent;
+  position: relative;
+  float: right;
+}
+.like-btn path#Fill {
+  fill: black;
+}
+
+.like-btn.liked path#Fill {
+  fill: red;
+}
+
+
+
+.icon {
+  width: 30px;
+  height: 30px;
+  transition: .2s linear;
+}
+
+.icon path {
+  fill: rgb(0, 0, 0);
+  transition: .2s linear;
+}
+
+.like-btn:hover > .icon {
+  transform: scale(1.2);
+}
+
+.like-btn:hover > .icon path {
+  fill: rgb(255, 31, 6);
+}
+
+.like-button.liked .icon path {
+  fill: red !important;
+}
+
+
+.button2 {
+  font-family: inherit;
+  font-size: 20px;
+  background: royalblue;
+  color: white;
+  padding: 0.7em 1em;
+  padding-left: 0.9em;
+  display: flex;
+  align-items: center;
+  border: none;
+  border-radius: 16px;
+  overflow: hidden;
+  transition: all 0.2s;
+}
+
+.button2 span {
+  display: block;
+  margin-left: 0.3em;
+  transition: all 0.3s ease-in-out;
+}
+
+.button2 svg {
+  display: block;
+  transform-origin: center center;
+  transition: transform 0.3s ease-in-out;
+}
+
+.button2:hover .svg-wrapper {
+  animation: fly-1 0.6s ease-in-out infinite alternate;
+}
+
+.button2:hover svg {
+  transform: translateX(1.2em) rotate(45deg) scale(1.1);
+}
+
+.button2:hover span {
+  transform: translateX(5em);
+}
+
+.button2:active {
+  transform: scale(0.95);
+}
+
+@keyframes fly-1 {
+  from {
+    transform: translateY(0.1em);
+  }
+
+  to {
+    transform: translateY(-0.1em);
+  }
+}
+
+.btn2 {
+  background: #fff;
+  border: none;
+  padding: 20px 20px;
+  display: inline-block;
+  font-size: 15px;
+  font-weight: 600;
+  width: 250px;
+  text-transform: uppercase;
+  cursor: pointer;
+  transform: skew(-21deg);
+}
+
+.span2 {
+  display: inline-block;
+  transform: skew(21deg);
+}
+
+.btn2::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  right: 100%;
+  left: 0;
+  background: rgb(20, 20, 20);
+  opacity: 0;
+  z-index: -1;
+  transition: all 0.5s;
+}
+
+.btn2:hover {
+  color: #fff;
+}
+
+.btn2:hover::before {
+  left: 0;
+  right: 0;
+  opacity: 1;
+}

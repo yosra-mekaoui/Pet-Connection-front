@@ -8,6 +8,8 @@ import "./style.css";
 import "./comment.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPaperPlane } from "@fortawesome/free-solid-svg-icons";
+import { format } from "date-fns";
+import { formatDistanceToNow } from 'date-fns';
 
 import axios from "axios";
 
@@ -26,6 +28,7 @@ function EventDetails() {
   const [name, setName] = useState("");
   const [comment, setComment] = useState("");
   const { id, commentId } = useParams();
+   const {eventId} =useParams();
  const [users,setUsers] = useState('');
  const [imageSrc, setImageSrc] = useState(''); // importer image user 
  const [replyToCommentId, setReplyToCommentId] = useState(null);
@@ -39,6 +42,90 @@ const [isEditing,setIsEditing] = useState(false);
  const [isCommentSectionHidden, setIsCommentSectionHidden] = useState(false);
  const [buttonLabel, setButtonLabel] = useState("Join");
  const [showFullImage, setShowFullImage] = useState(false);
+ const [likes, setLikes] = useState(event?.Like || 0);
+ const [liked, setLiked] = useState(false);
+ const [disliked, setDisliked] = useState(false);
+ 
+ const handleLike = async (eventId) => {
+   const userId = JSON.parse(localStorage.getItem('user'))["_id"];
+   console.log('handleLike called');
+   console.log('liked:', liked);
+   console.log('disliked:', disliked);
+   try {
+     const response = await fetch(`http://localhost:3000/event/likeEvent/${eventId}`, {
+       method: 'POST',
+       headers: {
+         'Content-Type': 'application/json'
+       },
+       body: JSON.stringify({ userId })
+     });
+     const data = await response.json();
+     if (response.status === 404) {
+       console.log(data.message); // handle Event not found error
+     } else if (response.status === 400) {
+       console.log(data.message); // handle You have already liked this event error
+     } else {
+       setLiked(true);
+       setDisliked(false);
+       setLikes(prevLikes => prevLikes + 1);
+     }
+   } catch (error) {
+     console.error(error);
+   }
+ };
+ 
+ const handleDislike = async (eventId) => {
+  const userId = JSON.parse(localStorage.getItem('user'))._id;
+  console.log('handleDisLike called');
+  console.log('liked:', liked);
+  console.log('disliked:', disliked);
+  try {
+    const response = await fetch(`http://localhost:3000/event/dislikeEvent/${eventId}`, {
+      method: 'DELETE',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({ userId })
+    });
+    const data = await response.json();
+    if (response.status === 400) {
+      if (data.message === 'User has not liked the event') {
+        // User has not liked the event
+        console.log('User has not liked the event');
+        // TODO: display error message or disable the dislike button
+      } else {
+        // Other 400 error
+        console.log(data.message);
+      }
+    } else if (response.status === 200) {
+      setDisliked(true);
+      setLiked(false);
+      setLikes(prevLikes => prevLikes - 1);
+    } else {
+      console.log(data.message); // handle other errors
+    }
+  } catch (error) {
+    console.error(error);
+  }
+};
+
+ 
+ useEffect(() => {
+   const userId = JSON.parse(localStorage.getItem('user'))["_id"];
+   const userLikes = event.Like && event.Like.filter(like => like === userId);
+   if (userLikes && userLikes.length > 0) {
+     setLiked(true);
+   } else {
+     setLiked(false);
+   }
+   setLikes(event?.Like || 0);
+ }, [event]);
+
+
+
+
+
+
 
   const handleClick = () => {
     setShowFullImage(true);
@@ -159,16 +246,24 @@ const [isEditing,setIsEditing] = useState(false);
         console.log("remove attendee response", res);
         setButtonLabel("Join");
         setEvent(res);
-        setNumParticipants(res.attendeesCount);
-        toast.success("Successfully removed RSVP from the event!");
+        if (res && res.attendeesCount) {
+          setNumParticipants(res.attendeesCount);
+          toast.success("Successfully removed  from the event!");
+        } else {
+          toast.error("Failed to remove  from the event.");
+        }
       } else {
         // If user is not in attendees list, add them
         const res = await addAttendeeById(id, connectedUserId);
         console.log("add attendee response", res);
         setButtonLabel("Not Going");
         setEvent(res);
-        setNumParticipants(res.attendeesCount);
-        toast.success("Successfully RSVP'd to the event!");
+        if (res && res.attendeesCount) {
+          setNumParticipants(res.attendeesCount);
+          toast.success("Successfully joined the event!");
+        } else {
+          toast.error("Failed to join  the event.");
+        }
       }
     } catch (err) {
       console.error(err);
@@ -177,6 +272,23 @@ const [isEditing,setIsEditing] = useState(false);
     }
   };
   
+  useEffect(() => {
+    const userId = JSON.parse(localStorage.getItem("user"));
+    let connectedUserId;
+    if (userId._id) {
+      connectedUserId = userId._id;
+    } else if (userId.facebookId) {
+      connectedUserId = userId.facebookId;
+    } else {
+      return;
+    }
+
+    if (event.attendees?.includes(connectedUserId)) {
+      setButtonLabel("Not Going");
+    }
+    
+    
+  }, [event]);
   
 
   const isAuthenticated = () => {
@@ -284,7 +396,34 @@ const [isEditing,setIsEditing] = useState(false);
         console.error(error);
       }
     };
+    function timeAgo(date) {
+      const now = new Date();
+      const diff = now - new Date(date);
     
+      // Define time intervals in milliseconds
+      const minute = 60 * 1000;
+      const hour = 60 * minute;
+      const day = 24 * hour;
+    
+      // Choose the appropriate time interval and format the string
+      let interval, count;
+      if (diff < minute) {
+        interval = "second";
+        count = Math.floor(diff / 1000);
+      } else if (diff < hour) {
+        interval = "minute";
+        count = Math.floor(diff / minute);
+      } else if (diff < day) {
+        interval = "hour";
+        count = Math.floor(diff / hour);
+      } else {
+        interval = "day";
+        count = Math.floor(diff / day);
+      }
+      return `${count} ${interval}${count !== 1 ? "s" : ""} ago`;
+    }
+    
+
   return (<>
 
     <ToastContainer />
@@ -341,13 +480,13 @@ const [isEditing,setIsEditing] = useState(false);
           />
         </div>
       )}
-      <button onClick={handleClick}>Show Full Image</button>
+      <button className="btn2" onClick={handleClick}><span className="span2">Show Full Image</span></button>
   
-
+    
                 <div className="blog-meta">
                   <ul>
                     <li>
-                      <a href="blog-grid.html"> {event.date}</a>
+                      <a href="blog-grid.html"> {format(new Date(event.date), "dd/MM/yyyy,HH:MM")}</a>
                     </li>
                     <li>
                       <a href="blog-grid.html">by : {event.organizer} </a>
@@ -355,12 +494,43 @@ const [isEditing,setIsEditing] = useState(false);
                     <li>
                       <a href="blog-grid.html"> {event.location}</a>
                     </li>
-                    {!isAuthenticated() ? (
+                    <button 
+   className={`like-btn ${liked ? 'liked' : ''}`}
+
+  onClick={() => {
+    if (liked) {
+      handleDislike(event._id);
+      setLiked(false);
+      setDisliked(true);
+    } else if (disliked) {
+      handleLike(event._id);
+      setDisliked(false);
+      setLiked(true);
+    } else {
+      handleLike(event._id);
+      setLiked(true);
+    }
+  }}
+>
+  <svg viewBox="0 0 17.503 15.625" height="20.625" width="20.503" xmlns="http://www.w3.org/2000/svg" className="icon">
+    <path 
+      transform="translate(0 0)" 
+      d="M8.752,15.625h0L1.383,8.162a4.824,4.824,0,0,1,0-6.762,4.679,4.679,0,0,1,6.674,0l.694.7.694-.7a4.678,4.678,0,0,1,6.675,0,4.825,4.825,0,0,1,0,6.762L8.752,15.624ZM4.72,1.25A3.442,3.442,0,0,0,2.277,2.275a3.562,3.562,0,0,0,0,5l6.475,6.556,6.475-6.556a3.563,3.563,0,0,0,0-5A3.443,3.443,0,0,0,12.786,1.25h-.01a3.415,3.415,0,0,0-2.443,1.038L8.752,3.9,7.164,2.275A3.442,3.442,0,0,0,4.72,1.25Z" 
+      id="Fill"
+   
+
+      >
+    </path>
+  </svg>
+</button>
+
+ 
+     {!isAuthenticated() ? (
                       <button className="primary-btn3 btn-lg" disabled>
-                        Please log in to RSVP
+                        Please log in to Join
                       </button>
                     ) : (
-                      
+                                     
 <button
   onClick={handleGoingClick}
   disabled={!event}
@@ -410,11 +580,13 @@ const [isEditing,setIsEditing] = useState(false);
     ⟶
   </span>
 </button>
-
+                    
+                  
 
 
 
                     )}
+
 
 
 
@@ -508,7 +680,7 @@ className="comment-button"
                 </div>
                 <div className="author-details">
                   <h5 className="mb-0">{comment.username}</h5>
-                  <div className="c-date">{comment.createdAt}</div>
+                  <div className="c-date">{timeAgo(comment.createdAt)}</div>
          
   
 
@@ -586,7 +758,7 @@ className="comment-button"
                 </div>
                 <div className="author-details">
                   <h5 className="mb-0">{reply.username}</h5>
-                  <div className="c-date">{reply.createdAt}</div>
+                  <div className="c-date">{timeAgo(reply.createdAt)}</div>
                 </div>
               </div>
               {user && reply.username === user.username && (
@@ -658,7 +830,7 @@ className="comment-button"
           ></textarea>
          
         </div>
-        <button>
+        <button className="button2">
   <div class="svg-wrapper-1">
     <div class="svg-wrapper">
       <svg height="24" width="24" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
