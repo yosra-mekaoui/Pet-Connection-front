@@ -18,6 +18,7 @@ import EditCrowdfunding from "./Components/Pages/Crowdfunding/editCrowdfunding";
 import Leaderboard from "./Components/Pages/Crowdfunding/Leaderboard";
 import Verifications from "./Components/Pages/Association/Verifications";
 import RewardsList from "./Components/Pages/Rewards/RewardsList";
+//import PetAvatar from "./Components/Pages/Rewards/PetAvatar";
 
 const Home = React.lazy(() => import('./Components/Pages/Home.js'))
 const Header = React.lazy(() => import('./Components/Pages/Header'))
@@ -34,6 +35,10 @@ const ResetPwd = React.lazy(()=> import ('./Components/User/resetPwd'))
 const Profile = React.lazy(()=> import ('./Components/User/Profile'))
 const Upgrade = React.lazy(() => import("./Components/Pages/Association/Upgrade"));
 const AssociationList = React.lazy(() => import("./Components/Pages/Association/AssociationList"));
+const PetAvatar = React.lazy(() =>
+  import("./Components/Pages/Rewards/PetAvatar")
+);
+
 
 
 
@@ -154,6 +159,9 @@ useScript("./assets/js/masonry.pkgd.min.js");
                   element={<AddCrowdfunding />}
                 ></Route>
 
+                <Route path="/RewardsList" element={<RewardsList />}></Route>
+                <Route path="/petavatar" element={<PetAvatar />}></Route>
+
                 {role == "admin" && (
                   <Route
                     path="/verifications"
@@ -163,10 +171,8 @@ useScript("./assets/js/masonry.pkgd.min.js");
               </>
             )}
             <Route path="/leaderboard" element={<Leaderboard />}></Route>
-            <Route path="/RewardsList" element={<RewardsList />}></Route>
             <Route path="*" element={<Home />}></Route>
           </Routes>
-          
 
           <Footer />
         </Suspense>

@@ -19,22 +19,27 @@ function RewardsList() {
   const [message, setMessage] = useState("");
   const [done, setDone] = useState(0);
   const [rewards, setRewards] = useState([]);
-
+  const [user, setUser] = useState(JSON.parse(localStorage.getItem("user")));
   const query = new URLSearchParams(window.location.search);
 
-  useEffect(() => {
+    useEffect(() => {
+        // setUser(parseInt(JSON.parse(localStorage.getItem("user")).level));
       setRewards([
         {
           name: "Pet Avatar",
           level: "3",
+          locked: user.level < 3 ? "gray" : "#F3E8F5",
+          link : user.level > 3 ? "/PetAvatar" : "/RewardsList"
         },
         {
           name: "Text To Image",
           level: "6",
+          locked: user.level < 6 ? "gray" : "#F3E8F5",
         },
         {
           name: "Image to Image",
           level: "9",
+          locked: user.level < 9 ? "gray" : "#F3E8F5",
         },
       ]);
   }, []);
@@ -135,9 +140,7 @@ function RewardsList() {
             style={{ padding: "0px 4% 30px 4%", fontWeight: "600" }}
           >
             {/* =============== title ============= */}
-            <div className="row" style={{width : "80%"}}>
-               
-
+            <div className="row" style={{ width: "80%" }}>
               <div className="col-6 rankHeads">Reward</div>
 
               <div className="col-2 rankHeads">Level</div>
@@ -147,33 +150,37 @@ function RewardsList() {
             {/* ==================== rows ====================== */}
             {rewards.map((item, index) => (
               <>
-                 
-                  <div
-                    className="row rankBar"
-                    style={{
-                      color: "black",
-                      marginBottom: "10px",
-                      padding : "10px",
-                      fontSize: "18px",
-                      backgroundColor: "#F3E8F5",
-                      width: "80%",
-                    }}
-                  > 
+                <NavLink to={item.link}>
+                    
+                <div
+                  className="row rankBar locked"
+                  style={{
+                    color: "black",
+                    marginBottom: "10px",
+                    padding: "20px",
+                    fontSize: "18px",
+                    backgroundColor: item.locked,
+                    width: "80%",
+                  }}
+                >
+                  <div className="col-6 rewards">{" " + item.name}</div>
 
-                    <div className="col-6 username">
-                      <i className="fas fa-user-alt" />
-                      {" " + item.name}
-                    </div>
-
-                    <div className="col-2">
-                      <div>{item.level}</div>
-                    </div>
-
-                    <div className="col-2">
-                      <div>yes</div>
-                    </div>
+                  <div className="col-2">
+                    <div>{item.level}</div>
                   </div>
-                 
+                  
+                    <div className="col-2">
+                      <div>
+                        {user.level < item.level ? (
+                        <i className="fa fa-lock" />
+                        ) : (
+                                    <i className="fa fa-unlock" />
+                        )}
+                      </div>
+                    </div>
+                  
+                </div>
+                </NavLink>
               </>
             ))}
           </div>

@@ -44,6 +44,17 @@
     font-weight: 700;
 }
 
+.rewards {
+    font-weight: 700;
+    font-style: italic;
+}
+
+.locked{
+    -webkit-filter: grayscale(100%);
+        /* Safari 6.0 - 9.0 */
+        filter: grayscale(100%);
+/* background-color:   gray !important; */
+}
 .neonText {
     color : black ; 
     text-shadow:

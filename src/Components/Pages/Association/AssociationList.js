@@ -322,13 +322,14 @@ function AssociationList() {
               </button>
             </NavLink>
 
-            <NavLink to={`/rewardsList`}>
+            <NavLink to={`/RewardsList`}>
               <button
                 style={{
                   marginLeft: "20px",
                   padding: "8px 20px 8px 20px",
                   backgroundColor: "#77A4FF",
                   borderRadius: "10px",
+                  zIndex : "100",
                   boxShadow: "rgba(0, 0, 0, 0.25) 0px 3px 5px",
                 }}
               >
