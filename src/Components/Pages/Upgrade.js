@@ -9,6 +9,7 @@ import { useDispatch } from "react-redux";
 import ReCAPTCHA from "react-google-recaptcha";
 
 function Upgrade() {
+
     const [role, setRole] = useState("");
     const [image, setImage] = useState("");
     const [type, setType] = useState("");
@@ -31,6 +32,7 @@ function Upgrade() {
                   data-wow-delay=".2s"
                 >
                   <div className="form-title">
+
                     <h3>Upgrade Account</h3>
                     <p>
                       Are you a veterinarian or an association? Verify your
@@ -41,6 +43,7 @@ function Upgrade() {
                     <div className="row">
                       <div className="col-12">
                         <div className="form-inner">
+
                           <label style={{ float: "left" }}>
                             Association Name (Only if you are submitting for an
                             association){" "}
@@ -77,6 +80,7 @@ function Upgrade() {
                           />
                         </div>
                       </div>
+
                     </div>
                     <button className="account-btn">
                       {" "}
@@ -84,6 +88,7 @@ function Upgrade() {
                       &nbsp;Log in
                     </button>
                   </form>
+
 
                   <div className="form-poicy-area">
                     <p>
@@ -102,5 +107,6 @@ function Upgrade() {
     </>
   );
 }
+
 
 export default Upgrade;
