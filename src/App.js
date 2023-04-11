@@ -23,11 +23,13 @@ const Event = React.lazy(()=> import ('./Components/Events/Event'))
 const ForgetPwd = React.lazy(()=> import ('./Components/User/forgetPwd'))
 const ResetPwd = React.lazy(()=> import ('./Components/User/resetPwd'))
 const Profile = React.lazy(()=> import ('./Components/User/Profile'))
+
 const EventDetails = React.lazy(()=> import ('./Components/Events/EventDetails'))
 const UpdateEvent = React.lazy(()=> import ('./Components/Events/UpdateEvent'))
 const CreateEvent = React.lazy(()=>import ('./Components/Events/CreateEvent'))
 
 const Upgrade = React.lazy(() => import("./Components/Pages/Upgrade"));
+
 
 function App() {
 useScript("./assets/js/email-decode.min.js");
@@ -72,6 +74,7 @@ useScript("./assets/js/masonry.pkgd.min.js");
     <div className="App">
       {/* {isLoaded ? (
         <div className="loader-container">
+
        <Loading/>
       </div>
       ):( */}
@@ -115,6 +118,7 @@ useScript("./assets/js/masonry.pkgd.min.js");
       {/* ) 
       } */}
       
+
     </div>
   );
 }

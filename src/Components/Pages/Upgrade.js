@@ -10,12 +10,17 @@ import ReCAPTCHA from "react-google-recaptcha";
 
 function Upgrade() {
 
-    function handleSubmit() {
+    const [role, setRole] = useState("");
+    const [image, setImage] = useState("");
+    const [type, setType] = useState("");
+    console.log(image); 
+    
 
+    function handleSubmit() {
+          
     }
   return (
     <>
-       
       <center>
         <div className="login-section pt-120 pb-120">
           <div className="container">
@@ -27,29 +32,55 @@ function Upgrade() {
                   data-wow-delay=".2s"
                 >
                   <div className="form-title">
-                    <h3>Log In</h3>
+
+                    <h3>Upgrade Account</h3>
                     <p>
-                      New Member? <NavLink to="/Register"> Sign Up</NavLink>
+                      Are you a veterinarian or an association? Verify your
+                      account now.
                     </p>
- 
                   </div>
                   <form className="w-100" onSubmit={handleSubmit}>
                     <div className="row">
                       <div className="col-12">
                         <div className="form-inner">
-                          <label style={{ float: "left" }}>Username </label>
+
+                          <label style={{ float: "left" }}>
+                            Association Name (Only if you are submitting for an
+                            association){" "}
+                          </label>
                           <input
                             type="text"
                             placeholder="Enter Your Username..."
-                             
-                             
+                            onChange={(e) => setRole(e.target.value)}
                           />
                         </div>
-                         
                       </div>
-                                          
 
- 
+                      <div className="col-6">
+                        <div className="form-inner">
+                          <label style={{ float: "left" }}>Account Type </label>
+
+                          <select
+                            type="text"
+                            onChange={(e) => setType(e.target.value)}
+                          >
+                            <option value={"Veterinarian"}>Veterinarian</option>
+                            <option value={"Association"}>Association</option>
+                          </select>
+                        </div>
+                      </div>
+
+                      <div className="col-6">
+                        <div className="form-inner">
+                          <label style={{ float: "left" }}>Document </label>
+                          <input
+                            type="file"
+                            placeholder="Enter Your Username..."
+                            onChange={(e) => setImage(e.target.files[0])}
+                          />
+                        </div>
+                      </div>
+
                     </div>
                     <button className="account-btn">
                       {" "}
@@ -57,7 +88,8 @@ function Upgrade() {
                       &nbsp;Log in
                     </button>
                   </form>
-                   
+
+
                   <div className="form-poicy-area">
                     <p>
                       By clicking the "signup" button, you create a Cobiro
@@ -75,5 +107,6 @@ function Upgrade() {
     </>
   );
 }
+
 
 export default Upgrade;

@@ -6,22 +6,27 @@ import { useLocation } from 'react-router-dom';
 
 
 function Header() {
+  const [user, setUser] = useState(localStorage.getItem("user")); 
 
-  const [user, setUser] = useState(localStorage.getItem("user"));
   useEffect(() => {
     setUser(localStorage.getItem("user"));
   }, [user]);
+
+ 
+
   const logout = () => {
     localStorage.removeItem("user");
     window.location.reload();
   };
- const location = useLocation();
-  
-    if (location.pathname === "/Login" || location.pathname === "/Register" || location.pathname=="/2faverify") {
-      return <></>;
-    }
-    else
+  const location = useLocation();
 
+  if (
+    location.pathname === "/Login" ||
+    location.pathname === "/Register" ||
+    location.pathname == "/2faverify"
+  ) {
+    return <></>;
+  } else
     return (
       <div>
         <header className="header-area style-2">
@@ -48,6 +53,7 @@ function Header() {
                   height={50}
                   width={50}
                 />                  </a>
+
                 </div>
                 <div className="menu-close-btn">
                   <i className="bi bi-x-lg" />
@@ -67,9 +73,6 @@ function Header() {
                   <NavLink to="/Event">Events</NavLink>
                 </li>
 
-<li><NavLink to='/profile'>profile</NavLink></li>
-
-
                 <li>
                   <NavLink to="/shop">Shop</NavLink>
                 </li>
@@ -79,7 +82,15 @@ function Header() {
                 <li>
                   <a href="contact.html">Contact</a>
                 </li>
-                
+
+
+                {user && (
+                  <li>
+                    <NavLink to="/profile">profile</NavLink>
+                  </li>
+                )}
+
+
                 {user && (
                   <li>
                     <a href="/upgrade">Upgrade</a>
@@ -87,7 +98,7 @@ function Header() {
                 )}
                 {/* <Link to="About">Contact</Link> */}
               </ul>
-              
+
               <div className="for-mobile-menu d-lg-none d-block">
                 <div className="hotline mb-5">
                   <div className="hotline-info">
@@ -220,7 +231,13 @@ function Header() {
                   </NavLink>
                 </li>
 
-                <li>{user && <button  onClick={logout} height={15} width={15}><MdOutlineLogout/></button>}</li>
+                <li>
+                  {user && (
+                    <button onClick={logout} height={15} width={15}>
+                      <MdOutlineLogout />
+                    </button>
+                  )}
+                </li>
               </ul>
               <div className="hotline-info">
                 <span>Call Us Now</span>
