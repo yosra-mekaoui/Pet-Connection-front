@@ -31,6 +31,7 @@ function EventList() {
   const user = JSON.parse(localStorage.getItem("user"));
   const [anchorEl, setAnchorEl] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [currentEvent, setCurrentEvent] = useState(null);
 
   useEffect(() => {
     const fetchEvents = async () => {
@@ -43,6 +44,16 @@ function EventList() {
     };
     fetchEvents();
   }, []);
+  const updateEventsList = async () => {
+    try {
+      const res = await getEvents();
+      setEvents(res.data);
+    } catch (err) {
+
+      console.error(err);
+    }
+  };
+  
   let connectedUserId;
   if (user._id) {
     connectedUserId = user.username;
@@ -53,12 +64,16 @@ function EventList() {
     return;
   }
   
-  const handleOpenMenu = (event) => {
-    setAnchorEl(event.currentTarget);
+  const handleOpenMenu = (e, event) => {
+    setAnchorEl(e.currentTarget);
+    setCurrentEvent(event);
+    console.log(e)
+    console.log(event)
   };
-  
+
   const handleCloseMenu = () => {
     setAnchorEl(null);
+    setCurrentEvent(null);
   };
 
   const handleModalOpen = () => {
@@ -70,9 +85,9 @@ function EventList() {
   };
   const baseUrl = "http://localhost:3000/uploads/"; // Replace with your base URL
   const handleDelete = async (id) => {
- 
+    console.log(id); // add this line to check the value of id
+  
     try {
-      console.log( id, connectedUserId ); // <-- Add this line
       await deleteEvent(id, connectedUserId);
       setEvents(events.filter((event) => event._id !== id));
     } catch (err) {
@@ -158,7 +173,7 @@ function EventList() {
   }}
 >
   <button onClick={handleModalClose} className="close-btn">X</button>
-  <CreateEvent onClose={handleModalClose} />
+  <CreateEvent onClose={handleModalClose} onUpdate={updateEventsList} />
 </Modal>
 
 
@@ -180,28 +195,37 @@ function EventList() {
 
 
         }
-        action={<div>
+        action={
+          <div>
            {user && event.organizer === user.username && (
-      <IconButton aria-label="settings" onClick={handleOpenMenu}>
-        <MoreVertIcon />
-      </IconButton>
-    )}
-      <Menu
+ <IconButton aria-label="settings" onClick={(e) => handleOpenMenu(e, event._id)}>
+ <MoreVertIcon />
+</IconButton>
+
+)}
+
+           <Menu
+             id="simple-menu"
+
         anchorEl={anchorEl}
-        keepMounted
         open={Boolean(anchorEl)}
         onClose={handleCloseMenu}
       >
-        {user && event.organizer === user.username && (
-        <MenuItem onClick={() => handleDelete(event._id)}>Delete</MenuItem>
-        )}
-        {user && event.organizer === user.username && (
-        <MenuItem component={Link} to={`/UpdateEvent/${event._id}`}>
-        Modify
-      </MenuItem>
-        )}
-      </Menu>
-    </div>
+              {user && event.organizer === user.username && (
+                <MenuItem onClick={() => {
+                  console.log(currentEvent);
+                  handleDelete(currentEvent);
+                }}
+                >Delete</MenuItem>
+              )}
+              {user && event.organizer === user.username && (
+                <MenuItem component={Link} to={`/UpdateEvent/${currentEvent}`}>
+                  Modify
+                </MenuItem>
+              )}
+            </Menu>
+          </div>
+        
 
         }
         title={event.organizer}

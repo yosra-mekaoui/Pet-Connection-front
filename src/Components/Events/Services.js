@@ -134,4 +134,35 @@ export const addAttendeeById = async (id, connectedUserId) => {
         throw error;
       }
     };
+    export const updateReply = async (commentId, replyId, text, username) => {
+      try {
+        console.log("commentId:", commentId);
+        console.log("replyId:", replyId);
+        const response = await axios.put(`${url}/editReply/${commentId}/${replyId}`, {
+          text,
+          username
+        });
+        console.log("Response:", response);
+        
+        return response;
+      } catch (error) {
+        console.error(error);
+        console.log(error);
+        throw error;
+      }
+    };
+    
+    
+    
+    
+    export const deleteReply = async (commentId, replyId) => {
+      try {
+        const response = await axios.delete(`${url}/deleteReply/${commentId}/${replyId}`);
+        return response.data;
+      } catch (error) {
+        console.error(error);
+        throw error;
+      }
+    };
+    
     
