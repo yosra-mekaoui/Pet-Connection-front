@@ -184,22 +184,21 @@ const [isEditing,setIsEditing] = useState(false);
     };
     fetchEvent();
   }, [id,event]); // Remove event as a dependency
+  const fetchComments = async () => {
+    try {
+      const res = await getCommentById(id);
+      setComments(res);
+    } catch (err) {
+      console.error(err);
+      setError("Failed to fetch comments.");
+    }
+  };
+  
   useEffect(() => {
     const user = JSON.parse(localStorage.getItem("user"));
     setUsers(user);
-    const fetchComments = async () => {
-      try {
-        const res = await getCommentById(id);
-        setComments(res);
-        console.log(res)
-      } catch (err) {
-        console.error(err);
-        setError("Failed to fetch comments.");
-      }
-    };
     fetchComments();
   }, [commentsUpdated]);
-  
 
 
   const handleSubmit = async (e) => {
@@ -405,10 +404,13 @@ const [isEditing,setIsEditing] = useState(false);
         });
         setComments(updatedComments);
         setIsEditing(false);
+    
+          fetchComments();
       } catch (error) {
         console.error(error);
       }
     };
+    
     
     
     
@@ -418,20 +420,16 @@ const [isEditing,setIsEditing] = useState(false);
  
     
     
-    
-    const handleDeleteReply = async (commentId,replyId) => {
+    const handleDeleteReply = async (commentId, replyId, username) => {
       try {
-        const response = await fetch(`http://localhost:3000/event/deleteReply/${commentId}/${replyId}`, {
-          method: 'DELETE'
-        });
-        const deletedReply = await response.json();
+        const response = await deleteReply(commentId, replyId, username);
+        console.log('Deleted reply:', response);
         setCommentsUpdated(!commentsUpdated); // Force a re-render
-
-        console.log('Deleted reply:', deletedReply);
       } catch (error) {
         console.error(error);
       }
     };
+    
     function timeAgo(date) {
       const now = new Date();
       const diff = now - new Date(date);
@@ -789,7 +787,7 @@ className="comment-button"
   <div className="comment-actions">
     <div className="d-flex align-items-center">
     
-      <button class="btn3 ms-5" onClick={() => handleDeleteReply(comment._id,reply._id)}>
+      <button class="btn3 ms-5" onClick={() => handleDeleteReply(comment._id,reply._id,user.username)}>
   <svg viewBox="0 0 15 17.5" height="17.5" width="15" xmlns="http://www.w3.org/2000/svg" class="icon2">
   <path transform="translate(-2.5 -1.25)" d="M15,18.75H5A1.251,1.251,0,0,1,3.75,17.5V5H2.5V3.75h15V5H16.25V17.5A1.251,1.251,0,0,1,15,18.75ZM5,5V17.5H15V5Zm7.5,10H11.25V7.5H12.5V15ZM8.75,15H7.5V7.5H8.75V15ZM12.5,2.5h-5V1.25h5V2.5Z" id="Fill"></path>
 </svg>
