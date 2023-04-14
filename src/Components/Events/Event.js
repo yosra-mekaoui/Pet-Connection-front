@@ -84,6 +84,7 @@ function EventList() {
     setIsModalOpen(false);
   };
   const baseUrl = "http://localhost:3000/uploads/"; // Replace with your base URL
+  
   const handleDelete = async (id) => {
     console.log(id); // add this line to check the value of id
   

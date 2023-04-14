@@ -155,14 +155,17 @@ export const addAttendeeById = async (id, connectedUserId) => {
     
     
     
-    export const deleteReply = async (commentId, replyId) => {
+    export const deleteReply = async (commentId, replyId, username) => {
       try {
-        const response = await axios.delete(`${url}/deleteReply/${commentId}/${replyId}`);
+        const response = await axios.delete(`${url}/deleteReply/${commentId}/${replyId}`, {
+          data: { username },
+        });
         return response.data;
       } catch (error) {
         console.error(error);
         throw error;
       }
     };
+    
     
     
