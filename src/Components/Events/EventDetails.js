@@ -1,15 +1,13 @@
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import { getEvent, addAttendeeById, RemoveAttendeeById, getCommentById, addComment,addReply ,deleteComment,updateComment} from "./Services";
+import { getEvent, addAttendeeById, RemoveAttendeeById, getCommentById, addComment,addReply ,deleteComment,updateComment,updateReply,deleteReply} from "./Services";
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { BiChevronDown, BiChevronUp } from "react-icons/bi";
 import "./style.css";
 import "./comment.css";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faPaperPlane } from "@fortawesome/free-solid-svg-icons";
+
 import { format } from "date-fns";
-import { formatDistanceToNow } from 'date-fns';
 
 import axios from "axios";
 
@@ -37,6 +35,7 @@ function EventDetails() {
   const user = JSON.parse(localStorage.getItem('user'));
 const [isEditing,setIsEditing] = useState(false);
   const [numParticipants, setNumParticipants] = useState(0);
+  const[numLikes,setNumLikes]=useState(0);
   const [text, setText] = useState({ text: "" });
   const [commentsUpdated, setCommentsUpdated] = useState(false);
  const [isCommentSectionHidden, setIsCommentSectionHidden] = useState(false);
@@ -45,7 +44,11 @@ const [isEditing,setIsEditing] = useState(false);
  const [likes, setLikes] = useState(event?.Like || 0);
  const [liked, setLiked] = useState(false);
  const [disliked, setDisliked] = useState(false);
- 
+ const [showReplies, setShowReplies] = useState(false);
+
+ const toggleReplies = () => {
+   setShowReplies(!showReplies);
+ };
  const handleLike = async (eventId) => {
    const userId = JSON.parse(localStorage.getItem('user'))["_id"];
    console.log('handleLike called');
@@ -166,6 +169,7 @@ const [isEditing,setIsEditing] = useState(false);
     setText(comment.text);
   };
 
+
   
   useEffect(() => {
     const fetchEvent = async () => {
@@ -199,6 +203,9 @@ const [isEditing,setIsEditing] = useState(false);
 
 
   const handleSubmit = async (e) => {
+    if (!e) {
+      return;
+    }
     e.preventDefault();
     try {
       const formData = {
@@ -335,8 +342,11 @@ const [isEditing,setIsEditing] = useState(false);
       // handle the error, e.g. show an error message to the user
     }
     setReplyingTo(false);
-    setReplyText("");
+    if (replyInputsVisible[commentId]) {
+      setReplyText("");
+    }
   };
+  
   
   const handleDelete = async (id) => {
     try {
@@ -361,29 +371,55 @@ const [isEditing,setIsEditing] = useState(false);
         toast.error(err.response.data.message);
       }
     };
-    
-    const handleEditReply = async (reply) => {
+    const handleEditReply = (reply) => {
+      setIsEditing(true);
+      setText({
+        id: reply._id,
+        text: reply.text,
+      });
+    };
+  
+    const handleEditReplyCancelClick = (commentId, replyId, reply) => {
+      setIsEditing(false);
+      setText({
+        id: replyId,
+        text: reply.text,
+      });
+    };
+    const handleEditClick = async (commentId, replyId) => {
       try {
-        const response = await fetch(`http://localhost:3000/event/editReply/${commentId}/${reply.id}`, {
-          method: 'PUT',
-          headers: {
-            'Content-Type': 'application/json'
-          },
-          body: JSON.stringify({
-            text: reply.text,
-            username: reply.username
-          })
+        const updatedReply = await updateReply(commentId, replyId, text.text, user.username);
+        const updatedComments = comments.map((comment) => {
+          if (comment._id === commentId) {
+            const updatedReplies = comment.replies.map((reply) => {
+              if (reply._id === updatedReply._id) {
+                return updatedReply;
+              } else {
+                return reply;
+              }
+            });
+            return { ...comment, replies: updatedReplies };
+          } else {
+            return comment;
+          }
         });
-        const updatedReply = await response.json();
-        setCommentsUpdated(!commentsUpdated); // Force a re-render
-
-        console.log('Updated reply:', updatedReply);
+        setComments(updatedComments);
+        setIsEditing(false);
       } catch (error) {
         console.error(error);
       }
     };
     
-    const handleDeleteReply = async (replyId) => {
+    
+    
+    
+    
+    
+ 
+    
+    
+    
+    const handleDeleteReply = async (commentId,replyId) => {
       try {
         const response = await fetch(`http://localhost:3000/event/deleteReply/${commentId}/${replyId}`, {
           method: 'DELETE'
@@ -524,7 +560,7 @@ const [isEditing,setIsEditing] = useState(false);
   </svg>
 </button>
 
- 
+ {event.Like.length}
      {!isAuthenticated() ? (
                       <button className="primary-btn3 btn-lg" disabled>
                         Please log in to Join
@@ -590,6 +626,7 @@ const [isEditing,setIsEditing] = useState(false);
 
 
 
+
                   </ul>
                 
                   <p className="m-0">
@@ -636,7 +673,7 @@ className="comment-button"
 >
           {isCommentSectionHidden ? <BiChevronDown /> : <BiChevronUp />}
         </button>
-       
+  
 <div className="comment-area">
   
   <div className="blog-comments mb-120">
@@ -677,10 +714,10 @@ className="comment-button"
     </a>
   )}
   
-  <div className="comment-actions">
+  <div className="comment-actions" style={{marginBottom: '10px'}}>
   {user && comment.username === user.username && (
     <div className="dropdown">
-      <button className="primary-btn1 btn-sm dropdown-toggle" data-bs-toggle="dropdown">
+      <button className="btn3" data-bs-toggle="dropdown">
         <i className="bi bi-three-dots"></i>
       </button>
       <ul className="dropdown-menu">
@@ -693,7 +730,7 @@ className="comment-button"
     </div>
   )}
   {comment.username !== user.username && (
-    <button className="primary-btn3 btn-sm" onClick={() => handleReport(comment._id)}>
+    <button className="btn3" onClick={() => handleReport(comment._id)}>
       <i className="bi bi-flag"></i>
     </button>
   )}
@@ -706,24 +743,32 @@ className="comment-button"
             <div className="c-body">
             {isEditing && text.id === comment._id ? (
   <div className="comment-edit">
-<textarea value={text.text} onChange={(e) => setText({ ...text, text: e.target.value })} />
-    <button className="primary-btn1 btn-sm" onClick={handleSaveClick}>
-      Save
-    </button>
-    <button className="primary-btn1 btn-sm" onClick={handleCancelClick}>
-      Cancel
-    </button>
+<textarea value={text.text} onChange={(e) => setText({ ...text, text: e.target.value })} 
+  onKeyDown={(e) => {
+    if (e.key === 'Enter') {
+      handleSaveClick();
+    } else if (e.key === 'Escape') {
+      handleCancelClick();
+    }
+  }}
+/>
+ 
   </div>
 ) : (
   <div>{comment.text}</div>
 )}
-
+ <button onClick={toggleReplies}
+ className="comment-button">
+          {showReplies ? <BiChevronUp /> : <BiChevronDown />}
+        </button>
  
+       
 
 
 
-
-
+        {showReplies && (
+           
+          <div className="replies">
 {comment.replies && (
   <ul className="comment-reply">
     {comment.replies.map((reply) => (
@@ -741,39 +786,81 @@ className="comment-button"
                 </div>
               </div>
               {user && reply.username === user.username && (
-                <div className="comment-actions">
-                  <button className="primary-btn1 btn-sm" onClick={() => handleDeleteReply(reply._id)}>
-                    <i className="bi bi-trash-fill"></i>
-                  </button>
-                  <button className="primary-btn1 btn-sm" onClick={() => handleEditReply(reply)}>
-                    <i className="bi bi-pencil-square"></i>
-                  </button>
-                </div>
-              )}
-            </div>
-            <div className="c-body">
-              <p>{reply.text}</p>
-            </div>
+  <div className="comment-actions">
+    <div className="d-flex align-items-center">
+    
+      <button class="btn3 ms-5" onClick={() => handleDeleteReply(comment._id,reply._id)}>
+  <svg viewBox="0 0 15 17.5" height="17.5" width="15" xmlns="http://www.w3.org/2000/svg" class="icon2">
+  <path transform="translate(-2.5 -1.25)" d="M15,18.75H5A1.251,1.251,0,0,1,3.75,17.5V5H2.5V3.75h15V5H16.25V17.5A1.251,1.251,0,0,1,15,18.75ZM5,5V17.5H15V5Zm7.5,10H11.25V7.5H12.5V15ZM8.75,15H7.5V7.5H8.75V15ZM12.5,2.5h-5V1.25h5V2.5Z" id="Fill"></path>
+</svg>
+</button>
+      <button className="btn3 ms-2" onClick={() => handleEditReply(reply)}>
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" height="20" width="20" class="icon2">
+  <path fill="black" d="M22.7,2.3c-0.8-0.8-2-0.8-2.8,0L3,19.2V21h1.8l16.9-16.9C23.5,4.3,23.5,3.1,22.7,2.3z"/>
+  <path fill="black" d="M5.5,22h13.1v-1.4H5.5V22z"/>
+  <path fill="black" d="M19.5,5.9l-1.4,1.4l-3.6-3.6l1.4-1.4c0.6-0.6,1.6-0.6,2.2,0l1.4,1.4C20.1,4.3,20.1,5.3,19.5,5.9z"/>
+</svg>
+
+      </button>
+    </div>
+  </div>
+  
+)}
+  </div>
+  {isEditing && text.id === reply._id  ? (
+  <div className="comment-edit">
+    <textarea className="form-control" value={text.text} onChange={(e) => setText({ ...text, text: e.target.value })} 
+      onKeyDown={(e) => {
+        if (e.key === 'Enter') {
+          e.preventDefault(); // prevent default behavior of Enter key
+
+          handleEditClick(comment._id, reply._id);
+        } else if (e.key === 'Escape') {
+          handleEditReplyCancelClick(comment._id, reply._id, reply)
+        }
+      }}
+    />
+  </div>
+) : (
+  <div className="c-body">
+    <p>{reply.text}</p>
+  </div>
+)}
+
+          
+           
           </div>
         </div>
       </li>
     ))}
+
   </ul>
 )}
+            </div>  
+        )}
+
+
 
       <div className="form-group">
       {replyInputsVisible[comment._id] ? (
         <>
           <textarea
+                    className="form-control"
+
             value={replyText}
             onChange={(e) => setReplyText(e.target.value)}
+            onKeyDown={(e) => {
+              if (e.key === 'Enter') {
+                e.preventDefault();
+                handleReplySubmit(comment._id);
+              } else if (e.key === 'Escape') {
+                handleReplyCancelClick(comment._id);
+              }
+            }}
+            placeholder="Write a reply..."
+
           />
-          <button className="primary-btn1 btn-sm" onClick={() => handleReplySubmit(comment._id)}>
-            Save
-          </button>
-          <button className="primary-btn1 btn-sm" onClick={() => handleReplyCancelClick(comment._id)}>
-            Cancel
-          </button>
+        
         </>
       ) : null}
     </div>
@@ -795,7 +882,6 @@ className="comment-button"
   </div>
   <div className="comment-form">
       <h2 className="mb-3">Leave a Comment</h2>
-      <form onSubmit={handleSubmit}>
         <div className="mb-3">
           <label htmlFor="comment" className="form-label visually-hidden">
             Your comment
@@ -806,120 +892,23 @@ className="comment-button"
             placeholder="Your comment"
             value={comment}
             onChange={(e) => setComment(e.target.value)}
+            onKeyDown={(e) => {
+              if (e.key === 'Enter') {
+
+                handleSubmit(e);
+              }
+            }}
           ></textarea>
          
         </div>
-        <button className="button2">
-  <div class="svg-wrapper-1">
-    <div class="svg-wrapper">
-      <svg height="24" width="24" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-        <path d="M0 0h24v24H0z" fill="none"></path>
-        <path d="M1.946 9.315c-.522-.174-.527-.455.01-.634l19.087-6.362c.529-.176.832.12.684.638l-5.454 19.086c-.15.529-.455.547-.679.045L12 14l6-8-8 6-8.054-2.685z" fill="currentColor"></path>
-      </svg>
-    </div>
-  </div>
-  <span>Send</span>
-</button>
-      </form>
+     
+  
     </div>
 
 </div>
-       {/* {comments && comments.length > 0 ? (
-  <ul className="comment-list">
-  {comments.map((comment) => (
-      <li key={comment._id}>
-              {!isCommentSectionHidden && (
-      <div className="card">
-  <span className="title">Comments</span>
- 
-  <div className="comments">
-    <div className="comment-react">
-      <button>
-        <svg
-          fill="none"
-          viewBox="0 0 24 24"
-          height={16}
-          width={16}
-          xmlns="http://www.w3.org/2000/svg"
-        >
-          <path
-            fill="#707277"
-            strokeLinecap="round"
-            strokeWidth={2}
-            stroke="#707277"
-            d="M19.4626 3.99415C16.7809 2.34923 14.4404 3.01211 13.0344 4.06801C12.4578 4.50096 12.1696 4.71743 12 4.71743C11.8304 4.71743 11.5422 4.50096 10.9656 4.06801C9.55962 3.01211 7.21909 2.34923 4.53744 3.99415C1.01807 6.15294 0.221721 13.2749 8.33953 19.2834C9.88572 20.4278 10.6588 21 12 21C13.3412 21 14.1143 20.4278 15.6605 19.2834C23.7783 13.2749 22.9819 6.15294 19.4626 3.99415Z"
-          />
-        </svg>
-      </button>
-      <hr />
-      <span>14</span>
-    </div>
-    <div className="comment-container">
-      <div className="user">
-        <div className="user-pic">
-        <img src={url + comment.image} alt="" width="50" height="50" />
 
-        </div>
-        <div className="user-info">
-          <span>{comment.username}</span>
-          <p>{comment.date}</p>
-        </div>
-      </div>
-      <p className="comment-content">
-        {comment.text}
-      </p>
-    </div>
-  </div>
-  <div className="text-box">
-    <div className="box-container">
-      <textarea placeholder="Reply" defaultValue={""} />
-      <div>
-        <div className="formatting">
-       
-       
-          
-      
-        
-          <button type="submit" className="send" title="Send">
-            <svg
-              fill="none"
-              viewBox="0 0 24 24"
-              height={18}
-              width={18}
-              xmlns="http://www.w3.org/2000/svg"
-            >
-              <path
-                strokeLinejoin="round"
-                strokeLinecap="round"
-                strokeWidth="2.5"
-                stroke="#ffffff"
-                d="M12 5L12 20"
-              />
-              <path
-                strokeLinejoin="round"
-                strokeLinecap="round"
-                strokeWidth="2.5"
-                stroke="#ffffff"
-                d="M7 9L11.2929 4.70711C11.6262 4.37377 11.7929 4.20711 12 4.20711C12.2071 4.20711 12.3738 4.37377 12.7071 4.70711L17 9"
-              />
-            </svg>
-          </button>
-        </div>
-      </div>
-    </div>
-  </div>
+   
 
-</div>
-      )}
-      </li>
-  ))}
-  </ul>
-) : (
-  <div className="text-center">
-    <p className="text-muted">No comments yet</p>
-    </div>
-)}
-  */}      
 
     
   </div> 

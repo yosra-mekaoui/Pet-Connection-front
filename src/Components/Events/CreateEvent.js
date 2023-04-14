@@ -29,7 +29,7 @@ const useStyles = makeStyles((theme) => ({
     display: "none",
   },
 }));
-function CreateEvent() {
+const CreateEvent = ({ onClose, onUpdate }) => {
   const [location, setLocation] = useState(null);
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
@@ -166,6 +166,9 @@ function CreateEvent() {
         marker.remove();
       }
       setMarker(null);
+
+      onUpdate();
+      onClose();
     } catch (error) {
       console.error(error);
       alert('Error creating event');
