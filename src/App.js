@@ -49,184 +49,145 @@ const CreateEvent = React.lazy(()=>import ('./Components/Events/CreateEvent'))
 
 
 function App() {
-useScript("./assets/js/email-decode.min.js");
+  useScript("./assets/js/email-decode.min.js");
 
-useScript("./assets/js/jquery-3.6.0.min.js"); 
+  useScript("./assets/js/jquery-3.6.0.min.js");
 
-useScript("./assets/js/jquery-ui.js");
-useScript("./assets/js/jquery.timepicker.min.js");
-useScript("./assets/js/bootstrap.bundle.min.js");
-useScript("./assets/js/swiper-bundle.min.js");
-useScript("./assets/js/jquery.nice-select.js");
-useScript("./assets/js/jquery.fancybox.min.js");
-useScript("./assets/js/morphext.min.js");
-useScript("./assets/js/odometer.min.js")
-useScript("./assets/js/jquery.marquee.min.js");
-useScript("./assets/js/viewport.jquery.js");
-useScript("./assets/js/isotope.pkgd.min.js");
-useScript("./assets/js/SmoothScroll.js");
-useScript("./assets/js/jquery.nice-number.min.js");
-useScript("./assets/js/jquery.magnific-popup.min.js");
-useScript("./assets/js/masonry.pkgd.min.js");
+  useScript("./assets/js/jquery-ui.js");
+  useScript("./assets/js/jquery.timepicker.min.js");
+  useScript("./assets/js/bootstrap.bundle.min.js");
+  useScript("./assets/js/swiper-bundle.min.js");
+  useScript("./assets/js/jquery.nice-select.js");
+  useScript("./assets/js/jquery.fancybox.min.js");
+  useScript("./assets/js/morphext.min.js");
+  useScript("./assets/js/odometer.min.js")
+  useScript("./assets/js/jquery.marquee.min.js");
+  useScript("./assets/js/viewport.jquery.js");
+  useScript("./assets/js/isotope.pkgd.min.js");
+  useScript("./assets/js/SmoothScroll.js");
+  useScript("./assets/js/jquery.nice-number.min.js");
+  useScript("./assets/js/jquery.magnific-popup.min.js");
+  useScript("./assets/js/masonry.pkgd.min.js");
   useScript("./assets/js/main.js");
   
   const [isLoaded, setIsLoaded] = useState(false);
 
-  const [user, setUser] = useState(null); 
-    const[role, setRole] = useState(""); 
+  const [user, setUser] = useState(null);
+  const [role, setRole] = useState("");
     
   useEffect(() => {
     if (localStorage.getItem("user") != null) {
       setUser(localStorage.getItem("user"));
       setRole(JSON.parse(localStorage.getItem("user"))["role"]);
     }
-      setIsLoaded(true);
-      setTimeout(() => {
-        setIsLoaded(false);
-      }, 1000);
+    setIsLoaded(true);
+    setTimeout(() => {
+      setIsLoaded(false);
+    }, 1000);
       
     
 
     console.log(user)
-  },[])
+  }, [])
 
 
 
   return (
     <div className="App">
-      {/* {isLoaded ? (
+      {isLoaded ? (
         <div className="loader-container">
           <Loading />
         </div>
       ) : (
-        <Suspense fallback={<div></div>}>
-          <Cursor
-            showRing={true}
-            color="#000000"
-            ringSize={50}
-            cursorSize={10}
-            ringBorder={2}
-          />
-          <Header />
-          <Routes>
-            <Route path="/shop" element={<Market />}></Route>
-            <Route path="/About" element={<About />}></Route>
-            {user == null && <Route path="/Login" element={<Login />}></Route>}
-            {user == null && (
-              <Route path="/Register" element={<Register />}></Route>
-            )}
-            {user && (
-              <Route
-                path="/2faenable"
-                element={<EnableTwoFactorAuth />}
-              ></Route>
-            )}
-            {user && (
-              <Route
-                path="/2fadisable"
-                element={<DisableTwoFactorAuth />}
-              ></Route>
-            )}
-            {user &&
-              JSON.parse(localStorage.getItem("user"))["twoFactorEnabled"] && (
-                <Route path="/2faverify" element={<TwoFa />} />
-              )}{" "}
-            {user && <Route path="/profile" element={<Profile />}></Route>}
-            <Route path="/ForgetPwd" element={<ForgetPwd />}></Route>
-            <Route path="/resetPwd/:t" element={<ResetPwd />}></Route>
-            <Route
-              exact
-              path="/resetpassword/:token"
-              element={<ResetPwd />}
-            ></Route>
-            <Route path="/About" element={<About />}></Route>
-            <Route path="/associations" element={<AssociationList />}></Route>
-            <Route path="/association/:id" element={<Association />}></Route>
-            <Route path="/crowdfunding/:id" element={<Crowdfunding />}></Route>
-            {user && (
-              <>
-                <Route
-                  path="/editCrowdfunding/:id"
-                  element={<EditCrowdfunding />}
-                ></Route>
-
-                <Route path="/upgrade" element={<Upgrade />}></Route>
-
-                <Route
-                  path="/confirmDonation"
-                  element={<ConfirmDonation />}
-                ></Route>
-                <Route
-                  path="/editAssociation"
-                  element={<EditAssociation />}
-                ></Route>
-                <Route
-                  path="/addCrowdfunding"
-                  element={<AddCrowdfunding />}
-                ></Route>
-
-                <Route path="/RewardsList" element={<RewardsList />}></Route>
-                <Route path="/petavatar" element={<PetAvatar />}></Route>
-
-                {role == "admin" && (
+        <>
+          <div>
+            <Suspense fallback={<div></div>}>
+              <Cursor
+                showRing={true}
+                color="#000000"
+                ringSize={50}
+                cursorSize={10}
+                ringBorder={2}
+              />
+              <Header />
+              <Routes>
+                <Route path="/shop" element={<Market />}></Route>
+                <Route path="/About" element={<About />}></Route>
+                {user == null && <Route path="/Login" element={<Login />}></Route>}
+                {user == null && (
+                  <Route path="/Register" element={<Register />}></Route>
+                )}
+                {user && (
                   <Route
-                    path="/verifications"
-                    element={<Verifications />}
+                    path="/2faenable"
+                    element={<EnableTwoFactorAuth />}
                   ></Route>
                 )}
-              </>
-            )}
-            <Route path="/leaderboard" element={<Leaderboard />}></Route>
-            <Route path="*" element={<Home />}></Route>
-          </Routes>
+                {user && (
+                  <Route
+                    path="/2fadisable"
+                    element={<DisableTwoFactorAuth />}
+                  ></Route>
+                )}
+                {user &&
+                  JSON.parse(localStorage.getItem("user"))["twoFactorEnabled"] && (
+                    <Route path="/2faverify" element={<TwoFa />} />
+                  )}{" "}
+                {user && <Route path="/profile" element={<Profile />}></Route>}
+                <Route path="/ForgetPwd" element={<ForgetPwd />}></Route>
+                <Route path="/resetPwd/:t" element={<ResetPwd />}></Route>
+                <Route
+                  exact
+                  path="/resetpassword/:token"
+                  element={<ResetPwd />}
+                ></Route>
+                <Route path="/About" element={<About />}></Route>
+                <Route path="/associations" element={<AssociationList />}></Route>
+                <Route path="/association/:id" element={<Association />}></Route>
+                <Route path="/crowdfunding/:id" element={<Crowdfunding />}></Route>
+                {user && (
+                  <>
+                    <Route
+                      path="/editCrowdfunding/:id"
+                      element={<EditCrowdfunding />}
+                    ></Route>
 
-       <Loading/>
-      </div>
-      ):( */}
-      <Suspense fallback={<div></div>}>
-            {/* <Cursor
-  showRing={true}
-  color="#000000"
-  ringSize={50}
-  cursorSize={10}
-  ringBorder={2}
-/> */}
-        <Header />
-        <Routes>
-          <Route path="*" element={<Home />}></Route>
-          <Route path="/shop" element={<Market />}></Route>
-          <Route path="/About" element={<About />}></Route>
-          <Route path="/Event" element={<Event />}></Route>
-          <Route path="/EventDetails/:id" element={ <EventDetails/>}></Route>
-          <Route path="/UpdateEvent/:id" element={<UpdateEvent/>}></Route>
-          <Route path="/addEvent" element={<CreateEvent/>}></Route>
+                    <Route path="/upgrade" element={<Upgrade />}></Route>
 
-          {user == null && <Route path="/Login" element={<Login />}></Route>}
-          {user == null && (
-            <Route path="/Register" element={<Register />}></Route>
-          )}
-          {user &&(
-          <Route path="/2faenable" element={<EnableTwoFactorAuth/>}></Route>)}
-         {user &&( <Route path="/2fadisable" element={<DisableTwoFactorAuth/>}></Route>)}
-         {user && JSON.parse(localStorage.getItem('user'))['twoFactorEnabled'] && (
-  <Route path="/2faverify" element={<TwoFa />} />
-)}         {user &&(<Route path='/profile' element={<Profile />}></Route>)}
-         <Route path='/ForgetPwd' element={<ForgetPwd />}></Route>
-          <Route path='/resetPwd/:t' element={<ResetPwd />}></Route>
-          <Route exact path='/resetpassword/:token' element={<ResetPwd />}></Route>
-          <Route path="/upgrade" element={<Upgrade />}></Route>
+                    <Route
+                      path="/confirmDonation"
+                      element={<ConfirmDonation />}
+                    ></Route>
+                    <Route
+                      path="/editAssociation"
+                      element={<EditAssociation />}
+                    ></Route>
+                    <Route
+                      path="/addCrowdfunding"
+                      element={<AddCrowdfunding />}
+                    ></Route>
 
-        </Routes>
+                    <Route path="/RewardsList" element={<RewardsList />}></Route>
+                    <Route path="/petavatar" element={<PetAvatar />}></Route>
 
-        <Footer />
-      </Suspense>
-      {/* ) 
-      } */}
-      
-
+                    {role == "admin" && (
+                      <Route
+                        path="/verifications"
+                        element={<Verifications />}
+                      ></Route>
+                    )}
+                  </>
+                )}
+                <Route path="/leaderboard" element={<Leaderboard />}></Route>
+                <Route path="*" element={<Home />}></Route>
+              </Routes>
+            </Suspense>
+            {/* <Loading /> */}
+          </div>
+        </>
+      )}
     </div>
+ 
   );
 }
-
-
 export default App;
