@@ -10,6 +10,7 @@ import "./comment.css";
 import { format } from "date-fns";
 
 import axios from "axios";
+import translateText from './translate';
 
 
 
@@ -45,7 +46,30 @@ const [isEditing,setIsEditing] = useState(false);
  const [liked, setLiked] = useState(false);
  const [disliked, setDisliked] = useState(false);
  const [showReplies, setShowReplies] = useState(false);
+ const [targetLanguage, setTargetLanguage] = useState('fr');
+ const [translatedDescription, setTranslatedDescription] = useState('');
+ const [showSelect, setShowSelect] = useState(false);
+ const [showDropdown, setShowDropdown] = useState(false);
 
+ async function handleTranslate() {
+  const result = await translateText(event.description, targetLanguage);
+  setTranslatedDescription(result);
+
+}
+function handleLanguageSelect(e) {
+  setTargetLanguage(e.target.value);
+
+
+}
+function handleDropdownToggle() {
+  setShowDropdown(!showDropdown);
+}
+function handleClicks() {
+  if (showSelect) {
+    handleTranslate();
+  }
+  setShowSelect(!showSelect);
+}
  const toggleReplies = () => {
    setShowReplies(!showReplies);
  };
@@ -646,13 +670,32 @@ const [isEditing,setIsEditing] = useState(false);
 
                 </h2>
                 <div className="post-content">
-                  <p>
-                    {event.description}
+                <p>{translatedDescription || event.description}</p>
+                <div className="translate-button-container">
+             
+      <button className="btn3" data-bs-toggle="dropdown" onClick={handleDropdownToggle}>
+        <i className="bi bi-three-dots"></i>
+      </button>
+      {showDropdown && (
+        <div className="dropdown-container">
+          <select className="language-select" onChange={handleLanguageSelect}>
+            <option value="fr">French</option>
+            <option value="de">German</option>
+            <option value="es">Spanish</option>
+          </select>
+          <button className="translate-button" onClick={handleTranslate}>
+            Translate
+          </button>
+        </div>
+      )}
+      
+ 
 
-                  </p>
 
 
-               
+
+</div>
+   
                 </div>
 
               </div>
