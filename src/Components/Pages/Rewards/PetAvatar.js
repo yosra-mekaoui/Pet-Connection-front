@@ -20,7 +20,7 @@ function PetAvatar() {
 
   const [file, setFile] = useState(null);
   const [imageUrl, setImageUrl] = useState(
-    "https://images.unsplash.com/photo-1611003228941-98852ba62227?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8Mnx8YmFieSUyMGRvZ3xlbnwwfHwwfHw%3D&w=1000&q=80"
+    ""
   );
   const [output, setOutput] = useState("");
 
@@ -31,39 +31,50 @@ function PetAvatar() {
   const avatCreation = async () => { 
     console.log("1"); 
     setMessage("Uploading Image to the server...");
-    // const formData = new FormData();
-    // formData.append('file', file);
-    // formData.append("upload_preset", "dyg5jrqn");
+    const formData = new FormData();
+    formData.append('file', file);
+    formData.append("upload_preset", "dyg5jrqn");
 
-    // const response = await fetch(
-    //   'https://api.cloudinary.com/v1_1/dszmvlrpt/image/upload',
-    //   {
-    //     method: 'POST',
-    //     body: formData,
-    //   }
-    // );
+    const response = await fetch(
+      'https://api.cloudinary.com/v1_1/dszmvlrpt/image/upload',
+      {
+        method: 'POST',
+        body: formData,
+      }
+    );
 
-    // const data = await response.json();
-    // setImageUrl(data.secure_url);
-    // console.log("URL " + imageUrl);
+    const data = await response.json();
+    setImageUrl(data.secure_url);
+    console.log("URL " + imageUrl);
     // image uploaded to server : done !
     setMessage("Your avatar is being created. Please wait...");
     await axios
       .post(`http://localhost:3000/funding/avatar`, {
         img: imageUrl,
+
       })
       .then((res) => {
         //console.log("RES : "+JSON.parse(res) );
         setOutput(res.data.output);
+        if ((res.data.output == null) || (res.data.output == undefined) || (res.data.output == "")) {
+          setMessage("Processing Image..."); 
+          setOutput("https://placehold.co/512x512");
+        } else {
+          setMessage("Your avatar is ready!");
+        }
+
       })
+
+
       .catch((err) => {
         console.log(err);
       }); 
-
+    
+    
 
  
       console.log("OUTPUT : "+ output);
-      setMessage("Done !");
+      
       
   }
 
@@ -235,7 +246,7 @@ function PetAvatar() {
 
             <img
               style={{
-                width: "80%",
+                width: "40%",
                 boxShadow: "rgba(0, 0, 0, 0.25) 0px 3px 5px",
               }}
               src={output}
@@ -246,7 +257,7 @@ function PetAvatar() {
             <div className="row">
               <div className="offset-2 col-md-4 ">
                 <div className="input">Input</div>
-                <img src={imageUrl} style={{ width: "200px" }} />
+                <img src={imageUrl} style={{ width: "200px", marginBottom : "100px" }} />
               </div>
 
               <div className="col-md-4">
