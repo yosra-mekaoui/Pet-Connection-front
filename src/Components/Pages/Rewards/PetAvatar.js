@@ -15,7 +15,18 @@ const styles = {
 };
 
 function PetAvatar() {
-  
+  const [textToImg, setTextToImg] = useState(0);
+
+  useEffect(() => {
+    const query = new URLSearchParams(window.location.search);
+    if (query.get("textToImg") != null){
+      setTextToImg(query.get("textToImg"));
+    }
+  }, []);
+  const [textInput, setTextInput] = useState("");
+
+
+
   const [message, setMessage] = useState(""); 
 
   const [file, setFile] = useState(null);
@@ -31,27 +42,38 @@ function PetAvatar() {
   const avatCreation = async () => { 
     console.log("1"); 
     setMessage("Uploading Image to the server...");
-    const formData = new FormData();
-    formData.append('file', file);
-    formData.append("upload_preset", "dyg5jrqn");
+    // const formData = new FormData();
+    // formData.append('file', file);
+    // formData.append("upload_preset", "dyg5jrqn");
 
-    const response = await fetch(
-      'https://api.cloudinary.com/v1_1/dszmvlrpt/image/upload',
-      {
-        method: 'POST',
-        body: formData,
-      }
-    );
+    // const response = await fetch(
+    //   'https://api.cloudinary.com/v1_1/dszmvlrpt/image/upload',
+    //   {
+    //     method: 'POST',
+    //     body: formData,
+    //   }
+    // );
 
-    const data = await response.json();
-    setImageUrl(data.secure_url);
+    // const data = await response.json();
+    // setImageUrl(data.secure_url);
+
+
+
     console.log("URL " + imageUrl);
     // image uploaded to server : done !
     setMessage("Your avatar is being created. Please wait...");
+
+    var text = ""; 
+    if (textInput != "") {
+      text = "Make Avatar for my pet."
+    } else {
+      text = textInput;
+    }
+
     await axios
       .post(`http://localhost:3000/funding/avatar`, {
         img: imageUrl,
-
+        prompt : text
       })
       .then((res) => {
         //console.log("RES : "+JSON.parse(res) );
@@ -172,6 +194,15 @@ function PetAvatar() {
             className="container"
             style={{ padding: "0px 4% 30px 4%", fontWeight: "600" }}
           >
+            {textToImg == 1 && (
+              <textarea placeholder="Add a prompt text..." style={{
+                width: "60%"
+              }}
+                onChange={(e) => setTextInput(e.target.value)}
+              >
+
+              </textarea>
+            )}
             <Dropzone onDrop={handleFileUpload}>
               {({ getRootProps, getInputProps }) => (
                 <div

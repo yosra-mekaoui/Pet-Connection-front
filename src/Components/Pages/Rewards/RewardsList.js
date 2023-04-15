@@ -29,12 +29,13 @@ function RewardsList() {
           name: "Pet Avatar",
           level: "3",
           locked: user.level < 3 ? "gray" : "#F3E8F5",
-          link : user.level > 3 ? "/PetAvatar" : "/RewardsList"
+          link: user.level > 3 ? "/PetAvatar" : "/RewardsList",
         },
         {
           name: "Text To Image",
           level: "6",
           locked: user.level < 6 ? "gray" : "#F3E8F5",
+          link: user.level > 6 ? "/PetAvatar?textToImg=1" : "/RewardsList",
         },
         {
           name: "Image to Image",
