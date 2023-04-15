@@ -90,12 +90,15 @@ function Header() {
                   </li>
                 )}
 
+                <li>
+                  <NavLink to="/associations">Association</NavLink>
+                </li>
 
-                {user && (
-                  <li>
-                    <a href="/upgrade">Upgrade</a>
-                  </li>
-                )}
+
+                <li>
+                  <NavLink to="/associations">Association</NavLink>
+                </li>
+
                 {/* <Link to="About">Contact</Link> */}
               </ul>
 
