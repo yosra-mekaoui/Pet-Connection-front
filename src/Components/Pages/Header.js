@@ -36,7 +36,7 @@ function Header() {
                 <img
                   alt="image"
                   className="img-fluid"
-                  src="assets/images/logo-01.png"
+                  src="/assets/images/logo-01.png"
                   height={50}
                   width={50}
                 />
@@ -46,14 +46,14 @@ function Header() {
               <div className="mobile-logo-area d-lg-none d-flex justify-content-between align-items-center">
                 <div className="mobile-logo-wrap">
                   <a href="index.html">
-                    <img
-                      alt="image"
-                      className="img-fluid"
-                      src="assets/images/logo-01.png"
-                      height={50}
-                      width={50}
-                    />{" "}
-                  </a>
+                  <img
+                  alt="image"
+                  className="img-fluid"
+                  src="/assets/images/logo-01.png"
+                  height={50}
+                  width={50}
+                />                  </a>
+
                 </div>
                 <div className="menu-close-btn">
                   <i className="bi bi-x-lg" />
@@ -70,7 +70,7 @@ function Header() {
                   <NavLink to="/About">About</NavLink>
                 </li>
                 <li>
-                  <a href="#">Services</a>
+                  <NavLink to="/Event">Events</NavLink>
                 </li>
 
                 <li>
@@ -83,11 +83,17 @@ function Header() {
                   <a href="contact.html">Contact</a>
                 </li>
 
+
                 {user && (
                   <li>
                     <NavLink to="/profile">profile</NavLink>
                   </li>
                 )}
+
+                <li>
+                  <NavLink to="/associations">Association</NavLink>
+                </li>
+
 
                 <li>
                   <NavLink to="/associations">Association</NavLink>
