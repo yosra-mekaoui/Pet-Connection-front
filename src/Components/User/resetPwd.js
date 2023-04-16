@@ -21,6 +21,8 @@ function ResetPwd() {
       // await axios.put('http://localhost:3000/user/resetpassword', {password}, {
       //         headers: {Authorization: token}
       //     })
+      history.push('/login');
+      window.location.reload();
 
     }
 

@@ -3,6 +3,14 @@ import { NavLink, Routes, Route } from "react-router-dom";
 import React, { useEffect, useState } from "react";
 
 function Checkout() {
+  const userFromLocalStorageString = localStorage.getItem('user');
+  const user = userFromLocalStorageString ? JSON.parse(userFromLocalStorageString) : null;
+  const factureFromLocalStorageString = localStorage.getItem('facture');
+  
+  const [clientSecret, setClientSecret] = useState("");
+  const total= factureFromLocalStorageString? JSON.parse(factureFromLocalStorageString) : null;
+  
+
   return (
     <>
       <div className="inner-page-banner">
@@ -55,162 +63,80 @@ function Checkout() {
           <div className="row g-4">
             <div className="col-lg-7">
               <div className="form-wrap box--shadow mb-30">
-                <h4 className="title-25 mb-20">Billing Details</h4>
+                <h4 className="title-25 mb-20">Billing Details</h4><br></br>
                 <form>
                   <div className="row">
                     <div className="col-lg-6">
+                      <div className="form-inner">
+                        <label>Username</label>
+                        <input
+                          type="text"
+                          name="fname"
+                          placeholder="username.."
+                          value={user.username}
+                          disabled={true}
+                        />
+                      </div><br></br>
+                    </div>
+                   
+                    <div className="col-12">
                       <div className="form-inner">
                         <label>First Name</label>
                         <input
                           type="text"
                           name="fname"
                           placeholder="Your first name"
+                          value={user.name}
                         />
                       </div>
-                    </div>
-                    <div className="col-lg-6">
+                    </div><br></br>
+                    <div className="col-12"><br></br>
                       <div className="form-inner">
-                        <label>Last Name</label>
-                        <input
-                          type="text"
-                          name="fname"
-                          placeholder="Your last name"
-                        />
-                      </div>
-                    </div>
-                    <div className="col-12">
-                      <div className="form-inner">
-                        <label>Country / Region</label>
-                        <input
-                          type="text"
-                          name="fname"
-                          placeholder="Your country name"
-                        />
-                      </div>
-                    </div>
-                    <div className="col-12">
-                      <div className="form-inner">
-                        <label>Street Address</label>
+                        <label>Location</label>
                         <input
                           type="text"
                           name="fname"
                           placeholder="House and street name"
+                          value={user.location}
                         />
                       </div>
                     </div>
-                    <div className="col-12">
+                  
+                    <div className="col-12"><br></br>
                       <div className="form-inner">
-                        <div className="nice-select" tabIndex={0}>
-                          <span className="current">Town / City</span>
-                          <ul className="list">
-                            <li
-                              data-value="Town / City"
-                              className="option selected"
-                            >
-                              Town / City
-                            </li>
-                            <li data-value="Dhaka" className="option">
-                              Dhaka
-                            </li>
-                            <li data-value="Saidpur" className="option">
-                              Saidpur
-                            </li>
-                            <li data-value="Newyork" className="option">
-                              Newyork
-                            </li>
-                          </ul>
-                        </div>
-                      </div>
-                    </div>
-                    <div className="col-12">
-                      <div className="form-inner">
-                        <input
-                          type="text"
-                          name="fname"
-                          placeholder="Post Code"
-                        />
-                      </div>
-                    </div>
-                    <div className="col-12">
-                      <div className="form-inner">
-                        <label>Additional Information</label>
+                        
+                        <label>Phone Number:</label>
                         <input
                           type="text"
                           name="fname"
                           placeholder="Your Phone Number"
+                          value={user.phone}
                         />
                       </div>
                     </div>
-                    <div className="col-12">
+                    <div className="col-12"><br></br>
                       <div className="form-inner">
+                      <label>Email Address:</label>
                         <input
                           type="email"
                           name="email"
                           placeholder="Your Email Address"
+                          value={user.email}
                         />
                       </div>
                     </div>
-                    <div className="col-12">
-                      <div className="form-inner">
-                        <input
-                          type="text"
-                          name="postcode"
-                          placeholder="Post Code"
-                        />
-                      </div>
-                    </div>
-                    <div className="col-12">
-                      <div className="form-inner">
-                        <textarea
-                          name="message"
-                          placeholder="Order Notes (Optional)"
-                          rows="6"
-                        ></textarea>
-                      </div>
-                    </div>
+                 
+                   
                   </div>
                 </form>
               </div>
-              <div className="form-wrap box--shadow">
-                <h4 className="title-25 mb-20">Ship to a Different Address?</h4>
-                <form>
-                  <div className="row">
-                    <div className="col-md-6">
-                      <div className="form-inner">
-                        <label>First Name</label>
-                        <input
-                          type="text"
-                          name="fname"
-                          placeholder="Your first name"
-                        />
-                      </div>
-                    </div>
-                    <div className="col-md-6">
-                      <div className="form-inner">
-                        <label>Last Name</label>
-                        <input
-                          type="text"
-                          name="fname"
-                          placeholder="Your last name"
-                        />
-                      </div>
-                    </div>
-                    <div className="col-12">
-                      <div className="form-inner">
-                        <textarea
-                          name="message"
-                          placeholder="Order Notes (Optional)"
-                          rows="3"
-                        ></textarea>
-                      </div>
-                    </div>
-                  </div>
-                </form>
-              </div>
+              
             </div>
+            
             <aside className="col-lg-5">
+              
               <div className="added-product-summary mb-30">
-                <h5 className="title-25 checkout-title">Order Summary</h5>
+                <h5 className="title-25 checkout-title">Other products</h5><br></br>
                 <ul className="added-products">
                   <li className="single-product d-flex justify-content-start">
                     <div className="product-img">
@@ -235,9 +161,7 @@ function Checkout() {
                         </strong>
                       </div>
                     </div>
-                    <div className="delete-btn">
-                      <i className="bi bi-x-lg"></i>
-                    </div>
+                  
                   </li>
                   <li className="single-product d-flex justify-content-start">
                     <div className="product-img">
@@ -262,9 +186,7 @@ function Checkout() {
                         </strong>
                       </div>
                     </div>
-                    <div className="delete-btn">
-                      <i className="bi bi-x-lg"></i>
-                    </div>
+                    
                   </li>
                   <li className="single-product d-flex justify-content-start">
                     <div className="product-img">
@@ -287,9 +209,7 @@ function Checkout() {
                         </strong>
                       </div>
                     </div>
-                    <div className="delete-btn">
-                      <i className="bi bi-x-lg"></i>
-                    </div>
+                    
                   </li>
                 </ul>
               </div>
@@ -298,21 +218,21 @@ function Checkout() {
                   <thead>
                     <tr>
                       <th>Subtotal</th>
-                      <th>$128.70</th>
+                      <th>{total}</th>
                     </tr>
                   </thead>
                   <tbody>
                     <tr>
                       <td className="tax">Tax</td>
-                      <td>$5</td>
+                      <td>free</td>
                     </tr>
                     <tr>
                       <td>Total ( tax excl.)</td>
-                      <td>$15</td>
+                      <td>free</td>
                     </tr>
                     <tr>
                       <td>Total ( tax incl.)</td>
-                      <td>$15</td>
+                      <td>free</td>
                     </tr>
                   </tbody>
                 </table>
@@ -321,8 +241,8 @@ function Checkout() {
                 <table className="table cost-summery-table total-cost">
                   <thead>
                     <tr>
-                      <th>Total</th>
-                      <th>$162.70</th>
+                      <th>total</th>
+                      <th>{total}</th>
                     </tr>
                   </thead>
                 </table>
@@ -336,50 +256,29 @@ function Checkout() {
                       name="flexRadioDefault"
                       id="flexRadioDefault1"
                     />
-                    <label
-                      className="form-check-label"
-                      htmlFor="flexRadioDefault1"
-                    >
-                      Check payments
-                    </label>
-                    <p className="para">
-                      Please send a check to Store Name, Store Street, Store
-                      Town, Store State / County, Store Postcode.
-                    </p>
-                  </div>
-                  <div className="form-check payment-check">
-                    <label
-                      className="form-check-label"
-                      htmlFor="flexRadioDefault2"
-                    >
-                      Cash on delivery
-                    </label>
-                    <p className="para">Pay with cash upon delivery.</p>
-                  </div>
-                  <div className="form-check payment-check paypal d-flex flex-wrap align-items-center">
-                    <label
+                   <label
                       className="form-check-label"
                       htmlFor="flexRadioDefault3"
                     >
-                      PayPal
+                      Stripe
                     </label>
                     <img src="assets/images/bg/payonert.png" alt="" />
+                    
+                    
+                  </div>
+                  
+                  <div className="form-check payment-check paypal d-flex flex-wrap align-items-center">
+              
                     <a href="#" className="about-paypal">
                       What is PayPal
                     </a>
                   </div>
-                  <div className="payment-form-bottom d-flex align-items-start">
-                    <input type="checkbox" id="terms" />
-                    <label htmlFor="terms">
-                      I have read and agree to the website{" "}
-                      <a href="#">Terms and conditions</a>
-                    </label>
-                  </div>
+                 
                 </div>
                 <div className="place-order-btn">
-                  <button type="submit" className="primary-btn1 lg-btn">
+                  <NavLink to="/payment" className="btn primary-btn1 lg-btn">
                     Place Order
-                  </button>
+                  </NavLink>
                 </div>
               </form>
             </aside>

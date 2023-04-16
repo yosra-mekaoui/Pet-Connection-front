@@ -1,82 +1,70 @@
 import { useNavigate } from "react-router-dom";
-<<<<<<< HEAD
 import { NavLink,Link, Routes, Route } from "react-router-dom";
-=======
-import { NavLink, Routes, Route } from "react-router-dom";
-<<<<<<< HEAD
->>>>>>> ee347506aec4a2318022edffa450cb6f1f699215
-=======
->>>>>>> ee347506aec4a2318022edffa450cb6f1f699215
 import {useDispatch, useSelector} from "react-redux";
-import {useEffect} from "react";
+import {useEffect, useState} from "react";
 import { createBrowserHistory } from 'history';
 import {affichage, selectProduct} from "../../redux/slices/ProductSlice";
 import { addToCart } from "../../redux/slices/cartSlice";
-<<<<<<< HEAD
-<<<<<<< HEAD
 import {toast} from "react-toastify";
 
 import axios from "axios";
 function Shop() {
   const dispatch = useDispatch();
   const products = useSelector(selectProduct);
+  const[productsState,setProductState]=useState([]);
   const history = createBrowserHistory();
   const userFromLocalStorageString = localStorage.getItem('user');
   const user = userFromLocalStorageString ? JSON.parse(userFromLocalStorageString) : null;
+  const [listeFiltre,setListeFiltre]=useState([])
  
- 
-=======
-=======
->>>>>>> ee347506aec4a2318022edffa450cb6f1f699215
-function Shop() {
-  const dispatch = useDispatch();
-  const products = useSelector(selectProduct);
-  const history = createBrowserHistory();
+  function applyFilter(value){
+    console.log(value)
+    let lf=listeFiltre;
+    if(!lf.includes(value)){
+      lf.push(value);
 
-
-  const handleAddToCart = (p) => {
-  dispatch(addToCart(p));
-  history.push('/cart');
-  window.location.reload();
-  };
-<<<<<<< HEAD
->>>>>>> ee347506aec4a2318022edffa450cb6f1f699215
-=======
->>>>>>> ee347506aec4a2318022edffa450cb6f1f699215
-
-  useEffect(() => {
-    dispatch(affichage())
-  }, [dispatch]);
-<<<<<<< HEAD
-<<<<<<< HEAD
-  const handleSubmit = async (id) => {
-    try {
-      const confirmed = window.confirm("Product added to cart. Do you want to view your cart?");
-    if (confirmed) {
-      toast.success(" product added to cart", {
-        position: "bottom-left",
-    });
-   
-      const response = await axios.post(`http://localhost:3000/addproducttocart/${id}`, {user});
-      console.log(response.data);
-      
-      history.push('/cart');
-      window.location.reload();
-      
+    }else{
+      lf.splice(lf.indexOf(value), 1);
     }
-    
+    let pr=products;
+    if(lf.length>0){
+    pr=pr.filter(p=>lf.includes(p.categories));
+    setListeFiltre(lf);
+   setProductState(pr);
+    }else{
+      setProductState(products)
+    }
 
+
+  }
+  useEffect( () => {
+     dispatch(affichage())
+  }, [dispatch]);
+
+  useEffect( () =>
+   {    
+    setProductState(products);
+   }
+ ,[products] )
+  const handleSubmit = async (id) => {
+
+    if(user!=null){
+    try {
     
+   
+      const response =  axios.post(`http://localhost:3000/addproducttocart/${id}`, {user}).then((card)=>{
+        toast.success(" product added to cart", {
+          position: "bottom-left",
+        })
+      });
+      console.log(response.data);
     } catch (error) {
       console.error(error);
+    }}else{
+      history.push("/Register")
+      window.location.reload();
     }
   };
-=======
-
->>>>>>> ee347506aec4a2318022edffa450cb6f1f699215
-=======
-
->>>>>>> ee347506aec4a2318022edffa450cb6f1f699215
   return (<>
     <div className="inner-page-banner">
       <div className="breadcrumb-vec-btm">
@@ -116,29 +104,28 @@ function Shop() {
                 <div className="check-box-item">
                   <h5 className="shop-widget-title">Category</h5>
                   <div className="checkbox-container">
-                    <label className="containerss">Food Toppers
-                      <input type="checkbox" defaultChecked="checked" />
+                    
+                    <label className="containerss">Aliments
+                      <input type="checkbox" onClick={(e)=>applyFilter("Aliments")}/>
                       <span className="checkmark" />
                     </label>
-                    <label className="containerss">Milk Replacers
-                      <input type="checkbox" />
+                    <label className="containerss">Accessoires
+                      <input type="checkbox" onClick={(e)=>applyFilter("Accessoires")} />
                       <span className="checkmark" />
                     </label>
-                    <label className="containerss">Canned Food
-                      <input type="checkbox" />
+                    <label className="containerss">Jouets
+                      <input type="checkbox" onClick={(e)=>applyFilter("Jouets")} />
                       <span className="checkmark" />
                     </label>
-                    <label className="containerss">Veterinary Authorized Diets
-                      <input type="checkbox" />
-                      <span className="checkmark" />
-                    </label>
-                    <label className="containerss">Bones &amp; Rawhide
-                      <input type="checkbox" />
-                      <span className="checkmark" />
-                    </label>
+                  
                   </div>
+                
+          
                 </div>
+                
               </div>
+              <li><a href="/cart" className="primary-btn2 btn-lg">My Cart</a></li>
+
             </div>
           </div>
           {/* ---------------------------------------------------------------------------------- */}
@@ -172,7 +159,8 @@ function Shop() {
             </div>
             <div className="row g-4 justify-content-center">
 
-              {products.map((p,i) => {
+              {productsState&&
+              productsState.map((p,i) => {
                 return (
                   <div className="col-lg-4 col-md-4 col-sm-6">
                     <div className="collection-card">
@@ -188,8 +176,6 @@ function Shop() {
 
                           <NavLink to="/details">View Details</NavLink>
                         </div>
-<<<<<<< HEAD
-<<<<<<< HEAD
 
                         <ul className="cart-icon-list">
                           
@@ -200,31 +186,11 @@ function Shop() {
                             </a>
                             
                           </li>
-=======
-                        <ul className="cart-icon-list">
-                          <button onClick={() => handleAddToCart(p)}>Add </button>
-                          <li><NavLink to="/cart"><img src="assets/images/icon/Icon-cart3.svg" alt="" /></NavLink></li>
->>>>>>> ee347506aec4a2318022edffa450cb6f1f699215
-=======
-                        <ul className="cart-icon-list">
-                          <button onClick={() => handleAddToCart(p)}>Add </button>
-                          <li><NavLink to="/cart"><img src="assets/images/icon/Icon-cart3.svg" alt="" /></NavLink></li>
->>>>>>> ee347506aec4a2318022edffa450cb6f1f699215
                           <li><a href="#"><img src="assets/images/icon/Icon-favorites3.svg" alt="" /></a></li>
                         </ul>
                       </div>
                       <div className="collection-content text-center">
                         <h4><NavLink to="/details">{(p !== null) ? p.name : ''}</NavLink></h4>
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
-                     
-                  <span>SKU:9852410</span>
->>>>>>> ee347506aec4a2318022edffa450cb6f1f699215
-=======
-                     
-                  <span>SKU:9852410</span>
->>>>>>> ee347506aec4a2318022edffa450cb6f1f699215
                         <div className="price">
                           <h6>{(p !== null) ? p.price : ''} <del>$50.00</del></h6>
                         </div>

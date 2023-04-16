@@ -9,27 +9,13 @@ import store from './redux/store';
 const root = ReactDOM.createRoot(document.getElementById('root'));
 
 root.render(
-<<<<<<< HEAD
  
-=======
-  <React.StrictMode>
-<<<<<<< HEAD
->>>>>>> ee347506aec4a2318022edffa450cb6f1f699215
-=======
->>>>>>> ee347506aec4a2318022edffa450cb6f1f699215
       <BrowserRouter>
           <Provider store={store}>
               <App />
           </Provider>
       </BrowserRouter>
-<<<<<<< HEAD
-<<<<<<< HEAD
   
-=======
-=======
->>>>>>> ee347506aec4a2318022edffa450cb6f1f699215
-  </React.StrictMode>
->>>>>>> ee347506aec4a2318022edffa450cb6f1f699215
 );
 
 // If you want to start measuring performance in your app, pass a function
