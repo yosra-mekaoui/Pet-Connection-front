@@ -21,6 +21,7 @@ function PetAvatar() {
     const query = new URLSearchParams(window.location.search);
     if (query.get("textToImg") != null){
       setTextToImg(query.get("textToImg"));
+      console.log('use effect '+query.get("textToImg"));
     }
   }, []);
   const [textInput, setTextInput] = useState("");
@@ -64,7 +65,7 @@ function PetAvatar() {
     setMessage("Your avatar is being created. Please wait...");
 
     var text = ""; 
-    if (textInput != "") {
+    if (textInput == "") {
       text = "Make Avatar for my pet."
     } else {
       text = textInput;
@@ -175,17 +176,31 @@ function PetAvatar() {
                 marginRight: "10px",
               }}
             />
-            Pet Avatar
+            {textToImg == 1 ? <>Pet Customization</> : <>Pet Avatar</>}
           </h1>
           <div
             style={{
               marginBottom: "30px",
-              letterSpacing: "3px",
+              letterSpacing: "1px",
               fontSize: "18px",
               color: "#3A3C3F",
             }}
           >
-            Upload an Image of your pet.
+            {textToImg == 1 ? (
+              <>
+                <span style={{ fontWeight: "700", color: "black" }}>
+                  Lvl 6 Reward
+                </span>{" "}
+                : Add a customization text to your pet.
+              </>
+            ) : (
+              <>
+                <span style={{ fontWeight: "700", color: "black" }}>
+                  Lvl 3 Reward
+                </span>{" "}
+                : Drop a picture, and generate your pet avatar.
+              </>
+            )}
           </div>
 
           <br></br>
@@ -195,13 +210,13 @@ function PetAvatar() {
             style={{ padding: "0px 4% 30px 4%", fontWeight: "600" }}
           >
             {textToImg == 1 && (
-              <textarea placeholder="Add a prompt text..." style={{
-                width: "60%"
-              }}
+              <textarea
+                placeholder="Add a prompt text..."
+                style={{
+                  width: "60%",
+                }}
                 onChange={(e) => setTextInput(e.target.value)}
-              >
-
-              </textarea>
+              ></textarea>
             )}
             <Dropzone onDrop={handleFileUpload}>
               {({ getRootProps, getInputProps }) => (
@@ -286,15 +301,22 @@ function PetAvatar() {
 
           <div className="container">
             <div className="row">
-              <div className="offset-2 col-md-4 ">
-                <div className="input">Input</div>
-                <img src={imageUrl} style={{ width: "200px", marginBottom : "100px" }} />
-              </div>
+              {imageUrl != "" && (
+                <div className="offset-2 col-md-4 ">
+                  <div className="input">Input</div>
+                  <img
+                    src={imageUrl}
+                    style={{ width: "200px", marginBottom: "100px" }}
+                  />
+                </div>
+              )}
 
-              <div className="col-md-4">
-                <div className="input">Output</div>
-                <img src={output} style={{ width: "200px" }} />
-              </div>
+              {output != "" && (
+                <div className="col-md-4">
+                  <div className="input">Output</div>
+                  <img src={output} style={{ width: "200px" }} />
+                </div>
+              )}
             </div>
           </div>
         </div>
