@@ -484,6 +484,36 @@ textarea.form-input {
   position: relative;
   border: none;
 }
+.translate-button-container {
+  position: relative;
+}
+
+.translate-button {
+  background-color: #4caf50;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.translate-button:hover {
+  background-color: #3e8e41;
+}
+
+.language-select {
+  position: absolute;
+  top: 50px;
+  right: 0;
+  background-color: white;
+  color: #333;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  padding: 10px;
+  font-size: 16px;
+  cursor: pointer;
+}
 
 .btn3::after {
   position: absolute;
