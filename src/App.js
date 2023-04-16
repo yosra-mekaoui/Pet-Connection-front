@@ -4,6 +4,12 @@ import { Suspense } from 'react';
 import {  Route, Routes } from 'react-router-dom';
 
 import { useScript } from 'usehooks-ts'
+
+import { loadStripe } from "@stripe/stripe-js";
+
+//import TwoFactorVerification from "./Components/User/TwoFactorVerification";
+
+
 import Loading from "./Components/Pages/Loading";
 import TwoFa from "./Components/User/TwoFa";
 //import TwoFactorVerification from "./Components/User/TwoFactorVerification";
@@ -20,6 +26,7 @@ import Verifications from "./Components/Pages/Association/Verifications";
 import RewardsList from "./Components/Pages/Rewards/RewardsList";
 //import PetAvatar from "./Components/Pages/Rewards/PetAvatar";
 
+
 const Home = React.lazy(() => import('./Components/Pages/Home.js'))
 const Header = React.lazy(() => import('./Components/Pages/Header'))
 const Footer = React.lazy(() => import('./Components/Pages/Footer'))
@@ -29,6 +36,16 @@ const Login = React.lazy(() => import('./Components/User/login'))
 const Register = React.lazy(()=> import ('./Components/User/register'))
 const EnableTwoFactorAuth = React.lazy(()=> import('./Components/User/EnableTwoFactorAuth'))
 const DisableTwoFactorAuth = React.lazy(()=> import('./Components/User/DisableTwoFactorAuth'))
+
+
+const Shop = React.lazy(()=> import ('./Components/MarketPlace/shop'))
+const Cart = React.lazy(()=> import ('./Components/MarketPlace/cart'))
+
+const Details = React.lazy(()=> import ('./Components/MarketPlace/details'))
+const Checkout = React.lazy(()=> import ('./Components/MarketPlace/checkout'))
+const Paymenet = React.lazy(()=> import ('./Components/MarketPlace/payment'))
+import { Elements } from "@stripe/react-stripe-js";
+
 const Event = React.lazy(()=> import ('./Components/Events/Event'))
 const ForgetPwd = React.lazy(()=> import ('./Components/User/forgetPwd'))
 const ResetPwd = React.lazy(()=> import ('./Components/User/resetPwd'))
@@ -46,6 +63,7 @@ const UpdateEvent = React.lazy(()=> import ('./Components/Events/UpdateEvent'))
 const CreateEvent = React.lazy(()=>import ('./Components/Events/CreateEvent'))
 
 //const Upgrade = React.lazy(() => import("./Components/Pages/Upgrade"));
+
 
 
 function App() {
@@ -72,6 +90,7 @@ function App() {
   
   const [isLoaded, setIsLoaded] = useState(false);
 
+
   const [user, setUser] = useState(null);
   const [role, setRole] = useState("");
     
@@ -89,13 +108,16 @@ function App() {
 
     console.log(user)
   }, [])
-
+  const promise = loadStripe(
+    "pk_test_51MgaqwHbRAiFliiNEQJAtaIOs0gTi4iYfnmBlL6rT2NmkASR0sgNhnHCeUSEPjWPkhzNszWN43An67WnZouA5Ei800QOl0xTth"
+  );
 
 
   return (
     <div className="App">
       {isLoaded ? (
         <div className="loader-container">
+
           <Loading />
         </div>
       ) : (
@@ -117,6 +139,15 @@ function App() {
           <Route path="/EventDetails/:id" element={ <EventDetails/>}></Route>
           <Route path="/UpdateEvent/:id" element={<UpdateEvent/>}></Route>
           <Route path="/addEvent" element={<CreateEvent/>}></Route> 
+          <Route exact path='/shop' element={<Shop />}></Route>
+          <Route exact path='/cart/' element={<Cart />}></Route>
+          <Route exact path='/details' element={<Details />}></Route>
+          <Route exact path='/checkout' element={<Checkout />}></Route>
+          <Route exact path='/payment' element={
+              <Elements stripe={promise}>
+                <Paymenet />
+              </Elements>
+              }></Route>
                 {user == null && <Route path="/Login" element={<Login />}></Route>}
                 {user == null && (
                   <Route path="/Register" element={<Register />}></Route>
@@ -190,6 +221,7 @@ function App() {
           </div>
         </>
       )}
+
     </div>
  
   );
