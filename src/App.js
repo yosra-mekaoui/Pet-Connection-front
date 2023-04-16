@@ -113,6 +113,10 @@ function App() {
               <Routes>
                 <Route path="/shop" element={<Market />}></Route>
                 <Route path="/About" element={<About />}></Route>
+                <Route path="/Event" element={<Event />}></Route>
+          <Route path="/EventDetails/:id" element={ <EventDetails/>}></Route>
+          <Route path="/UpdateEvent/:id" element={<UpdateEvent/>}></Route>
+          <Route path="/addEvent" element={<CreateEvent/>}></Route> 
                 {user == null && <Route path="/Login" element={<Login />}></Route>}
                 {user == null && (
                   <Route path="/Register" element={<Register />}></Route>
