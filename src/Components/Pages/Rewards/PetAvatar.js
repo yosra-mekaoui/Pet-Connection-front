@@ -43,20 +43,20 @@ function PetAvatar() {
   const avatCreation = async () => { 
     console.log("1"); 
     setMessage("Uploading Image to the server...");
-    // const formData = new FormData();
-    // formData.append('file', file);
-    // formData.append("upload_preset", "dyg5jrqn");
+    const formData = new FormData();
+    formData.append('file', file);
+    formData.append("upload_preset", "dyg5jrqn");
 
-    // const response = await fetch(
-    //   'https://api.cloudinary.com/v1_1/dszmvlrpt/image/upload',
-    //   {
-    //     method: 'POST',
-    //     body: formData,
-    //   }
-    // );
+    const response = await fetch(
+      'https://api.cloudinary.com/v1_1/dszmvlrpt/image/upload',
+      {
+        method: 'POST',
+        body: formData,
+      }
+    );
 
-    // const data = await response.json();
-    // setImageUrl(data.secure_url);
+    const data = await response.json();
+    setImageUrl(data.secure_url);
 
 
 
