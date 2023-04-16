@@ -102,13 +102,13 @@ function App() {
         <>
           <div>
             <Suspense fallback={<div></div>}>
-              <Cursor
+              {/* <Cursor
                 showRing={true}
                 color="#000000"
                 ringSize={50}
                 cursorSize={10}
                 ringBorder={2}
-              />
+              /> */}
               <Header />
               <Routes>
                 <Route path="/shop" element={<Market />}></Route>
