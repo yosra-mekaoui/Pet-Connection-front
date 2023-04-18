@@ -2,6 +2,7 @@ import { NavLink, Routes, Route } from "react-router-dom";
 import { Link } from "react-router-dom";
 import React, { useState, useEffect } from "react";
 import { MdOutlineLogout } from "react-icons/md";
+
 import { useLocation } from 'react-router-dom';
 
 
@@ -36,7 +37,7 @@ function Header() {
                 <img
                   alt="image"
                   className="img-fluid"
-                  src="assets/images/logo-01.png"
+                  src="/assets/images/logo-01.png"
                   height={50}
                   width={50}
                 />
@@ -46,14 +47,15 @@ function Header() {
               <div className="mobile-logo-area d-lg-none d-flex justify-content-between align-items-center">
                 <div className="mobile-logo-wrap">
                   <a href="index.html">
+
                     <img
                       alt="image"
                       className="img-fluid"
-                      src="assets/images/logo-01.png"
+                      src="/assets/images/logo-01.png"
                       height={50}
                       width={50}
-                    />{" "}
-                  </a>
+                    />                  </a>
+
                 </div>
                 <div className="menu-close-btn">
                   <i className="bi bi-x-lg" />
@@ -70,7 +72,7 @@ function Header() {
                   <NavLink to="/About">About</NavLink>
                 </li>
                 <li>
-                  <a href="#">Services</a>
+                  <NavLink to="/Event">Events</NavLink>
                 </li>
 
                 <li>
@@ -83,13 +85,12 @@ function Header() {
                   <a href="contact.html">Contact</a>
                 </li>
 
-                {/* {user && (
+
+                {user && (
                   <li>
                     <NavLink to="/profile">profile</NavLink>
                   </li>
-                )} */}
-
-
+                )}
 
                 {user && (
                   <li>
@@ -97,15 +98,15 @@ function Header() {
                   </li>
                 )}
 
-                
+                <li>
+                  <NavLink to="/associations">Association</NavLink>
+                </li>
 
 
+                {/* <li>
+                  <NavLink to="/associations">Association</NavLink>
+                </li> */}
 
-                {user && (
-                  <li>
-                    <a href="/upgrade">Upgrade</a>
-                  </li>
-                )}
                 {/* <Link to="About">Contact</Link> */}
               </ul>
 
@@ -241,6 +242,7 @@ function Header() {
                   </NavLink>
                 </li>
 
+
                 <li>
                   {user && (
                     <button onClick={logout} height={15} width={15}>
@@ -248,6 +250,7 @@ function Header() {
                     </button>
                   )}
                 </li>
+
               </ul>
               <div className="hotline-info">
                 <span>Call Us Now</span>
