@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react"; 
 import Dropzone from "react-dropzone";
 import { UpgradeUser } from "../api";
+import { toast } from "react-toastify"; 
 
 
 
@@ -62,6 +63,7 @@ function Upgrade() {
       console.log(formData); 
       UpgradeUser(formData);
       setDone(true); 
+      toast.success("Thank you for your submit. It may take a few hours to upgrade your account.");
     };
     
   
