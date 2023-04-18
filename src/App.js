@@ -6,6 +6,8 @@ import { Route, Routes } from 'react-router-dom';
 import { useScript } from 'usehooks-ts'
 
 import { loadStripe } from "@stripe/stripe-js";
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 //import TwoFactorVerification from "./Components/User/TwoFactorVerification";
 
@@ -27,10 +29,11 @@ import RewardsList from "./Components/Pages/Rewards/RewardsList";
 //import PetAvatar from "./Components/Pages/Rewards/PetAvatar";
 
 
+
 const Home = React.lazy(() => import('./Components/Pages/Home.js'))
 const Header = React.lazy(() => import('./Components/Pages/Header'))
 const Footer = React.lazy(() => import('./Components/Pages/Footer'))
-const Market = React.lazy(() => import('./Components/Pages/Market'))
+// const Market = React.lazy(() => import('./Components/Pages/Market'))
 const About = React.lazy(() => import('./Components/Pages/About'))
 const Login = React.lazy(() => import('./Components/User/login'))
 const Register = React.lazy(() => import('./Components/User/register'))
@@ -146,6 +149,7 @@ function App() {
         <>
             <div>
               <Suspense fallback={<div></div>}>
+                <ToastContainer/>
                 {/* <Cursor
                 showRing={true}
                 color="#000000"
@@ -155,7 +159,7 @@ function App() {
               /> */}
                 <Header />
                 <Routes>
-                  <Route path="/shop" element={<Market />}></Route>
+                  {/* <Route path="/shop" element={<Market />}></Route> */}
                   <Route path="/About" element={<About />}></Route>
                   <Route path="/Event" element={<Event />}></Route>
                   <Route path="/EventDetails/:id" element={<EventDetails />}></Route>

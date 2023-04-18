@@ -53,11 +53,14 @@ function Shop() {
     
    
       const response =  axios.post(`http://localhost:3000/addproducttocart/${id}`, {user}).then((card)=>{
-        toast.success(" product added to cart", {
-          position: "bottom-left",
-        })
+    
+  
       });
+      toast.success(" product added to cart", {
+        position: "bottom-left",
+      })
       console.log(response.data);
+   
     } catch (error) {
       console.error(error);
     }}else{
@@ -66,7 +69,10 @@ function Shop() {
     }
   };
   return (<>
+
+
     <div className="inner-page-banner">
+
       <div className="breadcrumb-vec-btm">
         <img className="img-fluid" src="assets/images/bg/inner-banner-btm-vec.png" alt="" />
       </div>
