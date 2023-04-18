@@ -1,18 +1,18 @@
-import { NavLink,Routes ,Route } from "react-router-dom";
+import { NavLink, Routes, Route } from "react-router-dom";
 import { Link } from "react-router-dom";
 import React, { useState, useEffect } from "react";
-import {MdOutlineLogout} from "react-icons/md";
+import { MdOutlineLogout } from "react-icons/md";
 import { useLocation } from 'react-router-dom';
 
 
 function Header() {
-  const [user, setUser] = useState(localStorage.getItem("user")); 
+  const [user, setUser] = useState(localStorage.getItem("user"));
 
   useEffect(() => {
     setUser(localStorage.getItem("user"));
   }, [user]);
 
- 
+
 
   const logout = () => {
     localStorage.removeItem("user");
@@ -83,11 +83,23 @@ function Header() {
                   <a href="contact.html">Contact</a>
                 </li>
 
-                {user && (
+                {/* {user && (
                   <li>
                     <NavLink to="/profile">profile</NavLink>
                   </li>
+                )} */}
+
+
+
+                {user && (
+                  <li>
+                    <NavLink to="/publications">publications</NavLink>
+                  </li>
                 )}
+
+                
+
+
 
                 {user && (
                   <li>

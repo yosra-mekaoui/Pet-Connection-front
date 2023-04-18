@@ -1068,9 +1068,9 @@ button.bg-white:focus {
   display: none !important;
 }
 
-.d-flex {
-  display: flex !important;
-}
+/* .d-flex {
+  display: flex !important; // to fixx err navbar
+} */
 
 @media (min-width: 768px) {
 
@@ -1559,14 +1559,14 @@ a.text-white:focus {
   vertical-align: -17%;
 }
 
-.dropdown-header {
+/* .dropdown-header {
   font-size: .625rem;
   font-weight: 700;
   padding-right: 1rem;
   padding-left: 1rem;
   text-transform: uppercase;
   color: #f6f9fc;
-}
+} */
 
 .dropdown-menu a.media>div:first-child {
   line-height: 1;
