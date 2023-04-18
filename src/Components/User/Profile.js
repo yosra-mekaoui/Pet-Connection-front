@@ -2,7 +2,7 @@
 import React, { useEffect, useState } from "react";
 import { Form, Button } from 'react-bootstrap';
 import { login, register, editProfil } from "./api";
-import { Await} from "react-router-dom";
+import { Await } from "react-router-dom";
 import { NavLink, Routes, Route } from "react-router-dom";
 import { useParams, useNavigate } from 'react-router-dom';
 import axios from "axios";
@@ -16,57 +16,58 @@ import { enable2FA } from './api';
 import { disable2FA } from './api';
 
 import './profile.css'
+
 const schema = yup.object().shape({
   username: yup.string()
-      .required()
-      .matches(/^(?=.*[a-zA-Z])[a-zA-Z\d]+$/, "Username must contain at least one letter, and no spiciness")
-      .max(20, "Username cannot exceed 20 characters")
-      .min(3,"Username must exceed 3 characters"),
+    .required()
+    .matches(/^(?=.*[a-zA-Z])[a-zA-Z\d]+$/, "Username must contain at least one letter, and no spiciness")
+    .max(20, "Username cannot exceed 20 characters")
+    .min(3, "Username must exceed 3 characters"),
 
 
   name: yup.string()
-       .required()
-       .matches(/^[^\d]+$/, "name must not contain numbers")
-       .max(20, "name cannot exceed 20 characters")
-       .min(3,"name must exceed 3 characters"),
+    .required()
+    .matches(/^[^\d]+$/, "name must not contain numbers")
+    .max(20, "name cannot exceed 20 characters")
+    .min(3, "name must exceed 3 characters"),
 
 
   email: yup.string()
-      .required()
-  // .matches(/^(?=.*[a-zA-Z])[a-zA-Z\d]+@(?:[a-zA-Z\d]+\.)+(?:com|tn)$/,'email must be in this form exp@exp.com ou exp@exp.tn')
-      .matches(/^(?=.*[a-zA-Z])[a-zA-Z\d._]+@(?:[a-zA-Z\d]+\.)+(?:com|tn)$/,'email must be in this form exp@exp.com ou exp@exp.tn'), // accepte . ou milieu
+    .required()
+    // .matches(/^(?=.*[a-zA-Z])[a-zA-Z\d]+@(?:[a-zA-Z\d]+\.)+(?:com|tn)$/,'email must be in this form exp@exp.com ou exp@exp.tn')
+    .matches(/^(?=.*[a-zA-Z])[a-zA-Z\d._]+@(?:[a-zA-Z\d]+\.)+(?:com|tn)$/, 'email must be in this form exp@exp.com ou exp@exp.tn'), // accepte . ou milieu
 
 
-      
+
 
 
 
 
   location: yup.string()
-       .required()
-       .matches(/^[A-Z][a-zA-Z]*$/, 'location must begin with an uppercase letter and must contain only letters.')
-       .max(20, "location cannot exceed 20 characters")
-       .min(3,"location must exceed 3 characters"),
+    .required()
+    .matches(/^[A-Z][a-zA-Z]*$/, 'location must begin with an uppercase letter and must contain only letters.')
+    .max(20, "location cannot exceed 20 characters")
+    .min(3, "location must exceed 3 characters"),
 
 
 
   phone: yup.string()
-       .required()
-       .matches(/^[0-9]{8}$/, 'phone field must contain 8 digits without spaces or special characters.'),
-     
+    .required()
+    .matches(/^[0-9]{8}$/, 'phone field must contain 8 digits without spaces or special characters.'),
+
 
 
   image: yup.mixed()
-  .required()
-  .test('fileFormat', 'The file must be in JPEG, PNG or JPG format', (value) =>
-    value && ['image/jpeg', 'image/png', 'image/jpg'].includes(value.type)
-  )
+    .required()
+    .test('fileFormat', 'The file must be in JPEG, PNG or JPG format', (value) =>
+      value && ['image/jpeg', 'image/png', 'image/jpg'].includes(value.type)
+    )
 
-  });
+});
 
 
- 
- 
+
+
 
 
 
@@ -87,7 +88,7 @@ function Profile() {
     location: '',
     phone: '',
     image: null,
-    password:''
+    password: ''
 
   });
 
@@ -98,8 +99,9 @@ function Profile() {
   useEffect(() => {
 
     const userFromLocalStorage = JSON.parse(localStorage.getItem('user'));
-    const id = userFromLocalStorage._id|userFromLocalStorage.facebookId;
+    const id = userFromLocalStorage._id | userFromLocalStorage.facebookId;
     console.log("iduserconnecte " + id)
+
 
     setUser(userFromLocalStorage);
 
@@ -116,7 +118,7 @@ function Profile() {
 
     //////////importer image user 
     if (userFromLocalStorage.image) {
-      axios.get(`http://localhost:3000/user/imageUser/${userFromLocalStorage.id}/image`, { responseType: 'blob' })
+      axios.get(`http://localhost:3000/user/imageUser/${userFromLocalStorage._id}/image`, { responseType: 'blob' })
         .then(res => {
           const url = URL.createObjectURL(res.data);
           setImageSrc(url);
@@ -171,7 +173,7 @@ function Profile() {
 
   ////// envoi de formulaire
   const handleSubmit = async e => {
-    const id = user._id||user.facebookId;
+    const id = user._id || user.facebookId;
     e.preventDefault();
     setFormSubmitted(true);
 
@@ -191,9 +193,8 @@ function Profile() {
 
 
 
-      const res = editProfil(id, formData).then(
-        notify()
-      )
+      const res = await editProfil(id, formData)
+      notify()
 
       console.log("--> " + JSON.stringify(res.data.user));
       localStorage.setItem("user", res.data.user);
@@ -224,79 +225,85 @@ function Profile() {
     draggable: true,
     progress: undefined,
     theme: "colored",
-  });
+  }).then(
+    window.location.reload()
 
 
-//2FA
-const [qrCodeData, setQrCodeData] = useState(null);
-const [secretKey, setSecretKey] = useState(null);
-const [showResults, setShowResults] = useState(false);
-
-const User = JSON.parse(localStorage.getItem("user"));
-const token = User.accessToken;
-
-const handleEnable2FA = () => {
-  const id = User._id||User.facebookId;
-  console.log(id)
-  
-  enable2FA(id)
-    .then((response) => {
-      const qrCode = response.data.qrCode;
-      const secret = response.data.secret;
-      console.log(qrCode);
-      console.log(secret);
-      setQrCodeData(qrCode);
-      setSecretKey(secret);
-      setShowResults(true);
-    })
-    .catch((error) => {
-      console.log("khlet 2");
-    });
-};
-
-const qrStyle = {
- 
-  display: 'flex',
-  justifyContent: 'center',
-  alignItems: 'center',
-  margin: '10px',
-}
+  );
 
 
+  //2FA
+  const [qrCodeData, setQrCodeData] = useState(null);
+  const [secretKey, setSecretKey] = useState(null);
+  const [showResults, setShowResults] = useState(false);
 
-const QR = () => (
-  <div style={qrStyle}>
-        <h4 color="Red">Please scan this Qr code and save your authentication code for your login</h4>
+  const User = JSON.parse(localStorage.getItem("user"));
+  const token = User.accessToken;
 
-    <img src={qrCodeData} alt="QR Code" />
-    {/* <p>secretKey: "{secretKey}"</p> */}
+  const handleEnable2FA = () => {
+    const id = User._id || User.facebookId;
+    console.log(id)
 
-  </div>
-);
+    enable2FA(id)
+      .then((response) => {
+        const qrCode = response.data.qrCode;
+        const secret = response.data.secret;
+        console.log(qrCode);
+        console.log(secret);
+        setQrCodeData(qrCode);
+        setSecretKey(secret);
+        setShowResults(true);
+      })
+      .catch((error) => {
+        console.log("khlet 2");
+      });
+  };
 
-useEffect(() => {
-  if (showResults && qrCodeData) {
-    console.log("qrCodeData", qrCodeData);
+  const qrStyle = {
+
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
+    margin: '10px',
   }
-}, [qrCodeData, showResults]);
-//disable 2Fa
-const Utilisateur = JSON.parse(localStorage.getItem('user'));
 
-const handleDisable2FA = async () => {
-  try {
-    const id = Utilisateur._id||Utilisateur.facebookId;
-    const response = await disable2FA(id);
-    console.log('Two-Factor Authentication has been disabled');
-    console.log('Response:', response.data);
-    alert("2fa has been disabled");
-    window.location.reload();
-    
-    // or update the state of your component to reflect the change
-  } catch (error) {
-    console.log('Error disabling Two-Factor Authentication:', error);
-    // or display an error message to the user
-  }
-};
+
+
+  const QR = () => (
+    <div style={qrStyle}>
+      <h4 color="Red">Please scan this Qr code and save your authentication code for your login</h4>
+
+      <img src={qrCodeData} alt="QR Code" />
+      {/* <p>secretKey: "{secretKey}"</p> */}
+
+    </div>
+  );
+
+  useEffect(() => {
+    if (showResults && qrCodeData) {
+      console.log("qrCodeData", qrCodeData);
+    }
+  }, [qrCodeData, showResults]);
+
+
+  //disable 2Fa
+  const Utilisateur = JSON.parse(localStorage.getItem('user'));
+
+  const handleDisable2FA = async () => {
+    try {
+      const id = Utilisateur._id || Utilisateur.facebookId;
+      const response = await disable2FA(id);
+      console.log('Two-Factor Authentication has been disabled');
+      console.log('Response:', response.data);
+      alert("2fa has been disabled");
+      window.location.reload();
+
+      // or update the state of your component to reflect the change
+    } catch (error) {
+      console.log('Error disabling Two-Factor Authentication:', error);
+      // or display an error message to the user
+    }
+  };
 
 
 
@@ -334,7 +341,7 @@ const handleDisable2FA = async () => {
               <ul className="navbar-nav align-items-center d-none d-md-flex">
                 <li className="nav-item dropdown">
                   <a className="nav-link pr-0" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                  
+
                   </a>
                   <div className="dropdown-menu dropdown-menu-arrow dropdown-menu-right">
                     <div className=" dropdown-header noti-title">
@@ -390,9 +397,9 @@ const handleDisable2FA = async () => {
                     <div className="col-lg-3 order-lg-2">
                       <div className="card-profile-image">
                         <a>
-                        {imageSrc !== '' ? <img src={imageSrc} alt={user.name} className="rounded-circle" /> :
+                          {imageSrc !== '' ? <img src={imageSrc} alt={user.name} className="rounded-circle" /> :
 
-<img  src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQSOGcje-B89rfsytrpDJELPk1OPGA0tXLElNx837LS&s" className="rounded-circle" />}                        </a>
+                            <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQSOGcje-B89rfsytrpDJELPk1OPGA0tXLElNx837LS&s" className="rounded-circle" />}                        </a>
                       </div>
                     </div>
                   </div>
@@ -467,6 +474,7 @@ const handleDisable2FA = async () => {
                     <form onSubmit={handleSubmit} enctype="multipart/form-data">
                       <h6 className="heading-small text-muted mb-4">INFORMATIONS DE L'UTILISATEUR</h6>
                       <div className="pl-lg-4">
+
                         <div className="row">
                           <div className="col-lg-6">
                             <div className="form-group focused">
@@ -492,6 +500,7 @@ const handleDisable2FA = async () => {
                             </div>
                           </div>
                         </div>
+
                         <div className="row">
                           <div className="col-lg-6">
                             <div className="form-group focused">
@@ -531,18 +540,25 @@ const handleDisable2FA = async () => {
                             </div>
                           </div>
                         </div>
+
+
+
+
+
+
+
                       </div>
                       <div className="col-12 text-right mr-5">
-                     
+
                         <button type="submit" className="btn btn-sm btn-primary">Modifier Profile</button >
                       </div>
                     </form>
                     <button className="btn btn-sm btn-primary" onClick={handleDisable2FA}>Disable Two-Factor Authentication</button>
 
-<button className="btn btn-sm btn-primary" onClick={handleEnable2FA}>
-Enable Two factor Authentication
-</button>
-{showResults ? <QR /> : null}
+                    <button className="btn btn-sm btn-primary" onClick={handleEnable2FA}>
+                      Enable Two factor Authentication
+                    </button>
+                    {showResults ? <QR /> : null}
                     {/*-------------------------------------------------------------------------------------------------------------------  */}
                     {/*-------------------------------------------------------------------------------------------------------------------  */}
 

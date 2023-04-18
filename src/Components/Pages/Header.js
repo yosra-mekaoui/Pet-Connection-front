@@ -1,19 +1,19 @@
-import { NavLink,Routes ,Route } from "react-router-dom";
+import { NavLink, Routes, Route } from "react-router-dom";
 import { Link } from "react-router-dom";
 import React, { useState, useEffect } from "react";
-import {MdOutlineLogout} from "react-icons/md";
+import { MdOutlineLogout } from "react-icons/md";
 
 import { useLocation } from 'react-router-dom';
 
 
 function Header() {
-  const [user, setUser] = useState(localStorage.getItem("user")); 
+  const [user, setUser] = useState(localStorage.getItem("user"));
 
   useEffect(() => {
     setUser(localStorage.getItem("user"));
   }, [user]);
 
- 
+
 
   const logout = () => {
     localStorage.removeItem("user");
@@ -48,13 +48,13 @@ function Header() {
                 <div className="mobile-logo-wrap">
                   <a href="index.html">
 
-                  <img
-                  alt="image"
-                  className="img-fluid"
-                  src="/assets/images/logo-01.png"
-                  height={50}
-                  width={50}
-                />                  </a>
+                    <img
+                      alt="image"
+                      className="img-fluid"
+                      src="/assets/images/logo-01.png"
+                      height={50}
+                      width={50}
+                    />                  </a>
 
                 </div>
                 <div className="menu-close-btn">
@@ -89,6 +89,12 @@ function Header() {
                 {user && (
                   <li>
                     <NavLink to="/profile">profile</NavLink>
+                  </li>
+                )}
+
+                {user && (
+                  <li>
+                    <NavLink to="/publications">publications</NavLink>
                   </li>
                 )}
 
